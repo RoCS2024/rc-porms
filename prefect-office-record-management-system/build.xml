@@ -1,0 +1,21 @@
+<project name="prefect-office-record-management-system" default="compile" basedir=".">
+
+    <property name="src.dir" value="src"/>
+    <property name="bin.dir" value="bin"/>
+
+    <target name="compile">
+        <mkdir dir="${bin.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${bin.dir}" includeantruntime="false"/>
+    </target>
+
+    <target name="jar" depends="compile">
+        <mkdir dir="${bin.dir}/jar"/>
+        <jar destfile="${bin.dir}/jar/prefect-office-record-management-system.jar" basedir="${bin.dir}">
+        </jar>
+    </target>
+
+    <target name="clean">
+        <delete dir="${bin.dir}"/>
+    </target>
+
+</project>

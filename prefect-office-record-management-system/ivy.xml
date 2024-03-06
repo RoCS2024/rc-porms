@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version ="2.0"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
+
+    <info
+            organisation="com.rogationist.college"
+            module="ivy-test"
+            status="integration">
+    </info>
+    <dependencies>
+        <dependency org="com.oracle.database.jdbc" name="ojdbc11" rev="23.3.0.23.09"/>
+        <dependency org="org.junit.jupiter" name="junit-jupiter-api" rev="5.8.1"/>
+        <dependency org="org.mockito" name="mockito-core" rev="5.8.0"/>
+        <dependency org="org.junit.platform" name="junit-platform-commons" rev="1.8.2"/>
+        <dependency org="net.bytebuddy" name="byte-buddy-dep" rev="1.13.0"/>
+        <dependency org="org.junit.jupiter" name="junit-jupiter-api" rev="5.8.1"/>
+        <dependency org="org.junit.platform" name=" junit-platform-engine" rev="1.8.2"/>
+    </dependencies>
+    </ivy-module>

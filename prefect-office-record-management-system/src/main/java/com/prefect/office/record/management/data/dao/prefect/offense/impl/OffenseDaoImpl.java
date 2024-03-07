@@ -5,6 +5,8 @@ import com.prefect.office.record.management.data.connectionhelper.ConnectionHelp
 import com.prefect.office.record.management.data.dao.prefect.offense.OffenseDao;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OffenseDaoImpl implements OffenseDao {
 
@@ -35,8 +37,11 @@ public class OffenseDaoImpl implements OffenseDao {
     @Override
     public boolean updateOffense(Offense offense) {
         String sql = "UPDATE offense SET violation_id = ?, student_id = ?, offense_date = ? WHERE id = ?";
+
         try (Connection con = ConnectionHelper.getConnection();
+
              PreparedStatement stmt = con.prepareStatement(sql)) {
+
             stmt.setInt(1, offense.getViolationId());
             stmt.setString(2, offense.getStudentId());
             stmt.setTimestamp(4, offense.getOffenseDate());
@@ -44,9 +49,34 @@ public class OffenseDaoImpl implements OffenseDao {
             int affectedRows = stmt.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException ex) {
+
             System.err.println("Error updating user with ID " + offense.getId() + ": " + ex.getMessage());
             ex.printStackTrace();
+
             return false;
         }
+    }
+    @Override
+    public List<Offense> getAllOffenses() {
+        List<Offense> offenses = new ArrayList<>();
+
+        try (Connection c = ConnectionHelper.getConnection();
+             PreparedStatement statement = c.prepareStatement("SELECT * FROM offense");
+             ResultSet r = statement.executeQuery()) {
+
+            while (r.next()) {
+                Offense offense = new Offense(1, 2, "student123", new Timestamp(System.currentTimeMillis()));
+                offense.setId(r.getInt("id"));
+                offense.setViolationId(r.getInt("violation_id"));
+                offense.setStudentId(r.getString("student_id"));
+                offense.setOffenseDate(r.getTimestamp("offense_date"));
+                offenses.add(offense);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return offenses;
     }
 }

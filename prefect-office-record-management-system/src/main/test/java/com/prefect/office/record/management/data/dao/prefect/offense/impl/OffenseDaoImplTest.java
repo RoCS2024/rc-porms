@@ -4,6 +4,7 @@ import com.prefect.office.record.management.app.model.offense.Offense;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -39,4 +40,20 @@ class OffenseDaoImplTest {
         Offense invalidOffense = new Offense(-1, 1, "student123", new Timestamp(System.currentTimeMillis()));
         assertFalse(offenseDao.updateOffense(invalidOffense));
     }
+    @Test
+    void testGetAllOffenses() {
+        OffenseDaoImpl offenseDao = new OffenseDaoImpl();
+        List<Offense> offenses = offenseDao.getAllOffenses();
+        assertNotNull(offenses);
+        assertFalse(offenses.isEmpty());
+    }
+
+    @Test
+    void testGetOffenseById() {
+        OffenseDaoImpl offenseDao = new OffenseDaoImpl();
+        String sampleId = "sampleId";
+        Offense offense = offenseDao.getOffenseById(sampleId);
+        assertNotNull(offense);
+    }
+
 }

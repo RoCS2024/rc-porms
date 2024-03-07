@@ -4,6 +4,8 @@ import com.prefect.office.record.management.app.model.offense.Offense;
 import com.prefect.office.record.management.data.dao.prefect.offense.OffenseDao;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -54,4 +56,24 @@ class OffenseFacadeImplTest {
 
         assertThrows(RuntimeException.class, () -> offenseFacade.updateOffense(offenseToUpdate));
     }
+    @Test
+    void testGetAllOffenses() {
+        List<Offense> offenses = offenseFacade.getAllOffenses();
+        assertNotNull(offenses);
+    }
+
+    @Test
+    void testGetOffenseById() {
+        String offenseId = "sampleOffenseId";
+        Offense offense = offenseFacade.getOffenseById(offenseId);
+        assertNotNull(offense);
+    }
+
+    @Test
+    void testGetStudentById() {
+        String studentId = "sampleStudentId";
+        Object student = offenseFacade.getStudentById(studentId);
+        assertNotNull(student);
+    }
+}
 }

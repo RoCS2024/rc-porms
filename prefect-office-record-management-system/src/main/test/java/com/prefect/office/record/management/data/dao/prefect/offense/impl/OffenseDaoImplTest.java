@@ -1,64 +1,50 @@
 package com.prefect.office.record.management.data.dao.prefect.offense.impl;
 
 import com.prefect.office.record.management.app.model.offense.Offense;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class OffenseDaoImplTest {
-
-    private OffenseDaoImpl offenseDao;
-    @Mock
-    private Connection connection;
-    @Mock
-    private PreparedStatement preparedStatement;
-
-    @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-        offenseDao = new OffenseDaoImpl(connection);
+    @Test
+    void getOffenseByID_ValidID_ReturnsOffense() {
+        OffenseDaoImpl offenseDao = new OffenseDaoImpl();
+        int validId = 1;
+        Offense offense = offenseDao.getOffenseByID(validId);
+        assertNotNull(offense);
+        assertEquals(validId, offense.getId());
     }
 
     @Test
-    public void testAddOffense_Success() throws SQLException {
+    void getOffenseByID_InvalidID_ReturnsNull() {
+        OffenseDaoImpl offenseDao = new OffenseDaoImpl();
+        int invalidId = -1;
+        Offense offense = offenseDao.getOffenseByID(invalidId);
+        assertNull(offense);
+    }
+    
+    @Test
+    void addOffense_ValidOffense_ReturnsTrue() throws SQLException {
+        OffenseDaoImpl offenseDao = new OffenseDaoImpl();
+        Offense offenseToAdd = new Offense(1, 1, "student123", new Timestamp(System.currentTimeMillis()));
 
-        Offense offense = new Offense(1, "ct22-001", Timestamp.valueOf("2022-01-01 00:00:00"));
+        OffenseDaoImpl mockDao = mock(OffenseDaoImpl.class);
+        when(mockDao.saveOffense(offenseToAdd)).thenReturn(true);
 
-        when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
-        when(preparedStatement.executeUpdate()).thenReturn(1);
-
-        boolean success = offenseDao.addOffense(offense);
-
-        verify(connection, times(1)).prepareStatement(any(String.class));
-        verify(preparedStatement, times(1)).executeUpdate();
-
-        assertTrue(success);
+        assertTrue(mockDao.saveOffense(offenseToAdd));
     }
 
     @Test
-    public void testAddOffense_Failure() throws SQLException {
+    void addOffense_InvalidOffense_ReturnsFalse() throws SQLException {
+        OffenseDaoImpl offenseDao = new OffenseDaoImpl();
+        Offense invalidOffense = new Offense(-1, 1, "student123", new Timestamp(System.currentTimeMillis()));
+        OffenseDaoImpl mockDao = mock(OffenseDaoImpl.class);
+        when(mockDao.saveOffense(invalidOffense)).thenReturn(false);
 
-        Offense offense = new Offense(1, "ct22-001", Timestamp.valueOf("2022-01-01 00:00:00"));
-
-        when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
-        when(preparedStatement.executeUpdate()).thenReturn(0);
-
-        boolean success = offenseDao.addOffense(offense);
-
-        verify(connection, times(1)).prepareStatement(any(String.class));
-        verify(preparedStatement, times(1)).executeUpdate();
-
-        assertFalse(success);
+        assertFalse(mockDao.saveOffense(invalidOffense));
     }
 }

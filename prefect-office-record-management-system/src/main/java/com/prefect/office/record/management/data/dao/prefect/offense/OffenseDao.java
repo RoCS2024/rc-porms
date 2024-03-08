@@ -5,5 +5,6 @@ import com.prefect.office.record.management.app.model.offense.Offense;
 public interface OffenseDao {
     boolean saveOffense(Offense offense);
     Offense getOffenseById(long id);
-    boolean addOffense(Offense offense);
+
+    Offense getOffenseByID(int id);
 }

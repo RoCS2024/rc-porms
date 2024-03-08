@@ -7,51 +7,58 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.sql.SQLException;
 import java.sql.Timestamp;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
-public class OffenseFacadeImplTest {
-    private OffenseFacadeImpl offenseFacade;
+class OffenseFacadeImplTest {
+
     @Mock
-    private OffenseDao offenseDao;
+    private OffenseDao mockOffenseDao;
+
+    private OffenseFacadeImpl offenseFacade;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.initMocks(this);
-        offenseFacade = new OffenseFacadeImpl(offenseDao);
+        MockitoAnnotations.openMocks(this);
+        offenseFacade = new OffenseFacadeImpl(mockOffenseDao);
+    }
+    @Test
+    void testGetOffenseById_ValidId_ReturnsOffense() {
+        Offense expectedOffense = new Offense(1, 1, "student123", new Timestamp(System.currentTimeMillis()));
+        when(mockOffenseDao.getOffenseById(1)).thenReturn(expectedOffense);
+        Offense actualOffense = offenseFacade.getOffenseById(1);
+
+        assertEquals(expectedOffense, actualOffense);
     }
 
     @Test
-    void testAddOffense_Success() throws SQLException {
-        int violationId = 1;
-        String studentId = "ct22-001";
-        Timestamp offenseDate = Timestamp.valueOf("2022-01-01 00:00:00");
-
-        Offense offense = new Offense();
-        when(offenseDao.addOffense(offense)).thenReturn(true);
-
-        boolean success = offenseFacade.saveOffense(offense);
-
-        assertTrue(success);
-        verify(offenseDao).addOffense(offense);
+    void testGetOffenseById_InvalidId_ReturnsNull() {
+        when(mockOffenseDao.getOffenseById(-1)).thenReturn(null);
+        Offense actualOffense = offenseFacade.getOffenseById(-1);
+        assertNull(actualOffense);
     }
-
     @Test
-    void testAddOffense_Failure() throws SQLException {
-        int violationId = 1;
-        String studentId = "ct22-001";
-        Timestamp offenseDate = Timestamp.valueOf("2022-01-01 00:00:00");
+    void testSaveOffense_Success() {
+        Offense offenseToSave = new Offense(1, 1, "student123", new Timestamp(System.currentTimeMillis()));
+        when(mockOffenseDao.getOffenseById(1)).thenReturn(null);
+        when(mockOffenseDao.saveOffense(offenseToSave)).thenReturn(true);
+        boolean result = offenseFacade.saveOffense(offenseToSave);
 
-        Offense offense = new Offense();
-        when(offenseDao.addOffense(offense)).thenReturn(false);
+        assertTrue(result);
+        verify(mockOffenseDao, times(1)).getOffenseById(1);
+        verify(mockOffenseDao, times(1)).saveOffense(offenseToSave);
+    }
+    @Test
+    void testSaveOffense_Failure() {
+        Offense offenseToSave = new Offense(1, 1, "student123", new Timestamp(System.currentTimeMillis()));
+        when(mockOffenseDao.getOffenseById(1)).thenReturn(null);
+        when(mockOffenseDao.saveOffense(offenseToSave)).thenReturn(false);
+        boolean result = offenseFacade.saveOffense(offenseToSave);
 
-        boolean success = offenseFacade.saveOffense(offense);
-
-        assertFalse(success);
-        verify(offenseDao).addOffense(offense);
+        assertFalse(result);
+        verify(mockOffenseDao, times(1)).getOffenseById(1);
+        verify(mockOffenseDao, times(1)).saveOffense(offenseToSave);
     }
 }

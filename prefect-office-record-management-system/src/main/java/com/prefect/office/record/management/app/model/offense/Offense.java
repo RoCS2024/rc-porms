@@ -4,14 +4,14 @@ import java.sql.Timestamp;
 
 public class Offense {
     private int id;
+    private int violationId;
     private String studentId;
     private Timestamp offenseDate;
 
-    public Offense() {
-    }
 
-    public Offense(int id, String studentId, Timestamp offenseDate) {
+    public Offense(int id, int violationId, String studentId, Timestamp offenseDate) {
         this.id = id;
+        this.violationId = violationId;
         this.studentId = studentId;
         this.offenseDate = offenseDate;
     }
@@ -22,6 +22,14 @@ public class Offense {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getViolationId() {
+        return violationId;
+    }
+
+    public void setViolationId(int violationId) {
+        this.violationId = violationId;
     }
 
     public String getStudentId() {
@@ -39,5 +47,4 @@ public class Offense {
     public void setOffenseDate(Timestamp offenseDate) {
         this.offenseDate = offenseDate;
     }
-
 }

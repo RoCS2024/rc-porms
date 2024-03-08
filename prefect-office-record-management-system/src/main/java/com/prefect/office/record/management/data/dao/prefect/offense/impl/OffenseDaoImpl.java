@@ -22,11 +22,11 @@ public class OffenseDaoImpl implements OffenseDao {
                     Timestamp offense_date = rs.getTimestamp("offense_date");
                     return new Offense(idNum, violationId, studentId, offense_date);
                 } else {
-                    System.err.println("No user found with ID: " + id);
+                    System.err.println("No offense found with ID: " + id);
                 }
             }
         } catch (SQLException ex) {
-            System.err.println("Error retrieving user with ID " + id + ": " + ex.getMessage());
+            System.err.println("Error retrieving offense with ID " + id + ": " + ex.getMessage());
             ex.printStackTrace();
         }
         return null;
@@ -44,7 +44,7 @@ public class OffenseDaoImpl implements OffenseDao {
             int affectedRows = stmt.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException ex) {
-            System.err.println("Error updating user with ID " + offense.getId() + ": " + ex.getMessage());
+            System.err.println("Error updating offense with ID " + offense.getId() + ": " + ex.getMessage());
             ex.printStackTrace();
             return false;
         }

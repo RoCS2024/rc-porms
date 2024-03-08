@@ -12,5 +12,4 @@ public interface OffenseDao {
 
     List<Offense> getAllOffenses();
 
-    Offense getStudentByID(String id);
 }

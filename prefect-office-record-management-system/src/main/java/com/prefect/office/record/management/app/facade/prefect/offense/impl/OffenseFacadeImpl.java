@@ -16,17 +16,8 @@ public class OffenseFacadeImpl implements OffenseFacade {
 
     }
     public List<Offense> getAllOffenses() {
-        List<Offense> offenses = new ArrayList<>();
-        offenses = offenseDao.getAllOffenses();
-
-        return offenses;
+        return offenseDao.getAllOffenses();
     }
-
-    @Override
-    public Offense getStudentById(String id) {
-        return offenseDao.getStudentByID(id);
-    }
-
 
     @Override
     public Offense getOffenseByID(int id) {

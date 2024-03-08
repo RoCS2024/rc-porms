@@ -4,6 +4,7 @@ import com.prefect.office.record.management.app.model.offense.Offense;
 import com.prefect.office.record.management.data.dao.prefect.offense.impl.OffenseDaoImpl;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -42,7 +43,22 @@ public class Main {
         System.out.println("1. Update User Information");
         System.out.println("0. Exit");
     }
+    private static void viewAllOffense() {
+        List<Offense> offenseRecords = offenseFacade.getAllOffenses();
 
+        if (offenseRecords != null && !offenseRecords.isEmpty()) {
+            System.out.println("Offense Records");
+            for (Offense offenseRecord : offenseRecords) {
+                System.out.println("Offense ID: " + offenseRecord.getId());
+                System.out.println("Violation ID: " + offenseRecord.getViolationId());
+                System.out.println("Student ID: " + offenseRecord.getStudentId());
+                System.out.println("Offense Date: " + offenseRecord.getOffenseDate());
+                System.out.println("-----------------------------------");
+            }
+        } else {
+            System.out.println("No offense records found.");
+        }
+    }
     private static void updateOffense() {
         try {
             int offenseId = 0;

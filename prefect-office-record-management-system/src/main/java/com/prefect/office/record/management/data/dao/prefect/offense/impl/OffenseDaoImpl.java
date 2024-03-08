@@ -60,17 +60,17 @@ public class OffenseDaoImpl implements OffenseDao {
     @Override
     public List<Offense> getAllOffenses() {
         List<Offense> offenses = new ArrayList<>();
+        String sql = "SELECT * FROM offense";
+        try (Connection con = ConnectionHelper.getConnection();
+             PreparedStatement statement = con.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
 
-        try (Connection c = ConnectionHelper.getConnection();
-             PreparedStatement statement = c.prepareStatement("SELECT * FROM offense");
-             ResultSet r = statement.executeQuery()) {
-
-            while (r.next()) {
-                Offense offense = new Offense(1, 2, "student123", new Timestamp(System.currentTimeMillis()));
-                offense.setId(r.getInt("id"));
-                offense.setViolationId(r.getInt("violation_id"));
-                offense.setStudentId(r.getString("student_id"));
-                offense.setOffenseDate(r.getTimestamp("offense_date"));
+            while (resultSet.next()) {
+                Offense offense = new Offense();
+                offense.setId(resultSet.getInt("id"));
+                offense.setViolationId(resultSet.getInt("violation_id"));
+                offense.setStudentId(resultSet.getString("student_id"));
+                offense.setOffenseDate(resultSet.getTimestamp("offense_date"));
                 offenses.add(offense);
             }
 
@@ -79,26 +79,5 @@ public class OffenseDaoImpl implements OffenseDao {
         }
 
         return offenses;
-    }
-
-    @Override
-    public Offense getStudentByID(String id) {
-        try (Connection c = ConnectionHelper.getConnection();
-             PreparedStatement statement = c.prepareStatement("SELECT * FROM offense");
-             ResultSet r = statement.executeQuery()) {
-            return r.next() ? setOffense(r) : null;
-        } catch (SQLException e) {
-
-        }
-        return null;
-    }
-
-    private Offense setOffense(ResultSet r) throws SQLException {
-        int id = r.getInt("id");
-        int violationId = r.getInt("violation_id");
-        String studentId = r.getString("student_id");
-        Timestamp offenseDate = r.getTimestamp("offense_date");
-
-        return new Offense(id, violationId, studentId, offenseDate);
     }
 }

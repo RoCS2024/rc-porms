@@ -8,5 +8,4 @@ public interface OffenseFacade {
     Offense getOffenseByID (int id);
     boolean updateOffense (Offense offense);
     List<Offense> getAllOffenses();
-    Offense getStudentById(String id);
 }

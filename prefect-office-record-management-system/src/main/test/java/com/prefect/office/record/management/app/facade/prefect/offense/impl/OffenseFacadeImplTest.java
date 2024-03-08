@@ -69,16 +69,6 @@ class OffenseFacadeImplTest {
 
         assertEquals(expectedOffenses, actualOffenses);
     }
-    @Test
-    public void testGetStudentById(OffenseDao offenseDao, OffenseFacadeImpl offenseFacade) {
 
-        String studentId = "student123";
-        Offense expectedOffense = new Offense(1, 2, studentId, new Timestamp(System.currentTimeMillis()));
-        when(offenseDao.getStudentByID(studentId)).thenReturn(expectedOffense);
-
-        Offense actualOffense = offenseFacade.getStudentById(studentId);
-
-        assertEquals(expectedOffense, actualOffense);
-    }
 }
 

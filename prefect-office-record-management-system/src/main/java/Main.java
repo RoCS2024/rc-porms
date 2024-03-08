@@ -8,6 +8,7 @@ import com.prefect.office.record.management.data.dao.prefect.communityservice.im
 import com.prefect.office.record.management.data.dao.prefect.offense.impl.OffenseDaoImpl;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -28,6 +29,9 @@ public class Main {
                         updateOffense();
                         break;
                     case 2:
+                        viewCsHistory();
+                        break;
+                    case 3:
                         renderCs();
                         break;
                     case 0:
@@ -48,7 +52,8 @@ public class Main {
     private static void displayMenu() {
         System.out.println("Prefect System");
         System.out.println("1. Update Offense");
-        System.out.println("2. Render Community Service");
+        System.out.println("2. View Community Service History");
+        System.out.println("3. Render Community Service");
         System.out.println("0. Exit");
     }
 
@@ -106,6 +111,24 @@ public class Main {
             System.err.println("An error occurred while updating Offense information: " + e.getMessage());
         }
     }
+
+    private static void viewCsHistory() {
+        List<CommunityService> csRecords = communityServiceFacade.getAllCs();
+
+        if (csRecords != null && !csRecords.isEmpty()) {
+            System.out.println("Community Service Records");
+            for (CommunityService csRecord : csRecords) {
+                System.out.println("Community Service ID: " + csRecord.getId());
+                System.out.println("Student ID: " + csRecord.getStudent_id());
+                System.out.println("Date Rendered: " + csRecord.getDate_rendered());
+                System.out.println("Hours Rendered: " + csRecord.getHours_rendered());
+                System.out.println("-----------------------------------");
+            }
+        } else {
+            System.out.println("No Community Service found.");
+        }
+    }
+
     private static void renderCs() {
         try {
             int csId = 0;

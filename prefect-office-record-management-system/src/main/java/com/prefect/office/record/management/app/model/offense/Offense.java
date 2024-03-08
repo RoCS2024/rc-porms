@@ -15,7 +15,9 @@ public class Offense {
         this.studentId = studentId;
         this.offenseDate = offenseDate;
     }
+    public Offense() {
 
+    }
     public int getId() {
         return id;
     }

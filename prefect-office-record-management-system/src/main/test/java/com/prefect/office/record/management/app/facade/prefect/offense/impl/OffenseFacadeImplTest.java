@@ -4,6 +4,9 @@ import com.prefect.office.record.management.app.model.offense.Offense;
 import com.prefect.office.record.management.data.dao.prefect.offense.OffenseDao;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -53,5 +56,17 @@ class OffenseFacadeImplTest {
         when(mockOffenseDao.getOffenseByID(1)).thenReturn(null);
 
         assertThrows(RuntimeException.class, () -> offenseFacade.updateOffense(offenseToUpdate));
+    }
+    @Test
+    public void testGetAllOffenses(OffenseFacadeImpl offenseDao) {
+
+        List<Offense> expectedOffenses = new ArrayList<>();
+        expectedOffenses.add(new Offense(1, 1, "student123", null));
+        expectedOffenses.add(new Offense(2, 2, "student456", null));
+        when(offenseDao.getAllOffenses()).thenReturn(expectedOffenses);
+
+        List<Offense> actualOffenses = offenseDao.getAllOffenses();
+
+        assertEquals(expectedOffenses, actualOffenses);
     }
 }

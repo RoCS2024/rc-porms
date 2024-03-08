@@ -5,6 +5,8 @@ import com.prefect.office.record.management.data.connectionhelper.ConnectionHelp
 import com.prefect.office.record.management.data.dao.prefect.offense.OffenseDao;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OffenseDaoImpl implements OffenseDao {
 
@@ -48,5 +50,28 @@ public class OffenseDaoImpl implements OffenseDao {
             ex.printStackTrace();
             return false;
         }
+    }
+    @Override
+    public List<Offense> getAllOffenses() {
+        List<Offense> offenses = new ArrayList<>();
+        String sql = "SELECT * FROM offense";
+        try (Connection con = ConnectionHelper.getConnection();
+             PreparedStatement statement = con.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                Offense offense = new Offense();
+                offense.setId(resultSet.getInt("id"));
+                offense.setViolationId(resultSet.getInt("violation_id"));
+                offense.setStudentId(resultSet.getString("student_id"));
+                offense.setOffenseDate(resultSet.getTimestamp("offense_date"));
+                offenses.add(offense);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return offenses;
     }
 }

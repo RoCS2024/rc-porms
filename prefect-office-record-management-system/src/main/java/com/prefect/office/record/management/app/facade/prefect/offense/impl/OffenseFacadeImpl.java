@@ -5,6 +5,7 @@ import com.prefect.office.record.management.app.model.offense.Offense;
 import com.prefect.office.record.management.data.dao.prefect.offense.OffenseDao;
 import com.prefect.office.record.management.data.dao.prefect.offense.impl.OffenseDaoImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OffenseFacadeImpl implements OffenseFacade {
@@ -15,13 +16,17 @@ public class OffenseFacadeImpl implements OffenseFacade {
 
     }
     public List<Offense> getAllOffenses() {
-        return null;
+        List<Offense> offenses = new ArrayList<>();
+        offenses = offenseDao.getAllOffenses();
+
+        return offenses;
     }
 
     @Override
-    public <Student> Student getStudentById(String id) {
-        return null;
+    public Offense getStudentById(String id) {
+        return offenseDao.getStudentByID(id);
     }
+
 
     @Override
     public Offense getOffenseByID(int id) {

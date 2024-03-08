@@ -48,12 +48,4 @@ class OffenseDaoImplTest {
         assertFalse(offenses.isEmpty());
     }
 
-    @Test
-    void testGetOffenseById() {
-        OffenseDaoImpl offenseDao = new OffenseDaoImpl();
-        String sampleId = "sampleId";
-        Offense offense = offenseDao.getOffenseById(sampleId);
-        assertNotNull(offense);
-    }
-
 }

@@ -56,6 +56,7 @@ public class OffenseDaoImpl implements OffenseDao {
             return false;
         }
     }
+
     @Override
     public List<Offense> getAllOffenses() {
         List<Offense> offenses = new ArrayList<>();
@@ -78,5 +79,26 @@ public class OffenseDaoImpl implements OffenseDao {
         }
 
         return offenses;
+    }
+
+    @Override
+    public Offense getStudentByID(String id) {
+        try (Connection c = ConnectionHelper.getConnection();
+             PreparedStatement statement = c.prepareStatement("SELECT * FROM offense");
+             ResultSet r = statement.executeQuery()) {
+            return r.next() ? setOffense(r) : null;
+        } catch (SQLException e) {
+
+        }
+        return null;
+    }
+
+    private Offense setOffense(ResultSet r) throws SQLException {
+        int id = r.getInt("id");
+        int violationId = r.getInt("violation_id");
+        String studentId = r.getString("student_id");
+        Timestamp offenseDate = r.getTimestamp("offense_date");
+
+        return new Offense(id, violationId, studentId, offenseDate);
     }
 }

@@ -28,6 +28,4 @@ public class OffenseFacadeImpl implements OffenseFacade {
     public <Student> Student getStudentById(String id) {
         return null;
     }
-
-
 }

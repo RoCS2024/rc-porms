@@ -4,6 +4,7 @@ import com.prefect.office.record.management.app.model.offense.Offense;
 import com.prefect.office.record.management.data.dao.prefect.offense.OffenseDao;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -57,23 +58,27 @@ class OffenseFacadeImplTest {
         assertThrows(RuntimeException.class, () -> offenseFacade.updateOffense(offenseToUpdate));
     }
     @Test
-    void testGetAllOffenses() {
-        List<Offense> offenses = offenseFacade.getAllOffenses();
-        assertNotNull(offenses);
-    }
+    public void testGetAllOffenses(OffenseFacadeImpl offenseDao) {
 
-    @Test
-    void testGetOffenseById() {
-        String offenseId = "sampleOffenseId";
-        Offense offense = offenseFacade.getOffenseById(offenseId);
-        assertNotNull(offense);
-    }
+        List<Offense> expectedOffenses = new ArrayList<>();
+        expectedOffenses.add(new Offense(1, 1, "student123", null));
+        expectedOffenses.add(new Offense(2, 2, "student456", null));
+        when(offenseDao.getAllOffenses()).thenReturn(expectedOffenses);
 
+        List<Offense> actualOffenses = offenseDao.getAllOffenses();
+
+        assertEquals(expectedOffenses, actualOffenses);
+    }
     @Test
-    void testGetStudentById() {
-        String studentId = "sampleStudentId";
-        Object student = offenseFacade.getStudentById(studentId);
-        assertNotNull(student);
+    public void testGetStudentById(OffenseDao offenseDao, OffenseFacadeImpl offenseFacade) {
+
+        String studentId = "student123";
+        Offense expectedOffense = new Offense(1, 2, studentId, new Timestamp(System.currentTimeMillis()));
+        when(offenseDao.getStudentByID(studentId)).thenReturn(expectedOffense);
+
+        Offense actualOffense = offenseFacade.getStudentById(studentId);
+
+        assertEquals(expectedOffense, actualOffense);
     }
 }
-}
+

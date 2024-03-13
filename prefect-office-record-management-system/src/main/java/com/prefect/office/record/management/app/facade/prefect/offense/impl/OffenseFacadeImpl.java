@@ -5,12 +5,17 @@ import com.prefect.office.record.management.app.model.offense.Offense;
 import com.prefect.office.record.management.data.dao.prefect.offense.OffenseDao;
 import com.prefect.office.record.management.data.dao.prefect.offense.impl.OffenseDaoImpl;
 
+import java.util.List;
+
 public class OffenseFacadeImpl implements OffenseFacade {
 
     OffenseDao offenseDao = new OffenseDaoImpl();
 
     public OffenseFacadeImpl(OffenseDao offenseDao){
 
+    }
+    public List<Offense> getAllOffenses() {
+        return offenseDao.getAllOffenses();
     }
 
     @Override

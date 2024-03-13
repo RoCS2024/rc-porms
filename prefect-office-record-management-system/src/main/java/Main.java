@@ -56,7 +56,22 @@ public class Main {
         System.out.println("3. Render Community Service");
         System.out.println("0. Exit");
     }
+    private static void viewAllOffense() {
+        List<Offense> offenseRecords = offenseFacade.getAllOffenses();
 
+        if (offenseRecords != null && !offenseRecords.isEmpty()) {
+            System.out.println("Offense Records");
+            for (Offense offenseRecord : offenseRecords) {
+                System.out.println("Offense ID: " + offenseRecord.getId());
+                System.out.println("Violation ID: " + offenseRecord.getViolationId());
+                System.out.println("Student ID: " + offenseRecord.getStudentId());
+                System.out.println("Offense Date: " + offenseRecord.getOffenseDate());
+                System.out.println("-----------------------------------");
+            }
+        } else {
+            System.out.println("No offense records found.");
+        }
+    }
     private static void updateOffense() {
         try {
             int offenseId = 0;

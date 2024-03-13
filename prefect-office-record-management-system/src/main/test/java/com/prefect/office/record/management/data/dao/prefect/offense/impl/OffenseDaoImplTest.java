@@ -1,11 +1,8 @@
 package com.prefect.office.record.management.data.dao.prefect.offense.impl;
-
 import com.prefect.office.record.management.app.model.offense.Offense;
 import org.junit.jupiter.api.Test;
-
 import java.sql.SQLException;
 import java.sql.Timestamp;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 

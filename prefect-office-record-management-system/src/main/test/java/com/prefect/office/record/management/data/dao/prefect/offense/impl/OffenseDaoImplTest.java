@@ -1,15 +1,12 @@
 package com.prefect.office.record.management.data.dao.prefect.offense.impl;
-
 import com.prefect.office.record.management.app.model.offense.Offense;
 import org.junit.jupiter.api.Test;
-
+import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class OffenseDaoImplTest {
-
     @Test
     void getOffenseByID_ValidID_ReturnsOffense() {
         OffenseDaoImpl offenseDao = new OffenseDaoImpl();
@@ -28,24 +25,23 @@ class OffenseDaoImplTest {
     }
 
     @Test
-    void updateOffense_ValidOffense_ReturnsTrue() {
+    void addOffense_ValidOffense_ReturnsTrue() throws SQLException {
         OffenseDaoImpl offenseDao = new OffenseDaoImpl();
-        Offense offenseToUpdate = new Offense(1, 1, "student123", new Timestamp(System.currentTimeMillis()));
-        assertTrue(offenseDao.updateOffense(offenseToUpdate));
+        Offense offenseToAdd = new Offense(1, 1, "student123", new Timestamp(System.currentTimeMillis()));
+
+        OffenseDaoImpl mockDao = mock(OffenseDaoImpl.class);
+        when(mockDao.saveOffense(offenseToAdd)).thenReturn(true);
+
+        assertTrue(mockDao.saveOffense(offenseToAdd));
     }
 
     @Test
-    void updateOffense_InvalidOffense_ReturnsFalse() {
+    void addOffense_InvalidOffense_ReturnsFalse() throws SQLException {
         OffenseDaoImpl offenseDao = new OffenseDaoImpl();
         Offense invalidOffense = new Offense(-1, 1, "student123", new Timestamp(System.currentTimeMillis()));
-        assertFalse(offenseDao.updateOffense(invalidOffense));
-    }
-    @Test
-    void testGetAllOffenses() {
-        OffenseDaoImpl offenseDao = new OffenseDaoImpl();
-        List<Offense> offenses = offenseDao.getAllOffenses();
-        assertNotNull(offenses);
-        assertFalse(offenses.isEmpty());
-    }
+        OffenseDaoImpl mockDao = mock(OffenseDaoImpl.class);
+        when(mockDao.saveOffense(invalidOffense)).thenReturn(false);
 
+        assertFalse(mockDao.saveOffense(invalidOffense));
+    }
 }

@@ -3,38 +3,35 @@ package com.prefect.office.record.management.app.facade.prefect.offense.impl;
 import com.prefect.office.record.management.app.facade.prefect.offense.OffenseFacade;
 import com.prefect.office.record.management.app.model.offense.Offense;
 import com.prefect.office.record.management.data.dao.prefect.offense.OffenseDao;
-import com.prefect.office.record.management.data.dao.prefect.offense.impl.OffenseDaoImpl;
 
 import java.util.List;
 
 public class OffenseFacadeImpl implements OffenseFacade {
+    private final OffenseDao offenseDao;
 
-    OffenseDao offenseDao = new OffenseDaoImpl();
-
-    public OffenseFacadeImpl(OffenseDao offenseDao){
-
-    }
-    public List<Offense> getAllOffenses() {
-        return offenseDao.getAllOffenses();
+    public OffenseFacadeImpl(OffenseDao offenseDao) {
+        this.offenseDao = offenseDao;
     }
 
     @Override
-    public Offense getOffenseByID(int id) {
-        return offenseDao.getOffenseByID(id);
+    public Offense getOffenseById(long id) {
+        return offenseDao.getOffenseById(id);
     }
 
     @Override
-    public boolean updateOffense(Offense offense) {
+    public boolean saveOffense(Offense offense) {
         boolean result = false;
         try {
-            Offense targetOffense = getOffenseByID(offense.getId());
-            if(targetOffense == null) {
-                throw new Exception("Offense to update not found. ");
+            Offense targetOffense = getOffenseById(offense.getId());
+            if (targetOffense != null) {
+
+                throw new RuntimeException("Offense to add not found.");
             }
-            result = offenseDao.updateOffense(offense);
+            result = offenseDao.saveOffense(offense);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
         return result;
     }
+
 }

@@ -1,25 +1,37 @@
 package com.violation.data.dao.impl;
 
+import com.violation.app.facade.violation.impl.ViolationFacade;
+import com.violation.app.facade.violation.impl.ViolationFacadeImpl;
 import com.violation.app.model.item.Violation;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ViolationDAOImplTest {
+public class ViolationDaoImplTest {
 
-    private ViolationDAO violationDAO;
+    private ViolationFacade violationFacade;
+    private ViolationDao violationDaoMock;
 
     @BeforeEach
-    void setUp() {
-        violationDAO = new ViolationDAOImpl();
+    public void setUp() {
+        violationDaoMock = mock(ViolationDao.class);
+        violationFacade = new ViolationFacadeImpl();
     }
 
     @Test
-    void testAddViolationWithAppModel() {
-        Violation testViolation = new Violation("TestingLang", "TestCon", 5);
+    public void saveViolation() {
+        Violation violation = new Violation();
+        when(violationFacade.saveViolation(violation)).thenReturn(true);
 
-        violationDAO.addViolation(testViolation);
-        assertTrue(true, "Expected: True, Actual: True");
+        assertTrue(violationFacade.saveViolation(violation));
+    }
+
+    @Test
+    public void getViolationById() {
+
+        Violation expectedViolation = new Violation();
+        when(violationDaoMock.getViolationById()).thenReturn(expectedViolation);
+
+        Violation retrievedViolation= violationFacade.getViolationById();
+
+        assertEquals(expectedViolation, retrievedViolation);
     }
 }

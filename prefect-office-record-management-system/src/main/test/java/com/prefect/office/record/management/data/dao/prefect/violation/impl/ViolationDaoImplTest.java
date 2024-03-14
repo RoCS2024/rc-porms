@@ -7,7 +7,7 @@ public class ViolationDaoImplTest {
 
     @BeforeEach
     void setUp() {
-        violationDAO = new ViolationDaoImpl();
+        violationDao = new ViolationDaoImpl();
     }
 
     @Test

@@ -9,4 +9,5 @@ public interface OffenseDao {
     Offense getOffenseByID (int id);
     boolean updateOffense (Offense offense);
 
+    boolean addOffense(Offense offense);
 }

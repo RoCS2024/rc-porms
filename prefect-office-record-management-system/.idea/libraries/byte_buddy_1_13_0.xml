@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="byte-buddy-1.13.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Downloads/Junit Dependencies/byte-buddy-1.13.0.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/Junit Dependencies/byte-buddy-agent-1.13.0.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/Junit Dependencies/junit-jupiter-engine-5.8.1.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/Junit Dependencies/junit-platform-commons-1.8.2.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/Junit Dependencies/junit-platform-engine-1.8.2.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/Junit Dependencies/mockito-core-5.8.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

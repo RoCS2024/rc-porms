@@ -37,4 +37,8 @@ public class OffenseFacadeImpl implements OffenseFacade {
         }
         return result;
     }
+    @Override
+    public boolean addOffense(Offense offense) {
+        return offenseDao.addOffense(offense);
+    }
 }

@@ -47,5 +47,17 @@ class OffenseDaoImplTest {
         assertNotNull(offenses);
         assertFalse(offenses.isEmpty());
     }
+    @Test
+    void addOffense_ValidOffense_ReturnsTrue() {
+         OffenseDaoImpl offenseDao = new OffenseDaoImpl();
+        Offense validOffenseToAdd = new Offense(1, 1, "student123", new Timestamp(System.currentTimeMillis()));
+        assertTrue(offenseDao.addOffense(validOffenseToAdd));
+}
 
+    @Test
+    void addOffense_InvalidOffense_ReturnsFalse() {
+        OffenseDaoImpl offenseDao = new OffenseDaoImpl();
+        Offense invalidOffenseToAdd = new Offense(-1, 1, "student123", new Timestamp(System.currentTimeMillis()));
+        assertFalse(offenseDao.addOffense(invalidOffenseToAdd));
+    }
 }

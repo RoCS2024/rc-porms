@@ -69,4 +69,27 @@ class OffenseFacadeImplTest {
 
         assertEquals(expectedOffenses, actualOffenses);
     }
+
+    @Test
+    void addOffense_ValidOffense_ReturnsTrue() {
+        OffenseDao mockOffenseDao = mock(OffenseDao.class);
+        OffenseFacadeImpl offenseFacade = new OffenseFacadeImpl(mockOffenseDao);
+        Offense offenseToAdd = new Offense(1, 1, "student123", null);
+
+        when(mockOffenseDao.getOffenseByID(1)).thenReturn(offenseToAdd);
+        when(mockOffenseDao.addOffense(offenseToAdd)).thenReturn(true);
+
+        assertTrue(offenseFacade.addOffense(offenseToAdd));
+    }
+
+    @Test
+    void addOffense_FailureToInsert_ThrowsRuntimeException() {
+        OffenseDao mockOffenseDao = mock(OffenseDao.class);
+        OffenseFacadeImpl offenseFacade = new OffenseFacadeImpl(mockOffenseDao);
+        Offense offenseToAdd = new Offense(1, 1, "student123", null);
+
+        when(mockOffenseDao.addOffense(offenseToAdd)).thenReturn(null);
+
+        assertThrows(RuntimeException.class, () -> offenseFacade.addOffense(offenseToAdd));
+    }
 }

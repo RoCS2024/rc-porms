@@ -73,5 +73,22 @@ public class OffenseDaoImpl implements OffenseDao {
         }
 
         return offenses;
+
+    }
+    @Override
+    public boolean addOffense(Offense offense) {
+        String sql = "INSERT INTO offense (violation_id, student_id, offense_date) VALUES (?, ?, ?)";
+        try (Connection con = ConnectionHelper.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setInt(1, offense.getViolationId());
+            stmt.setString(2, offense.getStudentId());
+            stmt.setTimestamp(3, offense.getOffenseDate());
+            int affectedRows = stmt.executeUpdate();
+            return affectedRows > 0;
+        } catch (SQLException ex) {
+            System.err.println("Error adding offense: " + ex.getMessage());
+            ex.printStackTrace();
+            return false;
+        }
     }
 }

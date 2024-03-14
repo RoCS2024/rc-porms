@@ -8,4 +8,6 @@ public interface OffenseFacade {
     List<Offense> getAllOffenses();
     Offense getOffenseByID (int id);
     boolean updateOffense (Offense offense);
+
+    boolean addOffense(Offense offense);
 }

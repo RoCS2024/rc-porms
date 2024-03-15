@@ -29,22 +29,24 @@ public class Main {
 
                 switch (choice) {
                     case 1:
-                        updateOffense();
+                        viewCsHistory()
+                        ;
                         break;
                     case 2:
-                        viewCsHistory();
+                        renderCs()
+                        ;
                         break;
                     case 3:
-                        renderCs();
-                        break;
-                    case 4:
-                        addViolation();
-                        break;
-                    case 5:
                         addOffense();
                         break;
-                    case 6:
+                    case 4:
                         viewAllOffense();
+                        break;
+                    case 5:
+                        updateOffense();
+                        break;
+                    case 6:
+                        addViolation();
                         break;
                     case 0:
                         System.out.println("Exiting the App...");
@@ -63,13 +65,117 @@ public class Main {
 
     private static void displayMenu() {
         System.out.println("Prefect System");
-        System.out.println("1. Update Offense");
-        System.out.println("2. View Community Service History");
-        System.out.println("3. Render Community Service");
-        System.out.println("4. Add Violation");
-        System.out.println("5. Add Offense");
-        System.out.println("6. View Offense");
+        System.out.println("1. View Community Service History");
+        System.out.println("2. Render Community Service");
+        System.out.println("3. Add Offense");
+        System.out.println("4. View Offense");
+        System.out.println("5. Update Offense");
+        System.out.println("6. Add Violation");
         System.out.println("0. Exit");
+    }
+
+    private static void viewCsHistory() {
+        List<CommunityService> csRecords = communityServiceFacade.getAllCs();
+
+        if (csRecords != null && !csRecords.isEmpty()) {
+            System.out.println("Community Service Records");
+            for (CommunityService csRecord : csRecords) {
+                System.out.println("Community Service ID: " + csRecord.getId());
+                System.out.println("Student ID: " + csRecord.getStudent_id());
+                System.out.println("Date Rendered: " + csRecord.getDate_rendered());
+                System.out.println("Hours Rendered: " + csRecord.getHours_rendered());
+                System.out.println("-----------------------------------");
+            }
+        } else {
+            System.out.println("No Community Service found.");
+        }
+    }
+
+    private static void renderCs() {
+        try {
+            List<CommunityService> csRecords = communityServiceFacade.getAllCs();
+
+            if (csRecords != null && !csRecords.isEmpty()) {
+                int csId = 0;
+                do {
+                    System.out.print("Enter Community Service-ID: ");
+                    if (!scanner.hasNextInt()) {
+                        System.out.println("Invalid input. Please enter an integer.");
+                        scanner.next();
+                        continue;
+                    }
+                    csId = scanner.nextInt();
+                    if (csId < 0) {
+                        System.out.println("Invalid Community Service ID. Please enter a non-negative integer.");
+                        continue;
+                    }
+
+                    System.out.print("Enter Student-ID: ");
+                    String student_id = scanner.next();
+                    if (student_id.isEmpty()) {
+                        System.out.println("Student-ID cannot be empty.");
+                        return;
+                    }
+
+                    System.out.print("Enter Hours Rendered: ");
+                    int hoursRender = scanner.nextInt();
+                    if (hoursRender < 0) {
+                        System.out.println("Please enter a non-negative integer.");
+                        continue;
+                    }
+
+                    CommunityService existingCs = communityServiceFacade.getCsById(csId);
+                    if (existingCs != null) {
+                        existingCs.setStudent_id(student_id);
+                        existingCs.setHours_rendered(hoursRender);
+                        existingCs.setDate_rendered(new Timestamp(System.currentTimeMillis()));
+
+                        boolean render = communityServiceFacade.renderCs(existingCs);
+
+                        if (render) {
+                            System.out.println("Community Service Rendered successfully!");
+                        } else {
+                            System.out.println("Failed to Render Community Service.");
+                        }
+                    } else {
+                        System.out.println("Community Service with ID " + csId + " does not exist.");
+                    }
+
+                } while (csId != 0);
+            } else {
+                System.out.println("No Community Service records found.");
+            }
+
+        } catch (Exception e) {
+            System.err.println("An error occurred while updating Community Service: " + e.getMessage());
+        }
+    }
+
+    private static void addOffense() {
+        System.out.println("\nAdding an Offense:");
+
+        System.out.print("Enter Violation ID: ");
+        int violationId = scanner.nextInt();
+        if (violationId < 0) {
+            System.out.println("Invalid Violation ID. Please enter a non-negative integer.");
+            return;
+        }
+
+        System.out.print("Enter Student ID: ");
+        String studentId = scanner.next();
+
+        Offense newOffense = new Offense();
+        newOffense.setViolationId(violationId);
+        newOffense.setStudentId(studentId);
+        newOffense.setOffenseDate(new Timestamp(System.currentTimeMillis()));
+
+        boolean added = offenseFacade.addOffense(newOffense);
+
+        if (added) {
+            System.out.println("Offense added successfully!");
+        } else {
+            System.out.println("Failed to add offense.");
+        }
     }
 
     private static void viewAllOffense() {
@@ -143,101 +249,6 @@ public class Main {
         }
     }
 
-    private static void addOffense() {
-        System.out.println("\nAdding an Offense:");
-
-        System.out.print("Enter Violation ID: ");
-        int violationId = scanner.nextInt();
-
-        System.out.print("Enter Student ID: ");
-        String studentId = scanner.next();
-
-
-        Offense newOffense = new Offense();
-        newOffense.setViolationId(violationId);
-        newOffense.setStudentId(studentId);
-        newOffense.setOffenseDate(new Timestamp(System.currentTimeMillis()));
-
-        boolean added = offenseFacade.addOffense(newOffense);
-
-        if (added) {
-            System.out.println("Offense added successfully!");
-        } else {
-            System.out.println("Failed to add offense.");
-        }
-    }
-
-    private static void viewCsHistory() {
-        List<CommunityService> csRecords = communityServiceFacade.getAllCs();
-
-        if (csRecords != null && !csRecords.isEmpty()) {
-            System.out.println("Community Service Records");
-            for (CommunityService csRecord : csRecords) {
-                System.out.println("Community Service ID: " + csRecord.getId());
-                System.out.println("Student ID: " + csRecord.getStudent_id());
-                System.out.println("Date Rendered: " + csRecord.getDate_rendered());
-                System.out.println("Hours Rendered: " + csRecord.getHours_rendered());
-                System.out.println("-----------------------------------");
-            }
-        } else {
-            System.out.println("No Community Service found.");
-        }
-    }
-
-    private static void renderCs() {
-        try {
-            int csId = 0;
-            do {
-                System.out.print("Enter Community Service-ID: ");
-                if (!scanner.hasNextInt()) {
-                    System.out.println("Invalid input. Please enter an integer.");
-                    scanner.next();
-                    continue;
-                }
-                csId = scanner.nextInt();
-                if (csId < 0) {
-                    System.out.println("Invalid Community Service ID. Please enter a non-negative integer.");
-                    continue;
-                }
-
-                System.out.print("Enter Student-ID: ");
-                String student_id = scanner.next();
-                if (student_id.isEmpty()) {
-                    System.out.println("Student-ID cannot be empty.");
-                    return;
-                }
-
-                System.out.print("Enter Hours Rendered: ");
-                int hoursRender = scanner.nextInt();
-                if (hoursRender < 0) {
-                    System.out.println("Please enter a non-negative integer.");
-                    continue;
-                }
-
-                CommunityService existingCs = communityServiceFacade.getCsById(csId);
-                if (existingCs != null) {
-                    existingCs.setStudent_id(student_id);
-                    existingCs.setHours_rendered(hoursRender);
-                    existingCs.setDate_rendered(new Timestamp(System.currentTimeMillis()));
-
-                    boolean render = communityServiceFacade.renderCs(existingCs);
-
-                    if (render) {
-                        System.out.println("Community Service Rendered successfully!");
-                    } else {
-                        System.out.println("Failed to Render Community Service.");
-                    }
-                } else {
-                    System.out.println("Community Service with ID " + csId + " does not exist.");
-                }
-
-            } while (csId != 0);
-
-        } catch (Exception e) {
-            System.err.println("An error occurred while updating Community Service: " + e.getMessage());
-        }
-    }
-
     private static void addViolation() {
         System.out.println("\nAdding a Violation:");
 
@@ -252,8 +263,8 @@ public class Main {
         int commServHours = scanner.nextInt();
         scanner.nextLine();
 
-
         violationFacade.addViolation(description, type, commServHours);
         System.out.println("Violation added successfully!");
     }
 }
+

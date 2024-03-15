@@ -2,6 +2,8 @@ import com.prefect.office.record.management.app.facade.prefect.communityservice.
 import com.prefect.office.record.management.app.facade.prefect.communityservice.impl.CommunityServiceFacadeImpl;
 import com.prefect.office.record.management.app.facade.prefect.offense.OffenseFacade;
 import com.prefect.office.record.management.app.facade.prefect.offense.impl.OffenseFacadeImpl;
+import com.prefect.office.record.management.app.facade.prefect.violation.ViolationFacade;
+import com.prefect.office.record.management.app.facade.prefect.violation.impl.ViolationFacadeImpl;
 import com.prefect.office.record.management.app.model.communityservice.CommunityService;
 import com.prefect.office.record.management.app.model.offense.Offense;
 import com.prefect.office.record.management.data.dao.prefect.communityservice.impl.CommunityServiceDaoImpl;
@@ -15,6 +17,7 @@ public class Main {
     private static final Scanner scanner = new Scanner(System.in);
     private static final OffenseFacade offenseFacade = new OffenseFacadeImpl(new OffenseDaoImpl());
     private static final CommunityServiceFacade communityServiceFacade = new CommunityServiceFacadeImpl(new CommunityServiceDaoImpl());
+    private static final ViolationFacade violationFacade = new ViolationFacadeImpl();
 
     public static void main(String[] args) {
         try {
@@ -33,6 +36,15 @@ public class Main {
                         break;
                     case 3:
                         renderCs();
+                        break;
+                    case 4:
+                        addViolation();
+                        break;
+                    case 5:
+                        addOffense();
+                        break;
+                    case 6:
+                        viewAllOffense();
                         break;
                     case 0:
                         System.out.println("Exiting the App...");
@@ -54,8 +66,12 @@ public class Main {
         System.out.println("1. Update Offense");
         System.out.println("2. View Community Service History");
         System.out.println("3. Render Community Service");
+        System.out.println("4. Add Violation");
+        System.out.println("5. Add Offense");
+        System.out.println("6. View Offense");
         System.out.println("0. Exit");
     }
+
     private static void viewAllOffense() {
         List<Offense> offenseRecords = offenseFacade.getAllOffenses();
 
@@ -72,6 +88,7 @@ public class Main {
             System.out.println("No offense records found.");
         }
     }
+
     private static void updateOffense() {
         try {
             int offenseId = 0;
@@ -90,7 +107,6 @@ public class Main {
 
                 System.out.print("Enter New Violation-ID: ");
                 int violationId = scanner.nextInt();
-                violationId = scanner.nextInt();
                 if (violationId < 0) {
                     System.out.println("Invalid violation ID. Please enter a non-negative integer.");
                     continue;
@@ -124,6 +140,30 @@ public class Main {
 
         } catch (Exception e) {
             System.err.println("An error occurred while updating Offense information: " + e.getMessage());
+        }
+    }
+
+    private static void addOffense() {
+        System.out.println("\nAdding an Offense:");
+
+        System.out.print("Enter Violation ID: ");
+        int violationId = scanner.nextInt();
+
+        System.out.print("Enter Student ID: ");
+        String studentId = scanner.next();
+
+
+        Offense newOffense = new Offense();
+        newOffense.setViolationId(violationId);
+        newOffense.setStudentId(studentId);
+        newOffense.setOffenseDate(new Timestamp(System.currentTimeMillis()));
+
+        boolean added = offenseFacade.addOffense(newOffense);
+
+        if (added) {
+            System.out.println("Offense added successfully!");
+        } else {
+            System.out.println("Failed to add offense.");
         }
     }
 
@@ -196,5 +236,24 @@ public class Main {
         } catch (Exception e) {
             System.err.println("An error occurred while updating Community Service: " + e.getMessage());
         }
+    }
+
+    private static void addViolation() {
+        System.out.println("\nAdding a Violation:");
+
+        System.out.print("Enter Violation Description: ");
+        scanner.nextLine();
+        String description = scanner.nextLine();
+
+        System.out.print("Enter Violation Type: ");
+        String type = scanner.nextLine();
+
+        System.out.print("Enter Community Service Hours: ");
+        int commServHours = scanner.nextInt();
+        scanner.nextLine();
+
+
+        violationFacade.addViolation(description, type, commServHours);
+        System.out.println("Violation added successfully!");
     }
 }

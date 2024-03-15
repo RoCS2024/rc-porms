@@ -15,7 +15,11 @@ public class ViolationFacadeImpl implements ViolationFacade {
 
     @Override
     public void addViolation(String violation, String type, int commServHours) {
+        try {
         Violation newViolation = new Violation(violation, type, commServHours);
         violationDAO.addViolation(newViolation);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to add violation: " + e.getMessage(), e);
     }
+}
 }

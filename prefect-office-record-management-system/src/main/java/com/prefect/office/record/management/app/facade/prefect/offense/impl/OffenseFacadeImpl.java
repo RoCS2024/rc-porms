@@ -11,11 +11,16 @@ public class OffenseFacadeImpl implements OffenseFacade {
 
     OffenseDao offenseDao = new OffenseDaoImpl();
 
-    public OffenseFacadeImpl(OffenseDao offenseDao){
+    public OffenseFacadeImpl(OffenseDao offenseDao) {
 
     }
+
     public List<Offense> getAllOffenses() {
-        return offenseDao.getAllOffenses();
+        try {
+            return offenseDao.getAllOffenses();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to retrieve all offenses: " + e.getMessage(), e);
+        }
     }
 
     @Override
@@ -28,7 +33,7 @@ public class OffenseFacadeImpl implements OffenseFacade {
         boolean result = false;
         try {
             Offense targetOffense = getOffenseByID(offense.getId());
-            if(targetOffense == null) {
+            if (targetOffense == null) {
                 throw new Exception("Offense to update not found. ");
             }
             result = offenseDao.updateOffense(offense);
@@ -37,8 +42,13 @@ public class OffenseFacadeImpl implements OffenseFacade {
         }
         return result;
     }
+
     @Override
     public boolean addOffense(Offense offense) {
-        return offenseDao.addOffense(offense);
+        try {
+            return offenseDao.addOffense(offense);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to add offense: " + e.getMessage(), e);
+        }
     }
 }

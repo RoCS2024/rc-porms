@@ -41,8 +41,8 @@ public class OffenseDaoImpl implements OffenseDao {
              PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setInt(1, offense.getViolationId());
             stmt.setString(2, offense.getStudentId());
-            stmt.setTimestamp(4, offense.getOffenseDate());
-            stmt.setInt(5, offense.getId());
+            stmt.setTimestamp(3, offense.getOffenseDate());
+            stmt.setInt(4, offense.getId());
             int affectedRows = stmt.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException ex) {

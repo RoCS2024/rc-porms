@@ -74,48 +74,60 @@ public class Main {
     }
 
     private static void viewAllOffense() {
-        List<Offense> offenseRecords = offenseFacade.getAllOffenses();
+        try {
+            List<Offense> offenseRecords = offenseFacade.getAllOffenses();
 
-        if (offenseRecords != null && !offenseRecords.isEmpty()) {
-            System.out.println("Offense Records");
-            for (Offense offenseRecord : offenseRecords) {
-                System.out.println("Offense ID: " + offenseRecord.getId());
-                System.out.println("Violation ID: " + offenseRecord.getViolationId());
-                System.out.println("Student ID: " + offenseRecord.getStudentId());
-                System.out.println("Offense Date: " + offenseRecord.getOffenseDate());
-                System.out.println("-----------------------------------");
+            if (offenseRecords != null && !offenseRecords.isEmpty()) {
+                System.out.println("Offense Records");
+                for (Offense offenseRecord : offenseRecords) {
+                    System.out.println("Offense ID: " + offenseRecord.getId());
+                    System.out.println("Violation ID: " + offenseRecord.getViolationId());
+                    System.out.println("Student ID: " + offenseRecord.getStudentId());
+                    System.out.println("Offense Date: " + offenseRecord.getOffenseDate());
+                    System.out.println("-----------------------------------");
+                }
+            } else {
+                System.out.println("No offense records found.");
             }
-        } else {
-            System.out.println("No offense records found.");
+        } catch (Exception e) {
+            System.err.println("An error occurred while viewing all offenses: " + e.getMessage());
         }
     }
+
 
     private static void addOffense() {
-        System.out.println("\nAdding an Offense:");
+        try {
+            System.out.println("\nAdding an Offense:");
 
-        System.out.print("Enter Violation ID: ");
-        int violationId = scanner.nextInt();
-        if (violationId < 0) {
-            System.out.println("Invalid Violation ID. Please enter a non-negative integer.");
-            return;
-        }
+            System.out.print("Enter Violation ID: ");
+            int violationId = scanner.nextInt();
+            if (violationId < 0) {
+                System.out.println("Invalid Violation ID. Please enter a non-negative integer.");
+                return;
+            }
 
-        System.out.print("Enter Student ID: ");
-        String studentId = scanner.next();
+            System.out.print("Enter Student ID: ");
+            String studentId = scanner.next();
 
-        Offense newOffense = new Offense();
-        newOffense.setViolationId(violationId);
-        newOffense.setStudentId(studentId);
-        newOffense.setOffenseDate(new Timestamp(System.currentTimeMillis()));
+            Offense newOffense = new Offense();
+            newOffense.setViolationId(violationId);
+            newOffense.setStudentId(studentId);
+            newOffense.setOffenseDate(new Timestamp(System.currentTimeMillis()));
 
-        boolean added = offenseFacade.addOffense(newOffense);
+            boolean added = offenseFacade.addOffense(newOffense);
 
-        if (added) {
-            System.out.println("Offense added successfully!");
-        } else {
-            System.out.println("Failed to add offense.");
+            if (added) {
+                System.out.println("Offense added successfully!");
+            } else {
+                System.out.println("Failed to add offense.");
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter valid IDs.");
+        } catch (Exception e) {
+            System.err.println("An error occurred while adding an offense: " + e.getMessage());
         }
     }
+
 
     private static void updateOffense() {
         try {
@@ -147,22 +159,27 @@ public class Main {
     }
 
     private static void addViolation() {
-        System.out.println("\nAdding a Violation:");
+        try {
+            System.out.println("\nAdding a Violation:");
 
-        System.out.print("Enter Violation Description: ");
-        scanner.nextLine();
-        String description = scanner.nextLine();
+            System.out.print("Enter Violation Description: ");
+            scanner.nextLine();
+            String description = scanner.nextLine();
 
-        System.out.print("Enter Violation Type: ");
-        String type = scanner.nextLine();
+            System.out.print("Enter Violation Type: ");
+            String type = scanner.nextLine();
 
-        System.out.print("Enter Community Service Hours: ");
-        int commServHours = scanner.nextInt();
-        scanner.nextLine();
+            System.out.print("Enter Community Service Hours: ");
+            int commServHours = scanner.nextInt();
+            scanner.nextLine();
 
-        violationFacade.addViolation(description, type, commServHours);
-        System.out.println("Violation added successfully!");
+            violationFacade.addViolation(description, type, commServHours);
+            System.out.println("Violation added successfully!");
+        } catch (Exception e) {
+            System.err.println("An error occurred while adding a violation: " + e.getMessage());
+        }
     }
+
 
     private static void renderCs() {
         try {
@@ -225,20 +242,23 @@ public class Main {
     }
 
     private static void viewCsHistory() {
-        List<CommunityService> csRecords = communityServiceFacade.getAllCs();
+        try {
+            List<CommunityService> csRecords = communityServiceFacade.getAllCs();
 
-        if (csRecords != null && !csRecords.isEmpty()) {
-            System.out.println("Community Service Records");
-            for (CommunityService csRecord : csRecords) {
-                System.out.println("Community Service ID: " + csRecord.getId());
-                System.out.println("Student ID: " + csRecord.getStudent_id());
-                System.out.println("Date Rendered: " + csRecord.getDate_rendered());
-                System.out.println("Hours Rendered: " + csRecord.getHours_rendered());
-                System.out.println("-----------------------------------");
+            if (csRecords != null && !csRecords.isEmpty()) {
+                System.out.println("Community Service Records");
+                for (CommunityService csRecord : csRecords) {
+                    System.out.println("Community Service ID: " + csRecord.getId());
+                    System.out.println("Student ID: " + csRecord.getStudent_id());
+                    System.out.println("Date Rendered: " + csRecord.getDate_rendered());
+                    System.out.println("Hours Rendered: " + csRecord.getHours_rendered());
+                    System.out.println("-----------------------------------");
+                }
+            } else {
+                System.out.println("No Community Service found.");
             }
-        } else {
-            System.out.println("No Community Service found.");
+        } catch (Exception e) {
+            System.err.println("An error occurred while viewing community service history: " + e.getMessage());
         }
     }
 }
-

@@ -18,8 +18,9 @@ public class ViolationDaoImpl implements ViolationDao {
             preparedStatement.setString(2, violation.getType());
             preparedStatement.setInt(3, violation.getCommServHours());
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException ex) {
+            System.err.println("Error adding violation: " + ex.getMessage());
+            ex.printStackTrace();
         }
     }
 }

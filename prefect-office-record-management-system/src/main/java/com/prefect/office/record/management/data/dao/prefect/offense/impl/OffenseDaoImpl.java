@@ -68,8 +68,10 @@ public class OffenseDaoImpl implements OffenseDao {
                 offenses.add(offense);
             }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException ex) {
+            System.err.println("Error retrieving all offenses: " + ex.getMessage());
+            ex.printStackTrace();
+
         }
 
         return offenses;

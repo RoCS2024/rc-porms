@@ -27,8 +27,9 @@ public class CommunityServiceDaoImpl implements CommunityServiceDao {
                 communityServices.add(communityService);
             }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException ex) {
+            System.err.println("Error retrieving all community services: " + ex.getMessage());
+            ex.printStackTrace();
         }
 
         return communityServices;
@@ -70,6 +71,7 @@ public class CommunityServiceDaoImpl implements CommunityServiceDao {
             int affectedRows = stmt.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException ex) {
+            System.err.println("Error rendering Community Service: " + ex.getMessage());
             ex.printStackTrace();
             return false;
         }

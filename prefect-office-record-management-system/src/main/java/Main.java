@@ -10,9 +10,8 @@ import com.prefect.office.record.management.data.dao.prefect.communityservice.im
 import com.prefect.office.record.management.data.dao.prefect.offense.impl.OffenseDaoImpl;
 
 import java.sql.Timestamp;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
@@ -109,10 +108,29 @@ public class Main {
             System.out.print("Enter Student ID: ");
             String studentId = scanner.next();
 
+            System.out.print("Enter Offense Date (YYYY-MM-DD): ");
+            String dateString = scanner.next();
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date parsedDate = dateFormat.parse(dateString);
+
+            Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(parsedDate);
+            calendar.setTime(parsedDate);
+            calendar.set(Calendar.HOUR_OF_DAY, currentTime.getHours());
+            calendar.set(Calendar.MINUTE, currentTime.getMinutes());
+            calendar.set(Calendar.SECOND, currentTime.getSeconds());
+            calendar.set(Calendar.MILLISECOND, currentTime.getNanos() / 1000000);
+
+
+            Timestamp offenseDate = new Timestamp(calendar.getTimeInMillis());
+
             Offense newOffense = new Offense();
             newOffense.setViolationId(violationId);
             newOffense.setStudentId(studentId);
-            newOffense.setOffenseDate(new Timestamp(System.currentTimeMillis()));
+            newOffense.setOffenseDate(offenseDate);
 
             boolean added = offenseFacade.addOffense(newOffense);
 

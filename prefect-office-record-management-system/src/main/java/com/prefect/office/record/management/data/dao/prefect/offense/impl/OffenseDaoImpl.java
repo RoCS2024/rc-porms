@@ -3,12 +3,16 @@ package com.prefect.office.record.management.data.dao.prefect.offense.impl;
 import com.prefect.office.record.management.app.model.offense.Offense;
 import com.prefect.office.record.management.data.connectionhelper.ConnectionHelper;
 import com.prefect.office.record.management.data.dao.prefect.offense.OffenseDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OffenseDaoImpl implements OffenseDao {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(OffenseDaoImpl.class);
 
     @Override
     public Offense getOffenseByID(int id) {
@@ -24,13 +28,14 @@ public class OffenseDaoImpl implements OffenseDao {
                     Timestamp offense_date = rs.getTimestamp("offense_date");
                     return new Offense(idNum, violationId, studentId, offense_date);
                 } else {
-                    System.err.println("No offense found with ID: " + id);
+                    LOGGER.warn("No offense found with ID: " + id);
                 }
             }
         } catch (SQLException ex) {
-            System.err.println("Error retrieving offense with ID " + id + ": " + ex.getMessage());
+            LOGGER.warn("Error retrieving offense with ID " + id + ": " + ex.getMessage());
             ex.printStackTrace();
         }
+        LOGGER.debug("Offense not found.");
         return null;
     }
 
@@ -46,11 +51,12 @@ public class OffenseDaoImpl implements OffenseDao {
             int affectedRows = stmt.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException ex) {
-            System.err.println("Error updating offense with ID " + offense.getId() + ": " + ex.getMessage());
+            LOGGER.warn("Error updating offense with ID " + offense.getId() + ": " + ex.getMessage());
             ex.printStackTrace();
             return false;
         }
     }
+
     @Override
     public List<Offense> getAllOffenses() {
         List<Offense> offenses = new ArrayList<>();
@@ -67,13 +73,12 @@ public class OffenseDaoImpl implements OffenseDao {
                 offense.setOffenseDate(resultSet.getTimestamp("offense_date"));
                 offenses.add(offense);
             }
-
+            LOGGER.info("Offenses retrieved successfully.");
         } catch (SQLException ex) {
-            System.err.println("Error retrieving all offenses: " + ex.getMessage());
+            LOGGER.warn("Error retrieving all offenses: " + ex.getMessage());
             ex.printStackTrace();
-
         }
-
+        LOGGER.debug("Offense database is empty.");
         return offenses;
 
     }
@@ -88,7 +93,7 @@ public class OffenseDaoImpl implements OffenseDao {
             int affectedRows = stmt.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException ex) {
-            System.err.println("Error adding offense: " + ex.getMessage());
+           LOGGER.warn("Error adding offense: " + ex.getMessage());
             ex.printStackTrace();
             return false;
         }

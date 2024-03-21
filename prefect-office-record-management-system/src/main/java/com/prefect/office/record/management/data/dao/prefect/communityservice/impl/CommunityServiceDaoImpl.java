@@ -4,12 +4,16 @@ import com.prefect.office.record.management.app.model.communityservice.Community
 import com.prefect.office.record.management.app.model.offense.Offense;
 import com.prefect.office.record.management.data.connectionhelper.ConnectionHelper;
 import com.prefect.office.record.management.data.dao.prefect.communityservice.CommunityServiceDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CommunityServiceDaoImpl implements CommunityServiceDao {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommunityServiceDaoImpl.class);
     @Override
     public List<CommunityService> getAllCs() {
         List<CommunityService> communityServices = new ArrayList<>();
@@ -26,12 +30,12 @@ public class CommunityServiceDaoImpl implements CommunityServiceDao {
                 communityService.setHours_rendered(resultSet.getInt("hours_rendered"));
                 communityServices.add(communityService);
             }
-
+            LOGGER.info("Community Service retrieved successfully.");
         } catch (SQLException ex) {
-            System.err.println("Error retrieving all community services: " + ex.getMessage());
+            LOGGER.warn("Error retrieving all community services: " + ex.getMessage());
             ex.printStackTrace();
         }
-
+        LOGGER.debug("Community Service database is empty.");
         return communityServices;
     }
 
@@ -49,13 +53,14 @@ public class CommunityServiceDaoImpl implements CommunityServiceDao {
                     int hours_rendered = rs.getInt("hours_rendered");
                     return new CommunityService(idNum, student_id, date_rendered, hours_rendered);
                 } else {
-                    System.err.println("No Community Service found with ID: " + id);
+                    LOGGER.info("No Community Service found with ID: " + id);
                 }
             }
         } catch (SQLException ex) {
-            System.err.println("Error retrieving Community Service with ID " + id + ": " + ex.getMessage());
+            LOGGER.warn("Error retrieving Community Service with ID " + id + ": " + ex.getMessage());
             ex.printStackTrace();
         }
+        LOGGER.debug("Community Service not found.");
         return null;
     }
 
@@ -71,7 +76,7 @@ public class CommunityServiceDaoImpl implements CommunityServiceDao {
             int affectedRows = stmt.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException ex) {
-            System.err.println("Error rendering Community Service: " + ex.getMessage());
+            LOGGER.warn("Error rendering Community Service: " + ex.getMessage());
             ex.printStackTrace();
             return false;
         }

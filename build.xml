@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<project name="prefect-office-record-management-system" default="resolve" xmlns:ivy = "antlib:org.apache.ivy.ant">
+
+    <property name="dst.dir" value="out"/>
+    <property name="source" value="src/main/java"/>
+    <property file="build.properties"/>
+    <property name="build.dir" value="target"/>
+    <property name="doc.dir" value="doc"/>
+
+    <target name="resolve" description="resolve dependencies">
+        <ivy:resolve/>
+        <ivy:retrieve/>
+    </target>
+
+    <target name="copy-files">
+        <copy todir="${dst.dir}">
+            <fileset dir="${source}">
+                <patternset refid="java.files.without.text.files"/>
+                <include name="**/*.docx"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <patternset id="java.files.without.text.files">
+        <include name="**/*.java"/>
+        <exclude name="**/**.txt"/>
+    </patternset>
+
+    <target name="build">
+        <mkdir dir="${build.dir}"/>
+        <javac includeantruntime="false" destdir="${build.dir}" source="1.8" target="1.8">
+            <src path="${source}"/>
+        </javac>
+    </target>
+
+    <target name="generate-javadoc">
+        <javadoc packagenames="com.prefect.office.record.management.*" sourcepath="${source}" destdir="${doc.dir}" version="${version}" windowtitle="Test ANT Documentation">
+            <fileset dir="."></fileset>
+            <doctitle><![CDATA[= Test Documentation =]]></doctitle>
+            <bottom>
+                <![CDATA[Copyright © ${copyright.year}. All Rights Reserved.]]>
+            </bottom>
+        </javadoc>
+        <echo message="java doc has been generated!" />
+    </target>
+
+
+</project>

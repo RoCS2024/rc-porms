@@ -10,6 +10,8 @@ import com.prefect.office.record.management.data.dao.prefect.communityservice.im
 import com.prefect.office.record.management.data.dao.prefect.offense.impl.OffenseDaoImpl;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -109,10 +111,16 @@ public class Main {
             System.out.print("Enter Student ID: ");
             String studentId = scanner.next();
 
+            System.out.print("Enter Offense Date (YYYY-MM-DD): ");
+            String dateStr = scanner.next();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date parsedDate = dateFormat.parse(dateStr);
+            Timestamp offenseDate = new Timestamp(parsedDate.getTime());
+
             Offense newOffense = new Offense();
             newOffense.setViolationId(violationId);
             newOffense.setStudentId(studentId);
-            newOffense.setOffenseDate(new Timestamp(System.currentTimeMillis()));
+            newOffense.setOffenseDate(offenseDate);
 
             boolean added = offenseFacade.addOffense(newOffense);
 
@@ -123,6 +131,8 @@ public class Main {
             }
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please enter valid IDs.");
+        } catch (ParseException e) {
+            System.out.println("Invalid date format. Please enter date in YYYY-MM-DD format.");
         } catch (Exception e) {
             System.err.println("An error occurred while adding an offense: " + e.getMessage());
         }

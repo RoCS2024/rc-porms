@@ -16,5 +16,10 @@
         <dependency org="net.bytebuddy" name="byte-buddy-dep" rev="1.13.0"/>
         <dependency org="org.junit.jupiter" name="junit-jupiter-api" rev="5.8.1"/>
         <dependency org="org.junit.platform" name=" junit-platform-engine" rev="1.8.2"/>
+
+        <!--For logging-->
+        <dependency org="org.apache.logging.log4j" name="log4j-api" rev="2.23.0"/>
+        <dependency org="org.apache.logging.log4j" name="log4j-core" rev="2.23.0"/>
+        <dependency org="org.apache.logging.log4j" name="log4j-slf4j2-impl" rev="2.23.0"/>
     </dependencies>
     </ivy-module>

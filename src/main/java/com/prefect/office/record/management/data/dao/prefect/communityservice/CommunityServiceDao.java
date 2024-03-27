@@ -1,7 +1,6 @@
 package com.prefect.office.record.management.data.dao.prefect.communityservice;
 
-import com.prefect.office.record.management.app.model.communityservice.CommunityService;
-import com.prefect.office.record.management.app.model.offense.Offense;
+import com.prefect.office.record.management.appl.model.communityservice.CommunityService;
 
 import java.sql.SQLException;
 import java.util.List;

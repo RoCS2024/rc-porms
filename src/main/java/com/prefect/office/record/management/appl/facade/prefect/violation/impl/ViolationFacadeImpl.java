@@ -5,6 +5,8 @@ import com.prefect.office.record.management.appl.model.violation.Violation;
 import com.prefect.office.record.management.data.dao.prefect.violation.ViolationDao;
 import com.prefect.office.record.management.data.dao.prefect.violation.impl.ViolationDaoImpl;
 
+import java.util.List;
+
 
 public class ViolationFacadeImpl implements ViolationFacade {
     private ViolationDao violationDAO;
@@ -22,4 +24,9 @@ public class ViolationFacadeImpl implements ViolationFacade {
             throw new RuntimeException("Failed to add violation: " + e.getMessage(), e);
     }
 }
+
+    @Override
+    public List<Violation> getAllViolation() {
+        return violationDAO.getAllViolation();
+    }
 }

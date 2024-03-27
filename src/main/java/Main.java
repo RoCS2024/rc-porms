@@ -1,11 +1,11 @@
-import com.prefect.office.record.management.app.facade.prefect.communityservice.CommunityServiceFacade;
-import com.prefect.office.record.management.app.facade.prefect.communityservice.impl.CommunityServiceFacadeImpl;
-import com.prefect.office.record.management.app.facade.prefect.offense.OffenseFacade;
-import com.prefect.office.record.management.app.facade.prefect.offense.impl.OffenseFacadeImpl;
-import com.prefect.office.record.management.app.facade.prefect.violation.ViolationFacade;
-import com.prefect.office.record.management.app.facade.prefect.violation.impl.ViolationFacadeImpl;
-import com.prefect.office.record.management.app.model.communityservice.CommunityService;
-import com.prefect.office.record.management.app.model.offense.Offense;
+import com.prefect.office.record.management.appl.facade.prefect.communityservice.CommunityServiceFacade;
+import com.prefect.office.record.management.appl.facade.prefect.communityservice.impl.CommunityServiceFacadeImpl;
+import com.prefect.office.record.management.appl.facade.prefect.offense.OffenseFacade;
+import com.prefect.office.record.management.appl.facade.prefect.offense.impl.OffenseFacadeImpl;
+import com.prefect.office.record.management.appl.facade.prefect.violation.ViolationFacade;
+import com.prefect.office.record.management.appl.facade.prefect.violation.impl.ViolationFacadeImpl;
+import com.prefect.office.record.management.appl.model.communityservice.CommunityService;
+import com.prefect.office.record.management.appl.model.offense.Offense;
 import com.prefect.office.record.management.data.dao.prefect.communityservice.impl.CommunityServiceDaoImpl;
 import com.prefect.office.record.management.data.dao.prefect.offense.impl.OffenseDaoImpl;
 

@@ -1,6 +1,6 @@
 package com.prefect.office.record.management.data.dao.prefect.offense.impl;
 
-import com.prefect.office.record.management.app.model.offense.Offense;
+import com.prefect.office.record.management.appl.model.offense.Offense;
 import com.prefect.office.record.management.data.connectionhelper.ConnectionHelper;
 import com.prefect.office.record.management.data.dao.prefect.offense.OffenseDao;
 import org.slf4j.Logger;

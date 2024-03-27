@@ -1,7 +1,6 @@
 package com.prefect.office.record.management.data.dao.prefect.communityservice.impl;
 
-import com.prefect.office.record.management.app.model.communityservice.CommunityService;
-import com.prefect.office.record.management.app.model.offense.Offense;
+import com.prefect.office.record.management.appl.model.communityservice.CommunityService;
 import com.prefect.office.record.management.data.connectionhelper.ConnectionHelper;
 import com.prefect.office.record.management.data.dao.prefect.communityservice.CommunityServiceDao;
 import org.slf4j.Logger;

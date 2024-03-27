@@ -1,0 +1,3 @@
+2024-03-27 16:32:47.182 [main] WARN  com.prefect.office.record.management.data.dao.prefect.offense.impl.OffenseDaoImpl - Error retrieving all offenses: ORA-00942: table or view does not exist
+
+https://docs.oracle.com/error-help/db/ora-00942/

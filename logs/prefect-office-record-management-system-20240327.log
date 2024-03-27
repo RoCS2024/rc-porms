@@ -1,0 +1,9 @@
+2024-03-27 17:07:37.592 [main] WARN  com.prefect.office.record.management.data.dao.prefect.offense.impl.OffenseDaoImpl - Error retrieving all offenses: ORA-00942: table or view does not exist
+
+https://docs.oracle.com/error-help/db/ora-00942/
+2024-03-27 17:23:29.211 [main] INFO  com.prefect.office.record.management.data.dao.prefect.offense.impl.OffenseDaoImpl - Offenses retrieved successfully.
+2024-03-27 17:23:55.222 [main] WARN  com.prefect.office.record.management.data.dao.prefect.offense.impl.OffenseDaoImpl - Error adding offense: ORA-02291: integrity constraint (SYSTEM.SYS_C007552) violated - parent key not found
+
+https://docs.oracle.com/error-help/db/ora-02291/
+2024-03-27 17:26:21.550 [main] INFO  com.prefect.office.record.management.data.dao.prefect.offense.impl.OffenseDaoImpl - Offenses retrieved successfully.
+2024-03-27 17:54:06.699 [main] INFO  com.prefect.office.record.management.app.facade.prefect.violation.ViolationFacade - Employee retrieved successfully.

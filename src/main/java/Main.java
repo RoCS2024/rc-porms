@@ -6,6 +6,7 @@ import com.prefect.office.record.management.app.facade.prefect.violation.Violati
 import com.prefect.office.record.management.app.facade.prefect.violation.impl.ViolationFacadeImpl;
 import com.prefect.office.record.management.app.model.communityservice.CommunityService;
 import com.prefect.office.record.management.app.model.offense.Offense;
+import com.prefect.office.record.management.app.model.violation.Violation;
 import com.prefect.office.record.management.data.dao.prefect.communityservice.impl.CommunityServiceDaoImpl;
 import com.prefect.office.record.management.data.dao.prefect.offense.impl.OffenseDaoImpl;
 
@@ -44,9 +45,12 @@ public class Main {
                         addViolation();
                         break;
                     case 5:
-                        renderCs();
+                        viewAllViolation();
                         break;
                     case 6:
+                        renderCs();
+                        break;
+                    case 7:
                         viewCsHistory();
                         break;
                     case 0:
@@ -64,14 +68,16 @@ public class Main {
         }
     }
 
+
     private static void displayMenu() {
         System.out.println("Prefect System");
         System.out.println("1. View List of Offense");
         System.out.println("2. Add Offense");
         System.out.println("3. Update Offense");
         System.out.println("4. Add Violation");
-        System.out.println("5. Render Community Service");
-        System.out.println("6. View Community Service History");
+        System.out.println("5. View Violation");
+        System.out.println("6. Render Community Service");
+        System.out.println("7. View Community Service History");
         System.out.println("0. Exit");
     }
 
@@ -190,6 +196,26 @@ public class Main {
         }
     }
 
+    private static void viewAllViolation() {
+        try {
+            List<Violation> violationRecords = violationFacade.getAllViolation();
+
+            if (violationRecords != null && !violationRecords.isEmpty()) {
+                System.out.println("Violation Records");
+                for (Violation violationRecord : violationRecords) {
+                    System.out.println("Violation: " + violationRecord.getId());
+                    System.out.println("Violation ID: " + violationRecord.getViolation());
+                    System.out.println("Violation Type: " + violationRecord.getType());
+                    System.out.println("Community Service Hours: " + violationRecord.getCommServHours());
+                    System.out.println("-----------------------------------");
+                }
+            } else {
+                System.out.println("No violation records found.");
+            }
+        } catch (Exception e) {
+            System.err.println("An error occurred while viewing all violation: " + e.getMessage());
+        }
+    }
 
     private static void renderCs() {
         try {

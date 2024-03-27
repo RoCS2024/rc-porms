@@ -197,23 +197,14 @@ public class Main {
     }
 
     private static void viewAllViolation() {
-        try {
-            List<Violation> violationRecords = violationFacade.getAllViolation();
-
-            if (violationRecords != null && !violationRecords.isEmpty()) {
-                System.out.println("Violation Records");
-                for (Violation violationRecord : violationRecords) {
-                    System.out.println("Violation: " + violationRecord.getId());
-                    System.out.println("Violation ID: " + violationRecord.getViolation());
-                    System.out.println("Violation Type: " + violationRecord.getType());
-                    System.out.println("Community Service Hours: " + violationRecord.getCommServHours());
-                    System.out.println("-----------------------------------");
-                }
-            } else {
-                System.out.println("No violation records found.");
-            }
-        } catch (Exception e) {
-            System.err.println("An error occurred while viewing all violation: " + e.getMessage());
+        System.out.println("Showing all Violations ...");
+        List<Violation> violationList = violationFacade.getAllViolation();
+        for (Violation violation : violationList) {
+            System.out.println("-------------------------------------");
+            System.out.println("Violation ID: " + violation.getId());
+            System.out.println("Violation: " + violation.getViolation());
+            System.out.println("Violation Type: " + violation.getType());
+            System.out.println("Community Service Hours: " + violation.getCommServHours());
         }
     }
 

@@ -38,25 +38,6 @@ public class ViolationFacadeImpl implements ViolationFacade {
 
     @Override
     public List<Violation> getAllViolation() {
-        List<Violation> violations = new ArrayList<>();
-        try {
-            String sql = "SELECT * FROM violation";
-            PreparedStatement stmt = c.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                Violation violation = new Violation();
-                violation.setId(rs.getInt("id"));
-                violation.setViolation(rs.getString("violation"));
-                violation.setType(rs.getString("type"));
-                violation.setCommServHours(rs.getInt("comm_serv_hours"));
-                violations.add(violation);
-            }
-            LOGGER.info("Employee retrieved successfully.");
-        } catch (Exception e) {
-            LOGGER.warn("An SQL Exception occurred." + e.getMessage());
-        }
-        LOGGER.debug("Employee database is empty.");
-        return violations;
+        return violationDAO.getAllViolation();
     }
 }

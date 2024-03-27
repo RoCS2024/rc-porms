@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface ViolationDao {
     void addViolation(Violation violation);
+    List<Violation> getAllViolation();
 }
 

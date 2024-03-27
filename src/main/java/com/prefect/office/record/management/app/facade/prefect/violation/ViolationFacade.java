@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface ViolationFacade {
     void addViolation(String violation, String type, int commServHours);
+
     List<Violation> getAllViolation();
 }

@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ViolationDaoImpl implements ViolationDao {
-
-
     private static final Logger LOGGER = LoggerFactory.getLogger(ViolationDaoImpl.class);
 
     @Override
@@ -31,5 +29,28 @@ public class ViolationDaoImpl implements ViolationDao {
             ex.printStackTrace();
         }
         LOGGER.debug("Adding violation failed.");
+    }
+
+    @Override
+    public List<Violation> getAllViolation() {
+        List<Violation> violations = new ArrayList<>();
+        try (Connection connection = ConnectionHelper.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM violation"))   {
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                Violation violation = new Violation();
+                violation.setId(rs.getInt("id"));
+                violation.setViolation(rs.getString("violation"));
+                violation.setType(rs.getString("type"));
+                violation.setCommServHours(rs.getInt("comm_serv_hours"));
+                violations.add(violation);
+            }
+            LOGGER.info("Violations retrieved successfully.");
+        } catch (Exception e) {
+            LOGGER.warn("An SQL Exception occurred." + e.getMessage());
+        }
+        LOGGER.debug("Violation database is empty.");
+        return violations;
     }
 }

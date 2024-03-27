@@ -6,6 +6,7 @@ import com.prefect.office.record.management.appl.facade.prefect.violation.Violat
 import com.prefect.office.record.management.appl.facade.prefect.violation.impl.ViolationFacadeImpl;
 import com.prefect.office.record.management.appl.model.communityservice.CommunityService;
 import com.prefect.office.record.management.appl.model.offense.Offense;
+import com.prefect.office.record.management.appl.model.violation.Violation;
 import com.prefect.office.record.management.data.dao.prefect.communityservice.impl.CommunityServiceDaoImpl;
 import com.prefect.office.record.management.data.dao.prefect.offense.impl.OffenseDaoImpl;
 
@@ -44,9 +45,12 @@ public class Main {
                         addViolation();
                         break;
                     case 5:
-                        renderCs();
+                        viewAllViolation();
                         break;
                     case 6:
+                        renderCs();
+                        break;
+                    case 7:
                         viewCsHistory();
                         break;
                     case 0:
@@ -70,8 +74,9 @@ public class Main {
         System.out.println("2. Add Offense");
         System.out.println("3. Update Offense");
         System.out.println("4. Add Violation");
-        System.out.println("5. Render Community Service");
-        System.out.println("6. View Community Service History");
+        System.out.println("5. View List of Violation");
+        System.out.println("6. Render Community Service");
+        System.out.println("7. View Community Service History");
         System.out.println("0. Exit");
     }
 
@@ -190,6 +195,17 @@ public class Main {
         }
     }
 
+    private static void viewAllViolation() {
+        System.out.println("Showing all Violations ...");
+        List<Violation> violationList =violationFacade.getAllViolation();
+        for (Violation violation : violationList) {
+            System.out.println("-------------------------------------");
+            System.out.println("Violation ID: " + violation.getId());
+            System.out.println("Violation: " + violation.getViolation());
+            System.out.println("Violation Type: " + violation.getType());
+            System.out.println("Community Service Hours: " + violation.getCommServHours());
+        }
+    }
 
     private static void renderCs() {
         try {

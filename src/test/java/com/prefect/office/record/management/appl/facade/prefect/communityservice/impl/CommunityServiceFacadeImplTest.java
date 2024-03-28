@@ -1,7 +1,87 @@
 package com.prefect.office.record.management.appl.facade.prefect.communityservice.impl;
 
-import static org.junit.jupiter.api.Assertions.*;
+import com.prefect.office.record.management.appl.facade.prefect.communityservice.CommunityServiceFacade;
+import com.prefect.office.record.management.appl.model.communityservice.CommunityService;
+import com.prefect.office.record.management.data.dao.prefect.communityservice.CommunityServiceDao;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
+
+import static org.mockito.Mockito.*;
 
 class CommunityServiceFacadeImplTest {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommunityServiceFacadeImplTest.class);
 
+    @InjectMocks
+    private CommunityServiceFacade communityServiceFacade = new CommunityServiceFacadeImpl();
+
+    @Mock
+    private CommunityServiceDao communityServiceDao;
+
+    @Mock
+    private List<CommunityService> communityServiceList;
+
+    @Mock
+    private CommunityService communityService;
+
+    @Mock
+    private CommunityService addCommunityService;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+        communityService.setId(1);
+        addCommunityService.setId(2);
+        when(communityServiceDao.getAllCs()).thenReturn(communityServiceList);
+    }
+
+    @AfterEach
+    public void validate() {
+        validateMockitoUsage();
+    }
+
+    @Test
+    public void testGetAllCs() {
+        List expectedList = communityServiceFacade.getAllCs();
+
+        assert (expectedList.equals(communityServiceList));
+        // Verify that the itemDao.getAllItems is called whenever itemFacade.getAllItems is invoked.
+        verify(communityServiceDao).getAllCs();
+    }
+
+    @Test
+    public void testGetCsById() {
+        when(communityServiceDao.getCsById(1)).thenReturn(communityService);
+        CommunityService expectedCommunityService = communityServiceFacade.getCsById(1);
+
+        assert (expectedCommunityService.equals(communityService));
+
+        verify(communityServiceDao).getCsById(1);
+    }
+
+    @Test
+    public void testRenderCs() {
+        try {
+            when(communityServiceDao.getCsById(communityService.getId())).thenReturn(communityService);
+            when(communityServiceDao.renderCs(communityService)).thenReturn(true);
+
+            boolean result = communityServiceFacade.renderCs(communityService);
+
+            // Assert that when updating an item, it returns true if successful
+            assert (result == true);
+            // Assert that item to update is in the database
+            assert (communityServiceFacade.getCsById(1).equals(communityService));
+            // Verify that itemDao.updateItem() is called when itemFacade.updateItem() is invoked
+            verify(communityServiceDao).renderCs(communityService);
+        } catch (Exception e) {
+            LOGGER.error("Exception caught: " + e.getMessage());
+        }
+    }
 }

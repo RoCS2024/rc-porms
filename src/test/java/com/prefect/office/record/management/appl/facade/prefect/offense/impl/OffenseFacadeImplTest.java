@@ -60,9 +60,8 @@ class OffenseFacadeImplTest {
         when(offenseDao.getOffenseByID(1)).thenReturn(offense);
         Offense expectedOffense = offenseFacade.getOffenseByID(1);
 
-        // Assert that expectedItem and item are equal
         assert(expectedOffense.equals(offense));
-        // verify that when calling itemFacade.getItemById(), the itemDao.getItemById() is called.
+
         verify(offenseDao).getOffenseByID(1);
     }
 
@@ -74,11 +73,10 @@ class OffenseFacadeImplTest {
 
             boolean result = offenseFacade.addOffense(addOffense);
 
-            // Assert that when adding an item, it returns true if successful
             assert(result == true);
-            // Assert that addItem is not in the database
+
             assert(offenseFacade.getOffenseByID(2) == null);
-            // Verify that itemDao.addItem() is called when itemFacade.addItem() is invoked
+
             verify(offenseDao).addOffense(addOffense);
         } catch (Exception e) {
             LOGGER.error("Exception caught: " + e.getMessage());
@@ -94,15 +92,13 @@ class OffenseFacadeImplTest {
 
             boolean result = offenseFacade.updateOffense(offense);
 
-            // Assert that when updating an item, it returns true if successful
             assert(result == true);
-            // Assert that item to update is in the database
+
             assert(offenseFacade.getOffenseByID(1).equals(offense));
-            // Verify that itemDao.updateItem() is called when itemFacade.updateItem() is invoked
+
             verify(offenseDao).updateOffense(offense);
         } catch (Exception e) {
             LOGGER.error("Exception caught: " + e.getMessage());
         }
     }
-
 }

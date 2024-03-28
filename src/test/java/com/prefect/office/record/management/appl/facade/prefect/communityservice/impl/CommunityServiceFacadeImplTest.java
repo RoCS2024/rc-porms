@@ -52,7 +52,7 @@ class CommunityServiceFacadeImplTest {
         List expectedList = communityServiceFacade.getAllCs();
 
         assert (expectedList.equals(communityServiceList));
-        // Verify that the itemDao.getAllItems is called whenever itemFacade.getAllItems is invoked.
+
         verify(communityServiceDao).getAllCs();
     }
 
@@ -74,11 +74,10 @@ class CommunityServiceFacadeImplTest {
 
             boolean result = communityServiceFacade.renderCs(communityService);
 
-            // Assert that when updating an item, it returns true if successful
             assert (result == true);
-            // Assert that item to update is in the database
+
             assert (communityServiceFacade.getCsById(1).equals(communityService));
-            // Verify that itemDao.updateItem() is called when itemFacade.updateItem() is invoked
+
             verify(communityServiceDao).renderCs(communityService);
         } catch (Exception e) {
             LOGGER.error("Exception caught: " + e.getMessage());

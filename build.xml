@@ -79,7 +79,7 @@
 
     <!-- Generate java documentation   -->
     <target name="generate-javadoc">
-        <javadoc packagenames="com.prefect.office.recorda.management.*"
+        <javadoc packagenames="com.prefect.office.record.management.*"
                  sourcepath="${src.dir}"
                  destdir="${doc.dir}"
                  version="${version}"

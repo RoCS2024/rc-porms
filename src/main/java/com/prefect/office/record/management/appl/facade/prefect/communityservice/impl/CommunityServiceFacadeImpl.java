@@ -8,11 +8,9 @@ import java.util.List;
 
 public class CommunityServiceFacadeImpl implements CommunityServiceFacade {
     private CommunityServiceDao communityServiceDao;
-
-    public CommunityServiceFacadeImpl() {
+    public CommunityServiceFacadeImpl(CommunityServiceDao communityServiceDao) {
         this.communityServiceDao = communityServiceDao;
     }
-
     @Override
     public List<CommunityService> getAllCs() {
         return communityServiceDao.getAllCs();

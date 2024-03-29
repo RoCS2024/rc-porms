@@ -3,6 +3,7 @@ package com.prefect.office.record.management.appl.facade.prefect.communityservic
 import com.prefect.office.record.management.appl.facade.prefect.communityservice.CommunityServiceFacade;
 import com.prefect.office.record.management.appl.model.communityservice.CommunityService;
 import com.prefect.office.record.management.data.dao.prefect.communityservice.CommunityServiceDao;
+import com.prefect.office.record.management.data.dao.prefect.communityservice.impl.CommunityServiceDaoImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,7 @@ class CommunityServiceFacadeImplTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(CommunityServiceFacadeImplTest.class);
 
     @InjectMocks
-    private CommunityServiceFacade communityServiceFacade = new CommunityServiceFacadeImpl();
+    private CommunityServiceFacade communityServiceFacade = new CommunityServiceFacadeImpl(new CommunityServiceDaoImpl());
 
     @Mock
     private CommunityServiceDao communityServiceDao;

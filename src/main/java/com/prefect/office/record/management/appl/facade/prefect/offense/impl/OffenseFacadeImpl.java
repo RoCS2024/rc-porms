@@ -11,7 +11,7 @@ public class OffenseFacadeImpl implements OffenseFacade {
 
     OffenseDao offenseDao = new OffenseDaoImpl();
 
-    public OffenseFacadeImpl(OffenseDao offenseDao) {
+    public OffenseFacadeImpl() {
 
     }
 

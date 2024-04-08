@@ -1,8 +1,17 @@
+/**
+ * this is the Offense class where the fields, constructors, getter and setter resides.
+ */
 package com.prefect.office.record.management.appl.model.offense;
 
 import java.sql.Timestamp;
-
+/**
+ * This is offense model.
+ */
 public class Offense {
+
+    /**
+     * This is the offense fields.
+     */
     private int id;
     private int violationId;
     private String studentId;
@@ -18,6 +27,10 @@ public class Offense {
     public Offense() {
 
     }
+
+    /**
+     * This is the offense Getter and Setter.
+     */
     public int getId() {
         return id;
     }

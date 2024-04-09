@@ -13,31 +13,36 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.prefect.office.record.management.data.utils.QueryConstants.*;
 public class ViolationDaoImpl implements ViolationDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ViolationDaoImpl.class);
+    Connection c = ConnectionHelper.getConnection();
 
     @Override
     public void addViolation(Violation violation) {
-        try (Connection connection = ConnectionHelper.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO violation(violation, type, comm_serv_hours) VALUES (?, ?, ?)")) {
-            preparedStatement.setString(1, violation.getViolation());
-            preparedStatement.setString(2, violation.getType());
-            preparedStatement.setInt(3, violation.getCommServHours());
-            preparedStatement.executeUpdate();
-        } catch (SQLException ex) {
-            LOGGER.warn("Error adding violation: " + ex.getMessage());
-            ex.printStackTrace();
+        try (PreparedStatement stmt = c.prepareStatement(ADD_VIOLATION_STATEMENT)) {
+            stmt.setString(1, violation.getViolation());
+            stmt.setString(2, violation.getType());
+            stmt.setInt(3, violation.getCommServHours());
+
+            int result = stmt.executeUpdate();
+
+            if (result == 1) {
+                LOGGER.info("Violation added successfully.");
+            } else {
+                LOGGER.debug("Adding violation failed.");
+            }
+        } catch (SQLException e) {
+            LOGGER.error("An SQL Exception occurred: " + e.getMessage());
         }
-        LOGGER.debug("Adding violation failed.");
     }
 
     @Override
     public List<Violation> getAllViolation() {
         List<Violation> violations = new ArrayList<>();
-        try (Connection connection = ConnectionHelper.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM violation"))   {
-            ResultSet rs = preparedStatement.executeQuery();
+        try ( PreparedStatement stmt = c.prepareStatement(GET_ALL_VIOLATION_STATEMENT);
+              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 Violation violation = new Violation();

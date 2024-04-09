@@ -9,16 +9,16 @@ import org.slf4j.LoggerFactory;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import static com.prefect.office.record.management.data.utils.QueryConstants.*;
 
 public class OffenseDaoImpl implements OffenseDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OffenseDaoImpl.class);
+    Connection c = ConnectionHelper.getConnection();
 
     @Override
     public Offense getOffenseByID(int id) {
-        String sql = "SELECT * FROM offense WHERE id = ?";
-        try (Connection con = ConnectionHelper.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
+        try (PreparedStatement stmt = c.prepareStatement(GET_OFFENSE_BY_ID_STATEMENT)) {
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -31,7 +31,7 @@ public class OffenseDaoImpl implements OffenseDao {
                     LOGGER.warn("No offense found with ID: " + id);
                 }
             }
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             LOGGER.warn("Error retrieving offense with ID " + id + ": " + ex.getMessage());
             ex.printStackTrace();
         }
@@ -41,16 +41,15 @@ public class OffenseDaoImpl implements OffenseDao {
 
     @Override
     public boolean updateOffense(Offense offense) {
-        String sql = "UPDATE offense SET violation_id = ?, student_id = ?, offense_date = ? WHERE id = ?";
-        try (Connection con = ConnectionHelper.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
+        try ( PreparedStatement stmt = c.prepareStatement(UPDATE_OFFENSE_STATEMENT);
+              ResultSet rs = stmt.executeQuery())  {
             stmt.setInt(1, offense.getViolationId());
             stmt.setString(2, offense.getStudentId());
             stmt.setTimestamp(3, offense.getOffenseDate());
             stmt.setInt(4, offense.getId());
             int affectedRows = stmt.executeUpdate();
             return affectedRows > 0;
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             LOGGER.warn("Error updating offense with ID " + offense.getId() + ": " + ex.getMessage());
             ex.printStackTrace();
             return false;
@@ -60,21 +59,19 @@ public class OffenseDaoImpl implements OffenseDao {
     @Override
     public List<Offense> getAllOffenses() {
         List<Offense> offenses = new ArrayList<>();
-        String sql = "SELECT * FROM offense";
-        try (Connection con = ConnectionHelper.getConnection();
-             PreparedStatement statement = con.prepareStatement(sql);
-             ResultSet resultSet = statement.executeQuery()) {
+        try ( PreparedStatement stmt = c.prepareStatement(GET_ALL_OFFENSES_STATEMENT);
+              ResultSet rs = stmt.executeQuery())  {
 
-            while (resultSet.next()) {
+            while (rs.next()) {
                 Offense offense = new Offense();
-                offense.setId(resultSet.getInt("id"));
-                offense.setViolationId(resultSet.getInt("violation_id"));
-                offense.setStudentId(resultSet.getString("student_id"));
-                offense.setOffenseDate(resultSet.getTimestamp("offense_date"));
+                offense.setId(rs.getInt("id"));
+                offense.setViolationId(rs.getInt("violation_id"));
+                offense.setStudentId(rs.getString("student_id"));
+                offense.setOffenseDate(rs.getTimestamp("offense_date"));
                 offenses.add(offense);
             }
             LOGGER.info("Offenses retrieved successfully.");
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             LOGGER.warn("Error retrieving all offenses: " + ex.getMessage());
             ex.printStackTrace();
         }
@@ -82,17 +79,18 @@ public class OffenseDaoImpl implements OffenseDao {
         return offenses;
 
     }
+
     @Override
     public boolean addOffense(Offense offense) {
-        String sql = "INSERT INTO offense (violation_id, student_id, offense_date) VALUES (?, ?, ?)";
-        try (Connection con = ConnectionHelper.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
+        try ( PreparedStatement stmt = c.prepareStatement(ADD_OFFENSE_STATEMENT);
+              ResultSet rs = stmt.executeQuery())  {
+
             stmt.setInt(1, offense.getViolationId());
             stmt.setString(2, offense.getStudentId());
             stmt.setTimestamp(3, offense.getOffenseDate());
             int affectedRows = stmt.executeUpdate();
             return affectedRows > 0;
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
            LOGGER.warn("Error adding offense: " + ex.getMessage());
             ex.printStackTrace();
             return false;

@@ -15,7 +15,8 @@ public class OffenseDaoImpl implements OffenseDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OffenseDaoImpl.class);
     Connection c = ConnectionHelper.getConnection();
-
+    public OffenseDaoImpl() {
+    }
     @Override
     public Offense getOffenseByID(int id) {
         try (PreparedStatement stmt = c.prepareStatement(GET_OFFENSE_BY_ID_STATEMENT)) {

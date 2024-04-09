@@ -21,7 +21,7 @@ class CommunityServiceFacadeImplTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(CommunityServiceFacadeImplTest.class);
 
     @InjectMocks
-    private CommunityServiceFacade communityServiceFacade = new CommunityServiceFacadeImpl(new CommunityServiceDaoImpl());
+    private CommunityServiceFacade communityServiceFacade = new CommunityServiceFacadeImpl();
 
     @Mock
     private CommunityServiceDao communityServiceDao;

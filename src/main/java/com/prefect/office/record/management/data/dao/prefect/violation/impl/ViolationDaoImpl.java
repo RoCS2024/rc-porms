@@ -18,6 +18,8 @@ public class ViolationDaoImpl implements ViolationDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ViolationDaoImpl.class);
     Connection c = ConnectionHelper.getConnection();
+    public ViolationDaoImpl() {
+    }
 
     @Override
     public void addViolation(Violation violation) {

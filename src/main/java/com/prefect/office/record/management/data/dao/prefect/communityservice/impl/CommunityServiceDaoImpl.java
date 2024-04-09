@@ -17,6 +17,8 @@ public class CommunityServiceDaoImpl implements CommunityServiceDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CommunityServiceDaoImpl.class);
     Connection c = ConnectionHelper.getConnection();
+    public CommunityServiceDaoImpl() {
+    }
     @Override
     public List<CommunityService> getAllCs() {
         List<CommunityService> communityServices = new ArrayList<>();

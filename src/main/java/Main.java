@@ -21,7 +21,7 @@ import java.util.Scanner;
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
     private static final OffenseFacade offenseFacade = new OffenseFacadeImpl();
-    private static final CommunityServiceFacade communityServiceFacade = new CommunityServiceFacadeImpl(new CommunityServiceDaoImpl());
+    private static final CommunityServiceFacade communityServiceFacade = new CommunityServiceFacadeImpl();
     private static final ViolationFacade violationFacade = new ViolationFacadeImpl();
 
     public static void main(String[] args) {

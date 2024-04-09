@@ -3,14 +3,12 @@ package com.prefect.office.record.management.appl.facade.prefect.communityservic
 import com.prefect.office.record.management.appl.facade.prefect.communityservice.CommunityServiceFacade;
 import com.prefect.office.record.management.appl.model.communityservice.CommunityService;
 import com.prefect.office.record.management.data.dao.prefect.communityservice.CommunityServiceDao;
+import com.prefect.office.record.management.data.dao.prefect.communityservice.impl.CommunityServiceDaoImpl;
 
 import java.util.List;
 
 public class CommunityServiceFacadeImpl implements CommunityServiceFacade {
-    private CommunityServiceDao communityServiceDao;
-    public CommunityServiceFacadeImpl(CommunityServiceDao communityServiceDao) {
-        this.communityServiceDao = communityServiceDao;
-    }
+    CommunityServiceDao communityServiceDao = new CommunityServiceDaoImpl();
     @Override
     public List<CommunityService> getAllCs() {
         return communityServiceDao.getAllCs();

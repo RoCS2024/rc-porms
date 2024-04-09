@@ -3,6 +3,7 @@ package com.prefect.office.record.management.data.dao.prefect.communityservice.i
 import com.prefect.office.record.management.appl.model.communityservice.CommunityService;
 import com.prefect.office.record.management.data.connectionhelper.ConnectionHelper;
 import com.prefect.office.record.management.data.dao.prefect.communityservice.CommunityServiceDao;
+import com.prefect.office.record.management.data.utils.QueryConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,8 +23,9 @@ public class CommunityServiceDaoImpl implements CommunityServiceDao {
     @Override
     public List<CommunityService> getAllCs() {
         List<CommunityService> communityServices = new ArrayList<>();
-        try (PreparedStatement stmt = c.prepareStatement(GET_ALL_CS_STATEMENT);
-             ResultSet rs = stmt.executeQuery()) {
+        try (Connection c = new ConnectionHelper().getConnection()){
+            PreparedStatement stmt = c.prepareStatement(QueryConstants.GET_ALL_CS_STATEMENT);
+            ResultSet rs= stmt.executeQuery();
 
             while (rs.next()) {
                 CommunityService communityService = new CommunityService();
@@ -44,7 +46,8 @@ public class CommunityServiceDaoImpl implements CommunityServiceDao {
 
         @Override
         public CommunityService getCsById(int id) {
-            try (PreparedStatement stmt = c.prepareStatement(GET_CS_BY_ID_STATEMENT)) {
+            try (Connection c = new ConnectionHelper().getConnection()){
+                PreparedStatement stmt = c.prepareStatement(QueryConstants.GET_CS_BY_ID_STATEMENT);
                 stmt.setInt(1, id);
                 try (ResultSet rs = stmt.executeQuery()) {
                     if (rs.next()) {
@@ -67,8 +70,9 @@ public class CommunityServiceDaoImpl implements CommunityServiceDao {
 
     @Override
     public boolean renderCs(CommunityService cs) throws SQLException {
-        try ( PreparedStatement stmt = c.prepareStatement(RENDER_CS_STATEMENT);
-              ResultSet rs = stmt.executeQuery()) {
+        try (Connection c = new ConnectionHelper().getConnection()){
+            PreparedStatement stmt = c.prepareStatement(QueryConstants.RENDER_CS_STATEMENT);
+            ResultSet rs= stmt.executeQuery();
 
             stmt.setString(1, cs.getStudent_id());
             stmt.setTimestamp(2, cs.getDate_rendered());

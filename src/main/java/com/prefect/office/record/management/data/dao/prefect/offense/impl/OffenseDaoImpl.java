@@ -3,6 +3,7 @@ package com.prefect.office.record.management.data.dao.prefect.offense.impl;
 import com.prefect.office.record.management.appl.model.offense.Offense;
 import com.prefect.office.record.management.data.connectionhelper.ConnectionHelper;
 import com.prefect.office.record.management.data.dao.prefect.offense.OffenseDao;
+import com.prefect.office.record.management.data.utils.QueryConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +20,8 @@ public class OffenseDaoImpl implements OffenseDao {
     }
     @Override
     public Offense getOffenseByID(int id) {
-        try (PreparedStatement stmt = c.prepareStatement(GET_OFFENSE_BY_ID_STATEMENT)) {
+        try (Connection c = new ConnectionHelper().getConnection()){
+            PreparedStatement stmt = c.prepareStatement(QueryConstants.GET_OFFENSE_BY_ID_STATEMENT);
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -42,8 +44,9 @@ public class OffenseDaoImpl implements OffenseDao {
 
     @Override
     public boolean updateOffense(Offense offense) {
-        try ( PreparedStatement stmt = c.prepareStatement(UPDATE_OFFENSE_STATEMENT);
-              ResultSet rs = stmt.executeQuery())  {
+        try (Connection c = new ConnectionHelper().getConnection()){
+            PreparedStatement stmt = c.prepareStatement(QueryConstants.UPDATE_OFFENSE_STATEMENT);
+            ResultSet rs= stmt.executeQuery();
             stmt.setInt(1, offense.getViolationId());
             stmt.setString(2, offense.getStudentId());
             stmt.setTimestamp(3, offense.getOffenseDate());
@@ -60,8 +63,9 @@ public class OffenseDaoImpl implements OffenseDao {
     @Override
     public List<Offense> getAllOffenses() {
         List<Offense> offenses = new ArrayList<>();
-        try ( PreparedStatement stmt = c.prepareStatement(GET_ALL_OFFENSES_STATEMENT);
-              ResultSet rs = stmt.executeQuery())  {
+        try (Connection c = new ConnectionHelper().getConnection()){
+            PreparedStatement stmt = c.prepareStatement(QueryConstants.GET_ALL_OFFENSES_STATEMENT);
+            ResultSet rs= stmt.executeQuery();
 
             while (rs.next()) {
                 Offense offense = new Offense();
@@ -83,8 +87,9 @@ public class OffenseDaoImpl implements OffenseDao {
 
     @Override
     public boolean addOffense(Offense offense) {
-        try ( PreparedStatement stmt = c.prepareStatement(ADD_OFFENSE_STATEMENT);
-              ResultSet rs = stmt.executeQuery())  {
+        try (Connection c = new ConnectionHelper().getConnection()){
+            PreparedStatement stmt = c.prepareStatement(QueryConstants.ADD_OFFENSE_STATEMENT);
+            ResultSet rs= stmt.executeQuery();
 
             stmt.setInt(1, offense.getViolationId());
             stmt.setString(2, offense.getStudentId());

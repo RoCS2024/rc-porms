@@ -3,6 +3,7 @@ package com.prefect.office.record.management.data.dao.prefect.violation.impl;
 import com.prefect.office.record.management.appl.model.violation.Violation;
 import com.prefect.office.record.management.data.connectionhelper.ConnectionHelper;
 import com.prefect.office.record.management.data.dao.prefect.violation.ViolationDao;
+import com.prefect.office.record.management.data.utils.QueryConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +24,9 @@ public class ViolationDaoImpl implements ViolationDao {
 
     @Override
     public void addViolation(Violation violation) {
-        try (PreparedStatement stmt = c.prepareStatement(ADD_VIOLATION_STATEMENT)) {
+        try (Connection c = new ConnectionHelper().getConnection()){
+            PreparedStatement stmt = c.prepareStatement(QueryConstants.ADD_VIOLATION_STATEMENT);
+            ResultSet rs= stmt.executeQuery();
             stmt.setString(1, violation.getViolation());
             stmt.setString(2, violation.getType());
             stmt.setInt(3, violation.getCommServHours());
@@ -43,8 +46,9 @@ public class ViolationDaoImpl implements ViolationDao {
     @Override
     public List<Violation> getAllViolation() {
         List<Violation> violations = new ArrayList<>();
-        try ( PreparedStatement stmt = c.prepareStatement(GET_ALL_VIOLATION_STATEMENT);
-              ResultSet rs = stmt.executeQuery()) {
+        try (Connection c = new ConnectionHelper().getConnection()){
+            PreparedStatement stmt = c.prepareStatement(QueryConstants.GET_ALL_VIOLATION_STATEMENT);
+            ResultSet rs= stmt.executeQuery();
 
             while (rs.next()) {
                 Violation violation = new Violation();

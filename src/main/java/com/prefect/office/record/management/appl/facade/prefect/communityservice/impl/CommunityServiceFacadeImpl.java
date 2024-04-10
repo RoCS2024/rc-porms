@@ -7,6 +7,9 @@ import com.prefect.office.record.management.data.dao.prefect.communityservice.im
 
 import java.util.List;
 
+/**
+ * An implementation class of the Community Service Facade.
+ */
 public class CommunityServiceFacadeImpl implements CommunityServiceFacade {
     private CommunityServiceDao communityServiceDao = new CommunityServiceDaoImpl();
     @Override

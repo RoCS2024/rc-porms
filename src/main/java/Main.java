@@ -9,6 +9,7 @@ import com.prefect.office.record.management.appl.model.offense.Offense;
 import com.prefect.office.record.management.appl.model.violation.Violation;
 import com.prefect.office.record.management.data.dao.prefect.communityservice.CommunityServiceDao;
 import com.prefect.office.record.management.data.dao.prefect.communityservice.impl.CommunityServiceDaoImpl;
+import com.prefect.office.record.management.data.dao.prefect.offense.OffenseDao;
 import com.prefect.office.record.management.data.dao.prefect.offense.impl.OffenseDaoImpl;
 
 import java.sql.Timestamp;

@@ -20,7 +20,7 @@ class OffenseFacadeImplTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(OffenseFacadeImplTest.class);
 
     @InjectMocks
-    private OffenseFacade offenseFacade = new OffenseFacadeImpl();
+    private OffenseFacadeImpl offenseFacade;
 
     @Mock
     private OffenseDao offenseDao;
@@ -37,6 +37,7 @@ class OffenseFacadeImplTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+        offenseFacade = new OffenseFacadeImpl(offenseDao);
         offense.setId(1);
         addOffense.setId(2);
         when(offenseDao.getAllOffenses()).thenReturn(offenseList);

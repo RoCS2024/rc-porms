@@ -9,7 +9,9 @@ import org.slf4j.LoggerFactory;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * This is an implementation class of the OffenseDao
+ */
 public class OffenseDaoImpl implements OffenseDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OffenseDaoImpl.class);

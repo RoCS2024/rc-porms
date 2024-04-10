@@ -20,7 +20,7 @@ public class CommunityServiceDaoImpl implements CommunityServiceDao {
 
     public CommunityServiceDaoImpl() {
     }
-    @Override
+        @Override
     public List<CommunityService> getAllCs() {
         List<CommunityService> communityServices = new ArrayList<>();
         try (Connection c = ConnectionHelper.getConnection()){

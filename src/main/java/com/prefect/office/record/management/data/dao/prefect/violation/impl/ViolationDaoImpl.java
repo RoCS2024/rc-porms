@@ -12,7 +12,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * This is an implementation class of the ViolationDao
+ */
 public class ViolationDaoImpl implements ViolationDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ViolationDaoImpl.class);

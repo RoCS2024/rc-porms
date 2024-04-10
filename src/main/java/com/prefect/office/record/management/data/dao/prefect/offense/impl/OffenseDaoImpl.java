@@ -10,7 +10,13 @@ import org.slf4j.LoggerFactory;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
 import static com.prefect.office.record.management.data.utils.QueryConstants.*;
+
+
+/**
+ * This is an implementation class of the OffenseDao
+ */
 
 public class OffenseDaoImpl implements OffenseDao {
 

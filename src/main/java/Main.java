@@ -9,6 +9,7 @@ import com.prefect.office.record.management.appl.model.offense.Offense;
 import com.prefect.office.record.management.appl.model.violation.Violation;
 import com.prefect.office.record.management.data.dao.prefect.communityservice.CommunityServiceDao;
 import com.prefect.office.record.management.data.dao.prefect.communityservice.impl.CommunityServiceDaoImpl;
+import com.prefect.office.record.management.data.dao.prefect.offense.OffenseDao;
 import com.prefect.office.record.management.data.dao.prefect.offense.impl.OffenseDaoImpl;
 
 import java.sql.Timestamp;
@@ -20,11 +21,20 @@ import java.util.Scanner;
 
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
+
     private static final OffenseFacade offenseFacade = new OffenseFacadeImpl();
     private static final CommunityServiceFacade communityServiceFacade = new CommunityServiceFacadeImpl();
+
+    private static final CommunityServiceFacade communityServiceFacade = new CommunityServiceFacadeImpl(new CommunityServiceDaoImpl());
+
     private static final ViolationFacade violationFacade = new ViolationFacadeImpl();
+    private static OffenseFacade offenseFacade;
 
     public static void main(String[] args) {
+
+        OffenseDao offenseDao = new OffenseDaoImpl();
+        offenseFacade = new OffenseFacadeImpl(offenseDao);
+
         try {
             int choice;
             do {

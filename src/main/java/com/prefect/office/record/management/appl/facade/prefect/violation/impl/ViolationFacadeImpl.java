@@ -7,10 +7,16 @@ import com.prefect.office.record.management.data.dao.prefect.violation.impl.Viol
 
 import java.util.List;
 
-
+/**
+ * This is an implementation class of the ViolationFacade
+ */
 public class ViolationFacadeImpl implements ViolationFacade {
     private ViolationDao violationDAO;
 
+    /**
+     * This is a constructor for new ViolationFacadeImpl object
+     * This initializes the ViolationDao
+     */
     public ViolationFacadeImpl() {
         this.violationDAO = new ViolationDaoImpl();
     }

@@ -18,13 +18,12 @@ import static com.prefect.office.record.management.data.utils.QueryConstants.*;
 public class ViolationDaoImpl implements ViolationDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ViolationDaoImpl.class);
-    Connection c = ConnectionHelper.getConnection();
     public ViolationDaoImpl() {
     }
 
     @Override
     public void addViolation(Violation violation) {
-        try (Connection c = new ConnectionHelper().getConnection()){
+        try (Connection c = ConnectionHelper.getConnection()){
             PreparedStatement stmt = c.prepareStatement(QueryConstants.ADD_VIOLATION_STATEMENT);
             ResultSet rs= stmt.executeQuery();
             stmt.setString(1, violation.getViolation());
@@ -46,7 +45,7 @@ public class ViolationDaoImpl implements ViolationDao {
     @Override
     public List<Violation> getAllViolation() {
         List<Violation> violations = new ArrayList<>();
-        try (Connection c = new ConnectionHelper().getConnection()){
+        try (Connection c = ConnectionHelper.getConnection()){
             PreparedStatement stmt = c.prepareStatement(QueryConstants.GET_ALL_VIOLATION_STATEMENT);
             ResultSet rs= stmt.executeQuery();
 

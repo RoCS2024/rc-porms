@@ -15,12 +15,12 @@ import static com.prefect.office.record.management.data.utils.QueryConstants.*;
 public class OffenseDaoImpl implements OffenseDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OffenseDaoImpl.class);
-    Connection c = ConnectionHelper.getConnection();
     public OffenseDaoImpl() {
     }
+
     @Override
     public Offense getOffenseByID(int id) {
-        try (Connection c = new ConnectionHelper().getConnection()){
+        try (Connection c = ConnectionHelper.getConnection()){
             PreparedStatement stmt = c.prepareStatement(QueryConstants.GET_OFFENSE_BY_ID_STATEMENT);
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
@@ -44,7 +44,7 @@ public class OffenseDaoImpl implements OffenseDao {
 
     @Override
     public boolean updateOffense(Offense offense) {
-        try (Connection c = new ConnectionHelper().getConnection()){
+        try (Connection c = ConnectionHelper.getConnection()){
             PreparedStatement stmt = c.prepareStatement(QueryConstants.UPDATE_OFFENSE_STATEMENT);
             ResultSet rs= stmt.executeQuery();
             stmt.setInt(1, offense.getViolationId());
@@ -63,7 +63,7 @@ public class OffenseDaoImpl implements OffenseDao {
     @Override
     public List<Offense> getAllOffenses() {
         List<Offense> offenses = new ArrayList<>();
-        try (Connection c = new ConnectionHelper().getConnection()){
+        try (Connection c = ConnectionHelper.getConnection()){
             PreparedStatement stmt = c.prepareStatement(QueryConstants.GET_ALL_OFFENSES_STATEMENT);
             ResultSet rs= stmt.executeQuery();
 
@@ -87,7 +87,7 @@ public class OffenseDaoImpl implements OffenseDao {
 
     @Override
     public boolean addOffense(Offense offense) {
-        try (Connection c = new ConnectionHelper().getConnection()){
+        try (Connection c = ConnectionHelper.getConnection()){
             PreparedStatement stmt = c.prepareStatement(QueryConstants.ADD_OFFENSE_STATEMENT);
             ResultSet rs= stmt.executeQuery();
 

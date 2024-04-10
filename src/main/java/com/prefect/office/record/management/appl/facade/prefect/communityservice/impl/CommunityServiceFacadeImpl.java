@@ -8,7 +8,7 @@ import com.prefect.office.record.management.data.dao.prefect.communityservice.im
 import java.util.List;
 
 public class CommunityServiceFacadeImpl implements CommunityServiceFacade {
-    CommunityServiceDao communityServiceDao = new CommunityServiceDaoImpl();
+    private CommunityServiceDao communityServiceDao = new CommunityServiceDaoImpl();
     @Override
     public List<CommunityService> getAllCs() {
         return communityServiceDao.getAllCs();

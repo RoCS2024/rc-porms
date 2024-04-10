@@ -17,13 +17,13 @@ import static com.prefect.office.record.management.data.utils.QueryConstants.*;
 public class CommunityServiceDaoImpl implements CommunityServiceDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CommunityServiceDaoImpl.class);
-    Connection c = ConnectionHelper.getConnection();
+
     public CommunityServiceDaoImpl() {
     }
     @Override
     public List<CommunityService> getAllCs() {
         List<CommunityService> communityServices = new ArrayList<>();
-        try (Connection c = new ConnectionHelper().getConnection()){
+        try (Connection c = ConnectionHelper.getConnection()){
             PreparedStatement stmt = c.prepareStatement(QueryConstants.GET_ALL_CS_STATEMENT);
             ResultSet rs= stmt.executeQuery();
 
@@ -44,9 +44,9 @@ public class CommunityServiceDaoImpl implements CommunityServiceDao {
         return communityServices;
     }
 
-        @Override
+    @Override
         public CommunityService getCsById(int id) {
-            try (Connection c = new ConnectionHelper().getConnection()){
+            try (Connection c = ConnectionHelper.getConnection()){
                 PreparedStatement stmt = c.prepareStatement(QueryConstants.GET_CS_BY_ID_STATEMENT);
                 stmt.setInt(1, id);
                 try (ResultSet rs = stmt.executeQuery()) {
@@ -67,10 +67,9 @@ public class CommunityServiceDaoImpl implements CommunityServiceDao {
             LOGGER.debug("Community Service not found.");
             return null;
         }
-
     @Override
     public boolean renderCs(CommunityService cs) throws SQLException {
-        try (Connection c = new ConnectionHelper().getConnection()){
+        try (Connection c = ConnectionHelper.getConnection()){
             PreparedStatement stmt = c.prepareStatement(QueryConstants.RENDER_CS_STATEMENT);
             ResultSet rs= stmt.executeQuery();
 

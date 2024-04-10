@@ -215,44 +215,52 @@ public class Main {
 
     private static void renderCs() {
         try {
-            List<CommunityService> csRecords = communityServiceFacade.getAllCs();
-
-            if (csRecords != null && !csRecords.isEmpty()) {
-                int csId = 0;
+                int offenseId;
                 do {
-                    System.out.print("Enter Community Service-ID: ");
+                    System.out.print("Enter Offense-ID (0 to exit): ");
                     if (!scanner.hasNextInt()) {
                         System.out.println("Invalid input. Please enter an integer.");
                         scanner.next();
                         continue;
                     }
-                    csId = scanner.nextInt();
-                    if (csId < 0) {
-                        System.out.println("Invalid Community Service ID. Please enter a non-negative integer.");
+                    offenseId = scanner.nextInt();
+                    if (offenseId < 0) {
+                        System.out.println("Invalid Offense ID. Please enter a non-negative integer.");
                         continue;
                     }
-
-                    System.out.print("Enter Student-ID: ");
-                    String student_id = scanner.next();
-                    if (student_id.isEmpty()) {
-                        System.out.println("Student-ID cannot be empty.");
+                    if (offenseId == 0) {
+                        System.out.println("Exiting...");
                         return;
                     }
 
-                    System.out.print("Enter Hours Rendered: ");
-                    int hoursRender = scanner.nextInt();
-                    if (hoursRender < 0) {
-                        System.out.println("Please enter a non-negative integer.");
+                    System.out.print("Enter Student-ID: ");
+                    String studentId = scanner.next().trim();
+                    if (studentId.isEmpty()) {
+                        System.out.println("Student-ID cannot be empty.");
                         continue;
                     }
 
-                    CommunityService existingCs = communityServiceFacade.getCsById(csId);
-                    if (existingCs != null) {
-                        existingCs.setStudent_id(student_id);
-                        existingCs.setHours_rendered(hoursRender);
-                        existingCs.setDate_rendered(new Timestamp(System.currentTimeMillis()));
+                    System.out.print("Enter Hours Rendered: ");
+                    int hoursRendered;
+                    if (!scanner.hasNextInt()) {
+                        System.out.println("Invalid input. Please enter an integer.");
+                        scanner.next();
+                        continue;
+                    }
+                    hoursRendered = scanner.nextInt();
+                    if (hoursRendered < 0) {
+                        System.out.println("Invalid input. Please enter a non-negative integer.");
+                        continue;
+                    }
 
-                        boolean render = communityServiceFacade.renderCs(existingCs);
+                    Offense existingOffense = offenseFacade.getOffenseByID(offenseId);
+                    if (existingOffense != null) {
+                        CommunityService newCs = new CommunityService();
+                        newCs.setStudent_id(studentId);
+                        newCs.setHours_rendered(hoursRendered);
+                        newCs.setDate_rendered(new Timestamp(System.currentTimeMillis()));
+
+                        boolean render = communityServiceFacade.renderCs(newCs);
 
                         if (render) {
                             System.out.println("Community Service Rendered successfully!");
@@ -260,16 +268,14 @@ public class Main {
                             System.out.println("Failed to Render Community Service.");
                         }
                     } else {
-                        System.out.println("Community Service with ID " + csId + " does not exist.");
+                        System.out.println("Offense with ID " + offenseId + " does not exist.");
                     }
-
-                } while (csId != 0);
-            } else {
-                System.out.println("No Community Service records found.");
-            }
-
+                } while (true);
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a valid value.");
+            scanner.next();
         } catch (Exception e) {
-            System.err.println("An error occurred while updating Community Service: " + e.getMessage());
+            System.err.println("An error occurred while rendering Community Service: " + e.getMessage());
         }
     }
 

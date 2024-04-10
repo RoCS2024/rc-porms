@@ -28,7 +28,8 @@ public class OffenseDaoImpl implements OffenseDao {
                     int violationId = rs.getInt("violation_id");
                     String studentId = rs.getString("student_id");
                     Timestamp offense_date = rs.getTimestamp("offense_date");
-                    return new Offense(idNum, violationId, studentId, offense_date);
+                    int commServHours = rs.getInt("comm_serv_hours");
+                    return new Offense(idNum, violationId, studentId, offense_date, commServHours);
                 } else {
                     LOGGER.warn("No offense found with ID: " + id);
                 }
@@ -73,6 +74,7 @@ public class OffenseDaoImpl implements OffenseDao {
                 offense.setViolationId(resultSet.getInt("violation_id"));
                 offense.setStudentId(resultSet.getString("student_id"));
                 offense.setOffenseDate(resultSet.getTimestamp("offense_date"));
+                offense.setCommServHours(resultSet.getInt("comm_serv_hours"));
                 offenses.add(offense);
             }
             LOGGER.info("Offenses retrieved successfully.");

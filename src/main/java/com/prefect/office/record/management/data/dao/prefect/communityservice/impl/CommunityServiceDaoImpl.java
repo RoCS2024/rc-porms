@@ -79,7 +79,7 @@ public class CommunityServiceDaoImpl implements CommunityServiceDao {
 
 
     /**
-     * Records a new community service entry into the database.
+     *      * Records a new community service entry into the database.
      *
      * @param cs The community service record to insert.
      * @return True if the insertion is successful, false otherwise.
@@ -87,13 +87,13 @@ public class CommunityServiceDaoImpl implements CommunityServiceDao {
      */
     @Override
     public boolean renderCs(CommunityService cs) throws SQLException {
-        String sql = "UPDATE comm_serv_rendered SET student_id = ?, date_rendered = ?, hours_rendered = ? WHERE id = ?";
+        String sql = "INSERT INTO comm_serv_rendered (student_id, date_rendered, hours_rendered) VALUES (?, ?, ?)";
+
         try (Connection con = ConnectionHelper.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setString(1, cs.getStudent_id());
             stmt.setTimestamp(2, cs.getDate_rendered());
             stmt.setInt(3, cs.getHours_rendered());
-            stmt.setInt(4, cs.getId());
             int affectedRows = stmt.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException ex) {

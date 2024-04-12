@@ -7,10 +7,12 @@ import com.prefect.office.record.management.appl.facade.prefect.violation.impl.V
 import com.prefect.office.record.management.appl.model.communityservice.CommunityService;
 import com.prefect.office.record.management.appl.model.offense.Offense;
 import com.prefect.office.record.management.appl.model.violation.Violation;
-import com.prefect.office.record.management.data.dao.prefect.communityservice.CommunityServiceDao;
 import com.prefect.office.record.management.data.dao.prefect.communityservice.impl.CommunityServiceDaoImpl;
 import com.prefect.office.record.management.data.dao.prefect.offense.OffenseDao;
 import com.prefect.office.record.management.data.dao.prefect.offense.impl.OffenseDaoImpl;
+import com.student.information.management.appl.facade.student.StudentFacade;
+import com.student.information.management.appl.facade.student.impl.StudentFacadeImpl;
+import com.student.information.management.appl.model.student.Student;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -51,12 +53,15 @@ public class Main {
                         addViolation();
                         break;
                     case 5:
-                        viewAllViolation();
+                        updateViolation();
                         break;
                     case 6:
-                        renderCs();
+                        viewAllViolation();
                         break;
                     case 7:
+                        renderCs();
+                        break;
+                    case 8:
                         viewCsHistory();
                         break;
                     case 0:
@@ -80,9 +85,10 @@ public class Main {
         System.out.println("2. Add Offense");
         System.out.println("3. Update Offense");
         System.out.println("4. Add Violation");
-        System.out.println("5. View List of Violation");
-        System.out.println("6. Render Community Service");
-        System.out.println("7. View Community Service History");
+        System.out.println("5. Update Violation");
+        System.out.println("6. View List of Violation");
+        System.out.println("7. Render Community Service");
+        System.out.println("8. View Community Service History");
         System.out.println("0. Exit");
     }
 
@@ -94,8 +100,10 @@ public class Main {
                 System.out.println("Offense Records");
                 for (Offense offenseRecord : offenseRecords) {
                     System.out.println("Offense ID: " + offenseRecord.getId());
-                    System.out.println("Violation ID: " + offenseRecord.getViolationId());
-                    System.out.println("Student ID: " + offenseRecord.getStudentId());
+                    System.out.println("Violation ID: " + offenseRecord.getViolation().getViolation());
+                    System.out.println("Student Last Name: " + offenseRecord.getStudent().getLastName());
+                    System.out.println("Student First Name: " + offenseRecord.getStudent().getFirstName());
+                    System.out.println("Student Middle Name: " + offenseRecord.getStudent().getMiddleName());
                     System.out.println("Offense Date: " + offenseRecord.getOffenseDate());
                     System.out.println("-----------------------------------");
                 }
@@ -128,9 +136,14 @@ public class Main {
             java.util.Date parsedDate = dateFormat.parse(dateStr);
             Timestamp offenseDate = new Timestamp(parsedDate.getTime());
 
+            Violation violation = violationFacade.getViolationByID(violationId);
+
+            StudentFacade studentFacade = new StudentFacadeImpl();
+            Student student = studentFacade.getStudentById(studentId);
+
             Offense newOffense = new Offense();
-            newOffense.setViolationId(violationId);
-            newOffense.setStudentId(studentId);
+            newOffense.setViolation(violation);
+            newOffense.setStudent(student);
             newOffense.setOffenseDate(offenseDate);
 
             boolean added = offenseFacade.addOffense(newOffense);
@@ -157,12 +170,19 @@ public class Main {
 
             System.out.print("Enter New Violation ID: ");
             int newViolationId = scanner.nextInt();
+
             System.out.print("Enter New Student ID: ");
             String newStudentId = scanner.next();
+
+            Violation newViolation = violationFacade.getViolationByID(newViolationId);
+
+            StudentFacade studentFacade = new StudentFacadeImpl();
+            Student newStudent = studentFacade.getStudentById(newStudentId);
+
             Offense updatedOffense = new Offense();
             updatedOffense.setId(offenseId);
-            updatedOffense.setViolationId(newViolationId);
-            updatedOffense.setStudentId(newStudentId);
+            updatedOffense.setViolation(newViolation);
+            updatedOffense.setStudent(newStudent);
             updatedOffense.setOffenseDate(new Timestamp(System.currentTimeMillis()));
 
             boolean updated = offenseFacade.updateOffense(updatedOffense);
@@ -198,6 +218,40 @@ public class Main {
             System.out.println("Violation added successfully!");
         } catch (Exception e) {
             System.err.println("An error occurred while adding a violation: " + e.getMessage());
+        }
+    }
+
+    private static void updateViolation() {
+        try {
+            System.out.print("Enter Violation ID: ");
+            int violationId = scanner.nextInt();
+
+            System.out.print("Enter New Violation ID: ");
+            int newViolationId = scanner.nextInt();
+            System.out.print("Enter New Violation Name: ");
+            String newViolation = scanner.next();
+            System.out.print("Enter New Violation Type: ");
+            String newViolationType = scanner.next();
+            System.out.print("Enter New Community Service Hours: ");
+            int newCsHours = scanner.nextInt();
+
+            Violation updatedViolation = new Violation();
+            updatedViolation.setId(violationId);
+            updatedViolation.setViolation(newViolation);
+            updatedViolation.setType(newViolationType);
+            updatedViolation.setCommServHours(newCsHours);
+
+            boolean updated = violationFacade.updateViolation(updatedViolation);
+
+            if (updated) {
+                System.out.println("Violation information updated successfully!");
+            } else {
+                System.out.println("Failed to update Violation information.");
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter valid IDs.");
+        } catch (Exception e) {
+            System.err.println("An error occurred while updating Violation information: " + e.getMessage());
         }
     }
 

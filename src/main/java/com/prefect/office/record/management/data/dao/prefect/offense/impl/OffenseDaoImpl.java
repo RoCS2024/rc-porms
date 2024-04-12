@@ -1,8 +1,14 @@
 package com.prefect.office.record.management.data.dao.prefect.offense.impl;
 
+import com.prefect.office.record.management.appl.facade.prefect.violation.ViolationFacade;
+import com.prefect.office.record.management.appl.facade.prefect.violation.impl.ViolationFacadeImpl;
 import com.prefect.office.record.management.appl.model.offense.Offense;
+import com.prefect.office.record.management.appl.model.violation.Violation;
 import com.prefect.office.record.management.data.connectionhelper.ConnectionHelper;
 import com.prefect.office.record.management.data.dao.prefect.offense.OffenseDao;
+import com.student.information.management.appl.facade.student.StudentFacade;
+import com.student.information.management.appl.facade.student.impl.StudentFacadeImpl;
+import com.student.information.management.appl.model.student.Student;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,9 +33,16 @@ public class OffenseDaoImpl implements OffenseDao {
                     int idNum = rs.getInt("id");
                     int violationId = rs.getInt("violation_id");
                     String studentId = rs.getString("student_id");
+
+                    ViolationFacade violationFacade = new ViolationFacadeImpl();
+                    StudentFacade studentFacade = new StudentFacadeImpl();
+
+                    Violation violation = violationFacade.getViolationByID(violationId);
+                    Student student = studentFacade.getStudentById(studentId);
+
                     Timestamp offense_date = rs.getTimestamp("offense_date");
                     int commServHours = rs.getInt("comm_serv_hours");
-                    return new Offense(idNum, violationId, studentId, offense_date, commServHours);
+                    return new Offense(idNum, violation, student, offense_date, commServHours);
                 } else {
                     LOGGER.warn("No offense found with ID: " + id);
                 }
@@ -47,8 +60,12 @@ public class OffenseDaoImpl implements OffenseDao {
         String sql = "UPDATE offense SET violation_id = ?, student_id = ?, offense_date = ? WHERE id = ?";
         try (Connection con = ConnectionHelper.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
-            stmt.setInt(1, offense.getViolationId());
-            stmt.setString(2, offense.getStudentId());
+
+            Violation violation = offense.getViolation();
+            Student student = offense.getStudent();
+
+            stmt.setInt(1, violation.getId());
+            stmt.setString(2, student.getStudentId());
             stmt.setTimestamp(3, offense.getOffenseDate());
             stmt.setInt(4, offense.getId());
             int affectedRows = stmt.executeUpdate();
@@ -71,8 +88,15 @@ public class OffenseDaoImpl implements OffenseDao {
             while (resultSet.next()) {
                 Offense offense = new Offense();
                 offense.setId(resultSet.getInt("id"));
-                offense.setViolationId(resultSet.getInt("violation_id"));
-                offense.setStudentId(resultSet.getString("student_id"));
+
+                ViolationFacade violationFacade = new ViolationFacadeImpl();
+                Violation violation = violationFacade.getViolationByID(resultSet.getInt("violation_id"));
+                offense.setViolation(violation);
+
+                StudentFacade studentFacade = new StudentFacadeImpl();
+                Student student = studentFacade.getStudentById(resultSet.getString("student_id"));
+                offense.setStudent(student);
+
                 offense.setOffenseDate(resultSet.getTimestamp("offense_date"));
                 offense.setCommServHours(resultSet.getInt("comm_serv_hours"));
                 offenses.add(offense);
@@ -84,20 +108,21 @@ public class OffenseDaoImpl implements OffenseDao {
         }
         LOGGER.debug("Offense database is empty.");
         return offenses;
-
     }
+
     @Override
     public boolean addOffense(Offense offense) {
         String sql = "INSERT INTO offense (violation_id, student_id, offense_date) VALUES (?, ?, ?)";
         try (Connection con = ConnectionHelper.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
-            stmt.setInt(1, offense.getViolationId());
-            stmt.setString(2, offense.getStudentId());
+            stmt.setInt(1, offense.getViolation().getId());
+            stmt.setString(2, offense.getStudent().getStudentId());
             stmt.setTimestamp(3, offense.getOffenseDate());
             int affectedRows = stmt.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException ex) {
-           LOGGER.warn("Error adding offense: " + ex.getMessage());
+            String errorMessage = (ex.getMessage() != null) ? ex.getMessage() : "Unknown error";
+            LOGGER.warn("Error adding offense: " + errorMessage);
             ex.printStackTrace();
             return false;
         }

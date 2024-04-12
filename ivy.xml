@@ -5,7 +5,7 @@
 
     <info
             organisation="com.rogationist.college"
-            module="ivy-test"
+            module="porms"
             status="integration">
     </info>
     <configurations defaultconfmapping="compile->default">

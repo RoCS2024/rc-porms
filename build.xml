@@ -73,7 +73,7 @@
 
     <!-- Create jar   -->
     <target name="build-jar" depends="build">
-        <jar destfile="${build.dir}/${ant.project.name}-${version}.jar"
+        <jar destfile="${build.dir}/porms.jar"
              basedir="${classes.dir}" />
     </target>
 

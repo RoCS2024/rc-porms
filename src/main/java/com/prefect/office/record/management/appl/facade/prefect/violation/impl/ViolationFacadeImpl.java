@@ -1,6 +1,7 @@
 package com.prefect.office.record.management.appl.facade.prefect.violation.impl;
 
 import com.prefect.office.record.management.appl.facade.prefect.violation.ViolationFacade;
+import com.prefect.office.record.management.appl.model.offense.Offense;
 import com.prefect.office.record.management.appl.model.violation.Violation;
 import com.prefect.office.record.management.data.dao.prefect.violation.ViolationDao;
 import com.prefect.office.record.management.data.dao.prefect.violation.impl.ViolationDaoImpl;
@@ -30,6 +31,26 @@ public class ViolationFacadeImpl implements ViolationFacade {
             throw new RuntimeException("Failed to add violation: " + e.getMessage(), e);
     }
 }
+
+    @Override
+    public boolean updateViolation(Violation violation) {
+        boolean result = false;
+        try {
+            Violation targetViolation = getViolationByID(violation.getId());
+            if (targetViolation == null) {
+                throw new Exception("Violation to update not found. ");
+            }
+            result = violationDAO.updateViolation(violation);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return result;
+    }
+
+    @Override
+    public Violation getViolationByID(int id) {
+        return violationDAO.getViolationByID(id);
+    }
 
     @Override
     public List<Violation> getAllViolation() {

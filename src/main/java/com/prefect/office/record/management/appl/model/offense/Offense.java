@@ -1,25 +1,28 @@
 package com.prefect.office.record.management.appl.model.offense;
 
+import com.prefect.office.record.management.appl.model.violation.Violation;
+import com.student.information.management.appl.model.student.Student;
+
 import java.sql.Timestamp;
 
 public class Offense {
     private int id;
-    private int violationId;
-    private String studentId;
+    private Violation violation;
+    private Student student;
     private Timestamp offenseDate;
     private int commServHours;
 
-
-    public Offense(int id, int violationId, String studentId, Timestamp offenseDate,int commServHours) {
+    public Offense(int id, Violation violation, Student student, Timestamp offenseDate, int commServHours) {
         this.id = id;
-        this.violationId = violationId;
-        this.studentId = studentId;
+        this.violation = violation;
+        this.student = student;
         this.offenseDate = offenseDate;
         this.commServHours = commServHours;
     }
-    public Offense() {
 
+    public Offense() {
     }
+
     public int getId() {
         return id;
     }
@@ -28,20 +31,20 @@ public class Offense {
         this.id = id;
     }
 
-    public int getViolationId() {
-        return violationId;
+    public Violation getViolation() {
+        return violation;
     }
 
-    public void setViolationId(int violationId) {
-        this.violationId = violationId;
+    public void setViolation(Violation violation) {
+        this.violation = violation;
     }
 
-    public String getStudentId() {
-        return studentId;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
     public Timestamp getOffenseDate() {

@@ -1,5 +1,6 @@
 package com.prefect.office.record.management.appl.facade.prefect.violation.impl;
 
+import com.prefect.office.record.management.appl.model.offense.Offense;
 import com.prefect.office.record.management.appl.model.violation.Violation;
 import com.prefect.office.record.management.data.dao.prefect.violation.ViolationDao;
 import org.junit.jupiter.api.AfterEach;
@@ -53,6 +54,34 @@ class ViolationFacadeImplTest {
         } catch (Exception e) {
             LOGGER.error("Exception caught: " + e.getMessage());
         }
+    }
+
+    @Test
+    public void testUpdateViolation() {
+        try {
+            when(violationDao.getViolationByID(violation.getId())).thenReturn(violation);
+            when(violationDao.updateViolation(violation)).thenReturn(true);
+
+            boolean result = violationFacade.updateViolation(violation);
+
+            assert(result == true);
+
+            assert(violationFacade.getViolationByID(1).equals(violation));
+
+            verify(violationDao).updateViolation(violation);
+        } catch (Exception e) {
+            LOGGER.error("Exception caught: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testGetViolationById() {
+        when(violationDao.getViolationByID(1)).thenReturn(violation);
+        Violation expectedViolation = violationFacade.getViolationByID(1);
+
+        assert(expectedViolation.equals(violation));
+
+        verify(violationDao).getViolationByID(1);
     }
 
     @Test

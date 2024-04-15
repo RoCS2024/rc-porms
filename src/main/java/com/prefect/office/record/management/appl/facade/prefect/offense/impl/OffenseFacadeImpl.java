@@ -7,9 +7,17 @@ import com.prefect.office.record.management.data.dao.prefect.offense.impl.Offens
 
 import java.util.List;
 
+/**
+ * This is an implementation class of the OffenseFacade
+ */
+
 public class OffenseFacadeImpl implements OffenseFacade {
 
     private OffenseDao offenseDao;
+    /**
+     * This is a constructor for new OffenseFacadeImpl object
+     * This initializes the OffenseDao
+     */
 
     public OffenseFacadeImpl(OffenseDao offenseDao) {
         this.offenseDao = offenseDao;

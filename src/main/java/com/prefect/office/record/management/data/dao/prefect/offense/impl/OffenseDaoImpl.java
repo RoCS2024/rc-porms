@@ -15,6 +15,9 @@ import org.slf4j.LoggerFactory;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.prefect.office.record.management.data.utils.QueryConstants.*;
+
 /**
  * This is an implementation class of the OffenseDao
  */
@@ -24,9 +27,8 @@ public class OffenseDaoImpl implements OffenseDao {
 
     @Override
     public Offense getOffenseByID(int id) {
-        String sql = "SELECT * FROM offense WHERE id = ?";
         try (Connection con = ConnectionHelper.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
+             PreparedStatement stmt = con.prepareStatement(GET_OFFENSE_BY_ID_STATEMENT)) {
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -57,9 +59,8 @@ public class OffenseDaoImpl implements OffenseDao {
 
     @Override
     public boolean updateOffense(Offense offense) {
-        String sql = "UPDATE offense SET violation_id = ?, student_id = ?, offense_date = ? WHERE id = ?";
         try (Connection con = ConnectionHelper.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
+             PreparedStatement stmt = con.prepareStatement(UPDATE_OFFENSE_STATEMENT)) {
 
             Violation violation = offense.getViolation();
             Student student = offense.getStudent();
@@ -80,9 +81,8 @@ public class OffenseDaoImpl implements OffenseDao {
     @Override
     public List<Offense> getAllOffenses() {
         List<Offense> offenses = new ArrayList<>();
-        String sql = "SELECT * FROM offense";
         try (Connection con = ConnectionHelper.getConnection();
-             PreparedStatement statement = con.prepareStatement(sql);
+             PreparedStatement statement = con.prepareStatement(GET_ALL_OFFENSES_STATEMENT);
              ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
@@ -112,17 +112,24 @@ public class OffenseDaoImpl implements OffenseDao {
 
     @Override
     public boolean addOffense(Offense offense) {
-        String sql = "INSERT INTO offense (violation_id, student_id, offense_date) VALUES (?, ?, ?)";
+        if (offense == null || offense.getViolation() == null || offense.getStudent() == null) {
+            LOGGER.warn("Invalid offense object: " + offense);
+            return false;
+        }
+
         try (Connection con = ConnectionHelper.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
-            stmt.setInt(1, offense.getViolation().getId());
+             PreparedStatement stmt = con.prepareStatement(ADD_OFFENSE_STATEMENT)) {
+            Violation violation = offense.getViolation();
+            int id = violation.getId();
+
+            stmt.setInt(1, id);
             stmt.setString(2, offense.getStudent().getStudentId());
             stmt.setTimestamp(3, offense.getOffenseDate());
             int affectedRows = stmt.executeUpdate();
-            return affectedRows > 0;
+            //return affectedRows > 0;
+            return true;
         } catch (SQLException ex) {
-            String errorMessage = (ex.getMessage() != null) ? ex.getMessage() : "Unknown error";
-            LOGGER.warn("Error adding offense: " + errorMessage);
+            LOGGER.warn("Error adding offense: " + ex.getMessage());
             ex.printStackTrace();
             return false;
         }

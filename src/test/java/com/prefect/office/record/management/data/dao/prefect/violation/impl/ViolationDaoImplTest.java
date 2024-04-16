@@ -1,6 +1,5 @@
 package com.prefect.office.record.management.data.dao.prefect.violation.impl;
 
-import com.prefect.office.record.management.appl.model.offense.Offense;
 import com.prefect.office.record.management.appl.model.violation.Violation;
 import com.prefect.office.record.management.data.dao.prefect.violation.ViolationDao;
 import org.junit.jupiter.api.BeforeEach;

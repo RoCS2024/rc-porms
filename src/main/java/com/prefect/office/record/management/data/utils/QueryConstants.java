@@ -4,7 +4,7 @@ public class QueryConstants {
 
     public static final String GET_ALL_CS_STATEMENT = "SELECT * FROM comm_serv_rendered";
     public static final String GET_CS_BY_ID_STATEMENT = "SELECT * FROM comm_serv_rendered WHERE id = ?";
-    public static final String RENDER_CS_STATEMENT = "UPDATE comm_serv_rendered SET student_id = ?, date_rendered = ?, hours_rendered = ? WHERE id = ?";
+    public static final String RENDER_CS_STATEMENT = "INSERT INTO comm_serv_rendered (student_id, date_rendered, hours_rendered) VALUES (?, ?, ?)";
 
 
     public static final String GET_ALL_OFFENSES_STATEMENT = "SELECT * FROM offense";
@@ -15,4 +15,6 @@ public class QueryConstants {
 
     public static final String ADD_VIOLATION_STATEMENT = "INSERT INTO violation (violation, type, comm_serv_hours) VALUES (?, ?, ?)";
     public static final String GET_ALL_VIOLATION_STATEMENT = "SELECT * FROM violation";
+    public static final String GET_BY_ID_VIOLATION_STATEMENT = "SELECT * FROM violation WHERE id = ?";
+    public static final String UPDATE_VIOLATION_STATEMENT ="UPDATE violation SET violation = ?, type = ?, comm_serv_hours = ? WHERE id = ?";
 }

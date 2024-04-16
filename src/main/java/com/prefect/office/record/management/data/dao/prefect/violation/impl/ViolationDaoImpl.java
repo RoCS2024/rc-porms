@@ -10,6 +10,9 @@ import org.slf4j.LoggerFactory;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.prefect.office.record.management.data.utils.QueryConstants.*;
+
 /**
  * This is an implementation class of the ViolationDao
  */
@@ -19,16 +22,18 @@ public class ViolationDaoImpl implements ViolationDao {
 
     @Override
     public Violation getViolationByID(int id) {
-        String sql = "SELECT * FROM violation WHERE id = ?";
         try (Connection connection = ConnectionHelper.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql)) {
+             PreparedStatement stmt = connection.prepareStatement(GET_BY_ID_VIOLATION_STATEMENT)) {
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     String violationName = rs.getString("violation");
                     String type = rs.getString("type");
                     int commServHours = rs.getInt("comm_serv_hours");
-                    return new Violation(violationName, type, commServHours);
+                    Violation violation = new Violation(violationName, type, commServHours);
+                    violation.setId(id);
+
+                    return violation;
                 } else {
                     LOGGER.warn("No Violation found with ID: " + id);
                 }
@@ -44,7 +49,7 @@ public class ViolationDaoImpl implements ViolationDao {
     @Override
     public void addViolation(Violation violation) {
         try (Connection connection = ConnectionHelper.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO violation(violation, type, comm_serv_hours) VALUES (?, ?, ?)")) {
+             PreparedStatement preparedStatement = connection.prepareStatement(ADD_VIOLATION_STATEMENT)) {
             preparedStatement.setString(1, violation.getViolation());
             preparedStatement.setString(2, violation.getType());
             preparedStatement.setInt(3, violation.getCommServHours());
@@ -58,9 +63,8 @@ public class ViolationDaoImpl implements ViolationDao {
 
     @Override
     public boolean updateViolation(Violation violation) {
-        String sql = "UPDATE violation SET violation = ?, type = ?, comm_serv_hours = ? WHERE id = ?";
         try (Connection connection = ConnectionHelper.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql)) {
+             PreparedStatement stmt = connection.prepareStatement(UPDATE_VIOLATION_STATEMENT)) {
             stmt.setString(1, violation.getViolation());
             stmt.setString(2, violation.getType());
             stmt.setInt(3, violation.getCommServHours());
@@ -78,7 +82,7 @@ public class ViolationDaoImpl implements ViolationDao {
     public List<Violation> getAllViolation() {
         List<Violation> violations = new ArrayList<>();
         try (Connection connection = ConnectionHelper.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM violation"))   {
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_VIOLATION_STATEMENT))   {
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) {

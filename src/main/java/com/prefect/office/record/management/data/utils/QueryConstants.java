@@ -20,6 +20,10 @@ public class QueryConstants {
      * SQL query to render the CS to the database.
      */
     public static final String RENDER_CS_STATEMENT = "INSERT INTO comm_serv_rendered (student_id, date_rendered, hours_rendered) VALUES (?, ?, ?)";
+<<<<<<< HEAD
+=======
+
+>>>>>>> bf4af684dcda0e56453edea46f615b6aeb20b886
 
 
     /**
@@ -57,7 +61,7 @@ public class QueryConstants {
      * SQL query to retrieves a Violation by their Violation Number from the database.
      */
     public static final String GET_BY_ID_VIOLATION_STATEMENT = "SELECT * FROM violation WHERE id = ?";
-    
+
     /**
      * SQL query to updates an existing violation in the database.
      */

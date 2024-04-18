@@ -9,6 +9,9 @@ import org.slf4j.LoggerFactory;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.prefect.office.record.management.data.utils.QueryConstants.*;
+
 /**
  * Implements the CommunityServiceDao interface to interact with the database for managing community service records.
  */
@@ -24,9 +27,8 @@ public class CommunityServiceDaoImpl implements CommunityServiceDao {
     @Override
     public List<CommunityService> getAllCs() {
         List<CommunityService> communityServices = new ArrayList<>();
-        String sql = "SELECT * FROM comm_serv_rendered";
         try (Connection con = ConnectionHelper.getConnection();
-             PreparedStatement statement = con.prepareStatement(sql);
+             PreparedStatement statement = con.prepareStatement(GET_ALL_CS_STATEMENT);
              ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
@@ -54,9 +56,8 @@ public class CommunityServiceDaoImpl implements CommunityServiceDao {
      */
     @Override
     public CommunityService getCsById(int id) {
-        String sql = "SELECT * FROM comm_serv_rendered WHERE id = ?";
         try (Connection con = ConnectionHelper.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
+             PreparedStatement stmt = con.prepareStatement(GET_CS_BY_ID_STATEMENT)) {
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -79,7 +80,7 @@ public class CommunityServiceDaoImpl implements CommunityServiceDao {
 
 
     /**
-     * Records a new community service entry into the database.
+     *      * Records a new community service entry into the database.
      *
      * @param cs The community service record to insert.
      * @return True if the insertion is successful, false otherwise.
@@ -87,13 +88,11 @@ public class CommunityServiceDaoImpl implements CommunityServiceDao {
      */
     @Override
     public boolean renderCs(CommunityService cs) throws SQLException {
-        String sql = "UPDATE comm_serv_rendered SET student_id = ?, date_rendered = ?, hours_rendered = ? WHERE id = ?";
         try (Connection con = ConnectionHelper.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
+             PreparedStatement stmt = con.prepareStatement(RENDER_CS_STATEMENT)) {
             stmt.setString(1, cs.getStudent_id());
             stmt.setTimestamp(2, cs.getDate_rendered());
             stmt.setInt(3, cs.getHours_rendered());
-            stmt.setInt(4, cs.getId());
             int affectedRows = stmt.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException ex) {

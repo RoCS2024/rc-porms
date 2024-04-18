@@ -34,7 +34,13 @@
     <!--Compile-->
     <target name="compile" depends="init">
         <javac srcdir="${src.dir}" destdir="${classes.dir}"
-               includeantruntime="false" debug="true" classpathref="compile.path"/>
+               includeantruntime="false" debug="true" classpathref="compile.path">
+            <classpath>
+                <fileset dir = "lib">
+                    <include name = "**/*.jar"/>
+                </fileset>
+            </classpath>
+        </javac>
     </target>
 
     <target name="compile-tests" depends="compile">
@@ -73,7 +79,7 @@
 
     <!-- Create jar   -->
     <target name="build-jar" depends="build">
-        <jar destfile="${build.dir}/${ant.project.name}-${version}.jar"
+        <jar destfile="${build.dir}/porms.jar"
              basedir="${classes.dir}" />
     </target>
 

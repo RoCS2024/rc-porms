@@ -27,13 +27,7 @@ public class CommunityServiceFacadeImpl implements CommunityServiceFacade {
     @Override
     public boolean renderCs(CommunityService cs) {
         try {
-            CommunityService targetCs = getCsById(cs.getId());
-            if(targetCs == null) {
-                throw new IllegalArgumentException("Community Service to render not found.");
-            }
-            return true;
-        } catch (IllegalArgumentException e) {
-            return false;
+            return communityServiceDao.renderCs(cs);
         } catch (Exception e) {
             throw new RuntimeException("Error rendering Community Service: " + e.getMessage(), e);
         }

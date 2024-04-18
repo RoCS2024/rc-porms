@@ -1,5 +1,8 @@
 package com.prefect.office.record.management.appl.model.offense;
 
+import com.prefect.office.record.management.appl.model.violation.Violation;
+import com.student.information.management.appl.model.student.Student;
+
 import java.sql.Timestamp;
 
 /**
@@ -8,9 +11,10 @@ import java.sql.Timestamp;
 public class Offense {
 
     private int id;
-    private int violationId;
-    private String studentId;
+    private Violation violation;
+    private Student student;
     private Timestamp offenseDate;
+    private int commServHours;
 
     /**
      * Constructs a new Offense object.
@@ -19,20 +23,21 @@ public class Offense {
      * @param violationId The ID of the violation associated with the offense.
      * @param studentId   The ID of the student who committed the offense.
      * @param offenseDate The timestamp indicating the date and time of the offense.
-     */
-    public Offense(int id, int violationId, String studentId, Timestamp offenseDate) {
+     */  
+    public Offense(int id, Violation violation, Student student, Timestamp offenseDate, int commServHours) {
         this.id = id;
-        this.violationId = violationId;
-        this.studentId = studentId;
+        this.violation = violation;
+        this.student = student;
         this.offenseDate = offenseDate;
+        this.commServHours = commServHours;
     }
 
     /**
      * Constructs a new Offense object with default values.
      */
     public Offense() {
-
     }
+
 
     /**
      * Retrieves the unique identifier of the offense record.
@@ -51,37 +56,36 @@ public class Offense {
     }
 
     /**
-     * Retrieves the ID of the violation associated with the offense.
-     * @return The ID of the violation.
+     * Retrieves the violation object of the Violation associated with the offense.
+     * @return The violation object of the Violation.
      */
-    public int getViolationId() {
-        return violationId;
+    public Violation getViolation() {
+        return violation;
     }
 
     /**
-     * Sets the ID of the violation associated with the offense.
-     * @param violationId The ID of the violation to set.
+     * Sets the violation indicating the violation of the offense.
+     * @param violation The violation to set.
      */
-    public void setViolationId(int violationId) {
-        this.violationId = violationId;
+    public void setViolation(Violation violation) {
+        this.violation = violation;
+    }
+    
+    /**
+     * Retrieves the student object of the Student associated with the offense.
+     * @return The student object of the Student.
+     */
+    public Student getStudent() {
+        return student;
     }
 
     /**
-     * Retrieves the ID of the student who committed the offense.
-     * @return The ID of the student.
+     * Sets the student indicating the student of the offense.
+     * @param student The student to set.
      */
-    public String getStudentId() {
-        return studentId;
+    public void setStudent(Student student) {
+        this.student = student;
     }
-
-    /**
-     * Sets the ID of the student who committed the offense.
-     * @param studentId The ID of the student to set.
-     */
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
-    }
-
 
     /**
      * Retrieves the timestamp indicating the date and time of the offense.
@@ -97,5 +101,22 @@ public class Offense {
      */
     public void setOffenseDate(Timestamp offenseDate) {
         this.offenseDate = offenseDate;
+    }
+
+    /**
+     * Retrieves the commServHours of the offense.
+     * @return The commServHours of the offense.
+     */
+    public int getCommServHours() {
+        return commServHours;
+    }
+
+
+    /**
+     * Sets the commServHours of the offense.
+     * @param commServHours The commServHours to set.
+     */
+    public void setCommServHours(int commServHours) {
+        this.commServHours = commServHours;
     }
 }

@@ -8,8 +8,10 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class ViolationDaoImplTest {
     private ViolationDao violationDao;
@@ -32,5 +34,30 @@ class ViolationDaoImplTest {
 
         violationDao.addViolation(testViolation);
         assertTrue(true, "Expected: True, Actual: True");
+    }
+
+    @Test
+    public void testUpdateViolation() {
+        Violation violation = new Violation();
+        violation.setId(1);
+
+        when(violationDao.updateViolation(violation)).thenReturn(true);
+        when(violationDao.getViolationByID(1)).thenReturn(violation);
+
+        Violation expectedViolation = violationDao.getViolationByID(1);
+        assertEquals(expectedViolation.getId(), violation.getId());
+    }
+
+    @Test
+    public void testGetViolationById() {
+        Violation violation1 = new Violation();
+        violation1.setId(1);
+
+        when(violationDao.getViolationByID(1)).thenReturn(violation1);
+
+        Violation expectedViolation = violationDao.getViolationByID(1);
+
+        assertEquals(expectedViolation, violation1);
+        assertEquals(expectedViolation.getId(), violation1.getId());
     }
 }

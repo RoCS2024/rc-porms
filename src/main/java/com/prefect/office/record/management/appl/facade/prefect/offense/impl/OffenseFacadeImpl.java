@@ -38,21 +38,28 @@ public class OffenseFacadeImpl implements OffenseFacade {
         try {
             Offense targetOffense = getOffenseByID(offense.getId());
             if (targetOffense == null) {
-                throw new Exception("Offense to update not found. ");
+                throw new Exception("Offense to update not found.");
             }
             result = offenseDao.updateOffense(offense);
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            String errorMessage = e.getMessage();
+            if (errorMessage != null) {
+                throw new RuntimeException(errorMessage);
+            } else {
+                throw new RuntimeException("An error occurred while updating the offense information.");
+            }
         }
         return result;
     }
+
 
     @Override
     public boolean addOffense(Offense offense) {
         try {
             return offenseDao.addOffense(offense);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to add offense: " + e.getMessage(), e);
+            e.printStackTrace();
         }
+        return false;
     }
 }

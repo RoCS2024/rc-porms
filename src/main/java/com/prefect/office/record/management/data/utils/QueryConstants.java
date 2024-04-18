@@ -19,8 +19,7 @@ public class QueryConstants {
     /**
      * SQL query to render the CS to the database.
      */
-    public static final String RENDER_CS_STATEMENT = "UPDATE comm_serv_rendered SET student_id = ?, date_rendered = ?, hours_rendered = ? WHERE id = ?";
-
+    public static final String RENDER_CS_STATEMENT = "INSERT INTO comm_serv_rendered (student_id, date_rendered, hours_rendered) VALUES (?, ?, ?)";
 
     /**
      * SQL query to retrieves all offenses from the database.
@@ -52,4 +51,14 @@ public class QueryConstants {
      * SQL query to retrieves all violation from the database.
      */
     public static final String GET_ALL_VIOLATION_STATEMENT = "SELECT * FROM violation";
+
+    /**
+     * SQL query to retrieves a Violation by their Violation Number from the database.
+     */
+    public static final String GET_BY_ID_VIOLATION_STATEMENT = "SELECT * FROM violation WHERE id = ?";
+
+    /**
+     * SQL query to updates an existing violation in the database.
+     */
+    public static final String UPDATE_VIOLATION_STATEMENT ="UPDATE violation SET violation = ?, type = ?, comm_serv_hours = ? WHERE id = ?";
 }

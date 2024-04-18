@@ -55,18 +55,34 @@ public class Offense {
         this.id = id;
     }
 
+    /**
+     * Retrieves the violation object of the Violation associated with the offense.
+     * @return The violation object of the Violation.
+     */
     public Violation getViolation() {
         return violation;
     }
 
+    /**
+     * Sets the violation indicating the violation of the offense.
+     * @param violation The violation to set.
+     */
     public void setViolation(Violation violation) {
         this.violation = violation;
     }
-
+    
+    /**
+     * Retrieves the student object of the Student associated with the offense.
+     * @return The student object of the Student.
+     */
     public Student getStudent() {
         return student;
     }
 
+    /**
+     * Sets the student indicating the student of the offense.
+     * @param student The student to set.
+     */
     public void setStudent(Student student) {
         this.student = student;
     }
@@ -87,10 +103,19 @@ public class Offense {
         this.offenseDate = offenseDate;
     }
 
+    /**
+     * Retrieves the commServHours of the offense.
+     * @return The commServHours of the offense.
+     */
     public int getCommServHours() {
         return commServHours;
     }
 
+
+    /**
+     * Sets the commServHours of the offense.
+     * @param commServHours The commServHours to set.
+     */
     public void setCommServHours(int commServHours) {
         this.commServHours = commServHours;
     }

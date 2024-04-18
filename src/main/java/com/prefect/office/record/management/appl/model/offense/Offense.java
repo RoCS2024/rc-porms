@@ -69,7 +69,7 @@ public class Offense {
 
     public void setStudent(Student student) {
         this.student = student;
-
+    }
 
     /**
      * Retrieves the timestamp indicating the date and time of the offense.

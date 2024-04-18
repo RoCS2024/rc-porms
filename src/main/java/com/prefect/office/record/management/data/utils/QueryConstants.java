@@ -20,11 +20,6 @@ public class QueryConstants {
      * SQL query to render the CS to the database.
      */
     public static final String RENDER_CS_STATEMENT = "INSERT INTO comm_serv_rendered (student_id, date_rendered, hours_rendered) VALUES (?, ?, ?)";
-<<<<<<< HEAD
-=======
-
->>>>>>> bf4af684dcda0e56453edea46f615b6aeb20b886
-
 
     /**
      * SQL query to retrieves all offenses from the database.

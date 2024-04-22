@@ -22,15 +22,16 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    private static final Scanner scanner = new Scanner(System.in);
-    private static final CommunityServiceFacade communityServiceFacade = new CommunityServiceFacadeImpl(new CommunityServiceDaoImpl());
-    private static final ViolationFacade violationFacade = new ViolationFacadeImpl();
+    private static Scanner scanner = new Scanner(System.in);
+    private static CommunityServiceFacade communityServiceFacade = new CommunityServiceFacadeImpl(new CommunityServiceDaoImpl());
+    private static ViolationFacade violationFacade = new ViolationFacadeImpl();
     private static OffenseFacade offenseFacade;
 
     public static void main(String[] args) {
-
-        OffenseDao offenseDao = new OffenseDaoImpl();
-        offenseFacade = new OffenseFacadeImpl(offenseDao);
+        PrefectOfficeRecordMgtApplication app = new PrefectOfficeRecordMgtApplication();
+        CommunityServiceFacade communityserviceFacade = app.getCommunityserviceFacade();
+        OffenseFacade offenseFacade = app.getOffenseFacade();
+        ViolationFacade violationFacade = app.getViolationFacade();
 
         try {
             int choice;

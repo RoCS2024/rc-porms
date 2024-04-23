@@ -4,6 +4,7 @@ import com.prefect.office.record.management.appl.facade.prefect.offense.OffenseF
 import com.prefect.office.record.management.appl.model.offense.Offense;
 import com.prefect.office.record.management.data.dao.prefect.offense.OffenseDao;
 import com.prefect.office.record.management.data.dao.prefect.offense.impl.OffenseDaoImpl;
+import com.student.information.management.appl.model.student.Student;
 
 import java.util.List;
 
@@ -30,6 +31,15 @@ public class OffenseFacadeImpl implements OffenseFacade {
     @Override
     public Offense getOffenseByID(int id) {
         return offenseDao.getOffenseByID(id);
+    }
+
+    @Override
+    public List<Offense> getAllOffenseByStudentId(Student studentId) {
+        try {
+            return offenseDao.getAllOffenseByStudentId(studentId);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to retrieve all offenses: " + e.getMessage(), e);
+        }
     }
 
     @Override

@@ -12,6 +12,11 @@ public class QueryConstants {
     public static final String GET_ALL_CS_STATEMENT = "SELECT * FROM comm_serv_rendered";
 
     /**
+     * SQL query to retrieves all offenses by student id from the database.
+     */
+    public static final String GET_ALL_CS_BY_STUDENT_ID_STATEMENT = "SELECT * FROM comm_serv_rendered WHERE STUDENT_ID = ?";
+
+    /**
      * SQL query to retrieves an CS by their Student Number from the database.
      */
     public static final String GET_CS_BY_ID_STATEMENT = "SELECT * FROM comm_serv_rendered WHERE id = ?";
@@ -21,10 +26,16 @@ public class QueryConstants {
      */
     public static final String RENDER_CS_STATEMENT = "INSERT INTO comm_serv_rendered (student_id, date_rendered, hours_rendered) VALUES (?, ?, ?)";
 
+
     /**
      * SQL query to retrieves all offenses from the database.
      */
     public static final String GET_ALL_OFFENSES_STATEMENT = "SELECT * FROM offense";
+
+    /**
+     * SQL query to retrieves all offenses by student id from the database.
+     */
+    public static final String GET_ALL_OFFENSES_BY_STUDENT_ID_STATEMENT = "SELECT * FROM OFFENSE WHERE STUDENT_ID = ?";
 
     /**
      * SQL query to retrieves an Offense by their Student Number from the database.

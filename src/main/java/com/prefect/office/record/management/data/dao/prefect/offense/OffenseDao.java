@@ -1,6 +1,7 @@
 package com.prefect.office.record.management.data.dao.prefect.offense;
 
 import com.prefect.office.record.management.appl.model.offense.Offense;
+import com.student.information.management.appl.model.student.Student;
 
 import java.util.List;
 /**
@@ -12,6 +13,13 @@ public interface OffenseDao {
      * @return list of all the offenses
      */
     List<Offense> getAllOffenses();
+
+    /**
+     * This retrieves all Offenses from the database with a specific student ID
+     * @param studentId is the id of the Student that has an Offense Record
+     * @return list of all the offenses
+     */
+    List<Offense> getAllOffenseByStudentId(Student studentId);
 
     /**
      * This gets an Offense from the database with a specific ID

@@ -1,7 +1,5 @@
 package com.prefect.office.record.management.appl.facade.prefect.offense.impl;
 
-import com.student.information.management.appl.facade.student.impl.StudentFacadeImpl;
-import com.student.information.management.appl.model.student.Student;
 import com.prefect.office.record.management.appl.model.offense.Offense;
 import com.prefect.office.record.management.data.dao.prefect.offense.OffenseDao;
 import org.junit.jupiter.api.AfterEach;
@@ -33,15 +31,6 @@ class OffenseFacadeImplTest {
     private Offense offense;
 
     @Mock
-    private Student studentId;
-
-    @Mock
-    private StudentFacadeImpl studentFacade;
-
-    @Mock
-    private List<Offense> studentOffenseList;
-
-    @Mock
     private Offense addOffense;
 
     @BeforeEach
@@ -64,17 +53,6 @@ class OffenseFacadeImplTest {
         assert(expectedList.equals(offenseList));
         verify(offenseDao).getAllOffenses();
     }
-
-//    @Test
-//    public void testGetAllOffensesByStudentId() {
-//        studentId = studentFacade.getStudentById("Ct21-0048");
-//        List expectedList = offenseFacade.getAllOffenseByStudentId(studentId);
-//
-//        studentOffenseList = offenseFacade.getAllOffenseByStudentId(studentId);
-//
-//        assert(expectedList.equals(studentOffenseList));
-//        verify(offenseDao).getAllOffenseByStudentId(studentId);
-//    }
 
     @Test
     public void testGetOffenseById() {

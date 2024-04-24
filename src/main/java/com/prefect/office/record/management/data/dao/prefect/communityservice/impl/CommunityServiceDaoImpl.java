@@ -1,6 +1,7 @@
 package com.prefect.office.record.management.data.dao.prefect.communityservice.impl;
 
 import com.prefect.office.record.management.appl.model.communityservice.CommunityService;
+import com.prefect.office.record.management.appl.model.offense.Offense;
 import com.prefect.office.record.management.data.connectionhelper.ConnectionHelper;
 import com.prefect.office.record.management.data.dao.prefect.communityservice.CommunityServiceDao;
 import org.slf4j.Logger;
@@ -46,6 +47,37 @@ public class CommunityServiceDaoImpl implements CommunityServiceDao {
         }
         LOGGER.debug("Community Service database is empty.");
         return communityServices;
+    }
+
+    @Override
+    public List<CommunityService> getAllCsByStudentId(String studentId) {
+        List<CommunityService> communityServices = new ArrayList<>();
+        try (Connection con = ConnectionHelper.getConnection();
+             PreparedStatement statement = con.prepareStatement(GET_ALL_CS_BY_STUDENT_ID_STATEMENT)) {
+
+            statement.setString(1, studentId);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    CommunityService communityService = new CommunityService();
+                    communityService.setId(resultSet.getInt("id"));
+                    communityService.setStudent_id(resultSet.getString("student_id"));
+                    communityService.setDate_rendered(resultSet.getTimestamp("date_rendered"));
+                    communityService.setHours_rendered(resultSet.getInt("hours_rendered"));
+                    communityServices.add(communityService);
+                }
+                LOGGER.info("Community Service retrieved successfully.");
+            } catch (SQLException ex) {
+                LOGGER.warn("Error retrieving all community services: " + ex.getMessage());
+                ex.printStackTrace();
+            }
+            LOGGER.debug("Community Service database is empty.");
+        } catch (SQLException ex) {
+            LOGGER.warn("Error preparing statement: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+        return communityServices;
+
     }
 
     /**

@@ -111,6 +111,46 @@ public class OffenseDaoImpl implements OffenseDao {
     }
 
     @Override
+    public List<Offense> getAllOffenseByStudentId(Student studentId) {
+        List<Offense> offenses = new ArrayList<>();
+        try (Connection con = ConnectionHelper.getConnection();
+             PreparedStatement statement = con.prepareStatement(GET_ALL_OFFENSES_BY_STUDENT_ID_STATEMENT)) {
+
+            statement.setString(1, studentId.getStudentId());
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Offense offense = new Offense();
+                    offense.setId(resultSet.getInt("id"));
+
+                    ViolationFacade violationFacade = new ViolationFacadeImpl();
+                    Violation violation = violationFacade.getViolationByID(resultSet.getInt("violation_id"));
+                    offense.setViolation(violation);
+
+                    StudentFacade studentFacade = new StudentFacadeImpl();
+                    Student student = studentFacade.getStudentById(resultSet.getString("student_id"));
+                    offense.setStudent(student);
+
+                    offense.setOffenseDate(resultSet.getTimestamp("offense_date"));
+                    offense.setCommServHours(resultSet.getInt("comm_serv_hours"));
+                    offenses.add(offense);
+                }
+                LOGGER.info("Offenses retrieved successfully.");
+            } catch (SQLException ex) {
+                LOGGER.warn("Error retrieving all offenses: " + ex.getMessage());
+                ex.printStackTrace();
+            }
+            LOGGER.debug("Offense database is empty.");
+        } catch (SQLException ex) {
+            LOGGER.warn("Error preparing statement: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+        return offenses;
+
+    }
+
+
+    @Override
     public boolean addOffense(Offense offense) {
         if (offense == null || offense.getViolation() == null || offense.getStudent() == null) {
             LOGGER.warn("Invalid offense object: " + offense);

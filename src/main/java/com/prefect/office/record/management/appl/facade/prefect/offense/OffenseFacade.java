@@ -1,6 +1,7 @@
 package com.prefect.office.record.management.appl.facade.prefect.offense;
 
 import com.prefect.office.record.management.appl.model.offense.Offense;
+import com.student.information.management.appl.model.student.Student;
 
 import java.util.List;
 
@@ -18,12 +19,20 @@ public interface OffenseFacade {
     List<Offense> getAllOffenses();
 
     /**
-     * Retrieves a Student from the database with specified id.
+     * Retrieves an Offense from the database with specified id.
      *
-     * @param id the id of the students.
+     * @param id the id of the offense.
      * @return the Offense.
      * */
     Offense getOffenseByID (int id);
+
+    /**
+     * Retrieves all offense from the database with specified student id.
+     *
+     * @param studentId the id of the students.
+     * @return the Offense.
+     * */
+    List<Offense> getAllOffenseByStudentId(Student studentId);
 
     /**
      * Updates a Student in the database.
@@ -39,6 +48,5 @@ public interface OffenseFacade {
      * @param offense offense to add.
      * @return true if adding is successful.
      * */
-
     boolean addOffense(Offense offense);
 }

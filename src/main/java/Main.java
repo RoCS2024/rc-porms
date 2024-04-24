@@ -50,19 +50,28 @@ public class Main {
                         updateOffense();
                         break;
                     case 4:
-                        addViolation();
+                        searchAllOffenseByStudentId();
                         break;
                     case 5:
-                        updateViolation();
+                        addViolation();
                         break;
                     case 6:
-                        viewAllViolation();
+                        updateViolation();
                         break;
                     case 7:
-                        renderCs();
+                        viewAllViolation();
                         break;
                     case 8:
+                        searchViolationById();
+                        break;
+                    case 9:
+                        renderCs();
+                        break;
+                    case 10:
                         viewCsHistory();
+                        break;
+                    case 11:
+                        searchCsHistoryByStudentId();
                         break;
                     case 0:
                         System.out.println("Exiting the App...");
@@ -84,12 +93,100 @@ public class Main {
         System.out.println("1. View List of Offense");
         System.out.println("2. Add Offense");
         System.out.println("3. Update Offense");
-        System.out.println("4. Add Violation");
-        System.out.println("5. Update Violation");
-        System.out.println("6. View List of Violation");
-        System.out.println("7. Render Community Service");
-        System.out.println("8. View Community Service History");
+        System.out.println("4. Search Offense By Student Id");
+        System.out.println("5. Add Violation");
+        System.out.println("6. Update Violation");
+        System.out.println("7. View List of Violation");
+        System.out.println("8. Search Violation By Id");
+        System.out.println("9. Render Community Service");
+        System.out.println("10. View Community Service History");
+        System.out.println("11. Search Community Service History By Student Id");
         System.out.println("0. Exit");
+    }
+
+    private static void searchAllOffenseByStudentId() {
+        try {
+            System.out.print("Enter Student ID: ");
+            String studentId = scanner.next();
+
+            StudentFacade studentFacade = new StudentFacadeImpl();
+            Student student = studentFacade.getStudentById(studentId);
+            if (student != null) {
+                List<Offense> offenseRecords = offenseFacade.getAllOffenseByStudentId(student);
+                if (offenseRecords != null && !offenseRecords.isEmpty()) {
+                    System.out.println("Offense Records");
+                    for (Offense offenseRecord : offenseRecords) {
+                        System.out.println("Offense ID: " + offenseRecord.getId());
+                        System.out.println("Violation ID: " + offenseRecord.getViolation().getViolation());
+                        System.out.println("Student Last Name: " + offenseRecord.getStudent().getLastName());
+                        System.out.println("Student First Name: " + offenseRecord.getStudent().getFirstName());
+                        System.out.println("Student Middle Name: " + offenseRecord.getStudent().getMiddleName());
+                        System.out.println("Offense Date: " + offenseRecord.getOffenseDate());
+                        System.out.println("-----------------------------------");
+                    }
+                } else {
+                    System.out.println("No offense records found.");
+                }
+            } else {
+                System.out.println("No Student ID found.");
+            }
+        } catch (Exception e) {
+            System.err.println("An error occurred while viewing all offenses: " + e.getMessage());
+        }
+    }
+
+    private static void searchViolationById() {
+        try {
+            System.out.print("Enter Violation ID: ");
+            int violationId = scanner.nextInt();
+
+            Violation violation = violationFacade.getViolationByID(violationId);
+            if (violation != null) {
+                    System.out.println("-------------------------------------");
+                    System.out.println("Violation ID: " + violation.getId());
+                    System.out.println("Violation: " + violation.getViolation());
+                    System.out.println("Violation Type: " + violation.getType());
+                    System.out.println("Community Service Hours: " + violation.getCommServHours());
+            } else {
+                System.out.println("No Violation ID found.");
+            }
+        } catch (Exception e) {
+            System.err.println("An error occurred while viewing all offenses: " + e.getMessage());
+        }
+    }
+
+    private static void searchCsHistoryByStudentId() {
+        try {
+            System.out.print("Enter Student ID: ");
+            String studentId = scanner.next();
+
+            StudentFacade studentFacade = new StudentFacadeImpl();
+            Student student = studentFacade.getStudentById(studentId);
+            if (student != null) {
+                try {
+                    List<CommunityService> csRecords = communityServiceFacade.getAllCsByStudentId(studentId);
+
+                    if (csRecords != null && !csRecords.isEmpty()) {
+                        System.out.println("Community Service Records");
+                        for (CommunityService csRecord : csRecords) {
+                            System.out.println("Community Service ID: " + csRecord.getId());
+                            System.out.println("Student ID: " + csRecord.getStudent_id());
+                            System.out.println("Date Rendered: " + csRecord.getDate_rendered());
+                            System.out.println("Hours Rendered: " + csRecord.getHours_rendered());
+                            System.out.println("-----------------------------------");
+                        }
+                    } else {
+                        System.out.println("No Community Service found.");
+                    }
+                } catch (Exception e) {
+                    System.err.println("An error occurred while viewing community service history: " + e.getMessage());
+                }
+            } else {
+                System.out.println("No Student ID found.");
+            }
+        } catch (Exception e) {
+            System.err.println("An error occurred while viewing all offenses: " + e.getMessage());
+        }
     }
 
     private static void viewAllOffense() {
@@ -114,6 +211,7 @@ public class Main {
             System.err.println("An error occurred while viewing all offenses: " + e.getMessage());
         }
     }
+
 
 
     private static void addOffense() {

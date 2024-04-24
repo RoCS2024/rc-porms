@@ -1,6 +1,5 @@
 package com.prefect.office.record.management.appl.facade.prefect.offense.impl;
 
-import com.prefect.office.record.management.appl.facade.prefect.offense.OffenseFacade;
 import com.prefect.office.record.management.appl.model.offense.Offense;
 import com.prefect.office.record.management.data.dao.prefect.offense.OffenseDao;
 import org.junit.jupiter.api.AfterEach;
@@ -52,7 +51,6 @@ class OffenseFacadeImplTest {
         List expectedList = offenseFacade.getAllOffenses();
 
         assert(expectedList.equals(offenseList));
-        // Verify that the itemDao.getAllItems is called whenever itemFacade.getAllItems is invoked.
         verify(offenseDao).getAllOffenses();
     }
 

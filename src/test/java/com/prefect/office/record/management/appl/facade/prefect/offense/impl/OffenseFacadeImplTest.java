@@ -1,7 +1,5 @@
 package com.prefect.office.record.management.appl.facade.prefect.offense.impl;
 
-import com.student.information.management.appl.facade.student.impl.StudentFacadeImpl;
-import com.student.information.management.appl.model.student.Student;
 import com.prefect.office.record.management.appl.model.offense.Offense;
 import com.prefect.office.record.management.data.dao.prefect.offense.OffenseDao;
 import org.junit.jupiter.api.AfterEach;
@@ -31,15 +29,6 @@ class OffenseFacadeImplTest {
 
     @Mock
     private Offense offense;
-
-    @Mock
-    private Student studentId;
-
-    @Mock
-    private StudentFacadeImpl studentFacade;
-
-    @Mock
-    private List<Offense> studentOffenseList;
 
     @Mock
     private Offense addOffense;

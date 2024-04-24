@@ -65,17 +65,6 @@ class OffenseFacadeImplTest {
         verify(offenseDao).getAllOffenses();
     }
 
-//    @Test
-//    public void testGetAllOffensesByStudentId() {
-//        studentId = studentFacade.getStudentById("Ct21-0048");
-//        List expectedList = offenseFacade.getAllOffenseByStudentId(studentId);
-//
-//        studentOffenseList = offenseFacade.getAllOffenseByStudentId(studentId);
-//
-//        assert(expectedList.equals(studentOffenseList));
-//        verify(offenseDao).getAllOffenseByStudentId(studentId);
-//    }
-
     @Test
     public void testGetOffenseById() {
         when(offenseDao.getOffenseByID(1)).thenReturn(offense);

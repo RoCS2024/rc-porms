@@ -8,6 +8,10 @@ import com.student.information.management.appl.model.student.Student;
 
 import java.util.List;
 
+/**
+ * An implementation class of the Offence Facade.
+ */
+
 public class OffenseFacadeImpl implements OffenseFacade {
 
     private OffenseDao offenseDao;

@@ -18,8 +18,10 @@ public class ViolationFacadeImpl implements ViolationFacade {
      * This is a constructor for new ViolationFacadeImpl object
      * This initializes the ViolationDao
      */
+    public ViolationFacadeImpl(ViolationDao violationDao) { this.violationDAO = violationDao;}
+
     public ViolationFacadeImpl() {
-        this.violationDAO = new ViolationDaoImpl();
+
     }
 
     @Override

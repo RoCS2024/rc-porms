@@ -5,8 +5,8 @@ build/
 doc/
 *.iml/
 target/
-
 logs/
+*.class
 !**/src/main/**/out/
 !**/src/test/**/out/
 

@@ -27,11 +27,11 @@ public class Main {
     private static ViolationFacade violationFacade = new ViolationFacadeImpl();
     private static OffenseFacade offenseFacade;
 
-    public static void main(String[] args) {
-        PrefectOfficeRecordMgtApplication app = new PrefectOfficeRecordMgtApplication();
-        CommunityServiceFacade communityserviceFacade = app.getCommunityserviceFacade();
-        OffenseFacade offenseFacade = app.getOffenseFacade();
-        ViolationFacade violationFacade = app.getViolationFacade();
+        public static void main(String[] args) {
+            PrefectOfficeRecordMgtApplication app = new PrefectOfficeRecordMgtApplication();
+            communityServiceFacade = app.getCommunityserviceFacade();
+            offenseFacade = app.getOffenseFacade();
+            violationFacade = app.getViolationFacade();
 
         try {
             int choice;

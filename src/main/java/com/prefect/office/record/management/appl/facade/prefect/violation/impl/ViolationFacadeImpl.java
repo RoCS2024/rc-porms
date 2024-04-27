@@ -21,7 +21,7 @@ public class ViolationFacadeImpl implements ViolationFacade {
     public ViolationFacadeImpl(ViolationDao violationDao) { this.violationDAO = violationDao;}
 
     public ViolationFacadeImpl() {
-
+        this.violationDAO = new ViolationDaoImpl();
     }
 
     @Override

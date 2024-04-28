@@ -23,8 +23,9 @@ import java.util.Scanner;
 
 public class Main {
     private static Scanner scanner = new Scanner(System.in);
-    private static CommunityServiceFacade communityServiceFacade = new CommunityServiceFacadeImpl(new CommunityServiceDaoImpl());
-    private static ViolationFacade violationFacade = new ViolationFacadeImpl();
+    private static final PrefectOfficeRecordMgtApplication app = new PrefectOfficeRecordMgtApplication();
+    private static CommunityServiceFacade communityServiceFacade;
+    private static ViolationFacade violationFacade;
     private static OffenseFacade offenseFacade;
 
         public static void main(String[] args) {

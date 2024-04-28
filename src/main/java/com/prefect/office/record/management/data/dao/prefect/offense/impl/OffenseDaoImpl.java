@@ -6,9 +6,11 @@ import com.prefect.office.record.management.appl.model.offense.Offense;
 import com.prefect.office.record.management.appl.model.violation.Violation;
 import com.prefect.office.record.management.data.connectionhelper.ConnectionHelper;
 import com.prefect.office.record.management.data.dao.prefect.offense.OffenseDao;
+import com.prefect.office.record.management.data.dao.prefect.violation.ViolationDao;
 import com.student.information.management.appl.facade.student.StudentFacade;
 import com.student.information.management.appl.facade.student.impl.StudentFacadeImpl;
 import com.student.information.management.appl.model.student.Student;
+import com.student.information.management.data.student.dao.StudentDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +26,13 @@ import static com.prefect.office.record.management.data.utils.QueryConstants.*;
 public class OffenseDaoImpl implements OffenseDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OffenseDaoImpl.class);
+    private ViolationDao violationDao;
+    private StudentDao studentDao;
+
+    public OffenseDaoImpl(ViolationDao violationDao, StudentDao studentDao) {
+        this.violationDao = violationDao;
+        this.studentDao = studentDao;
+    }
 
     @Override
     public Offense getOffenseByID(int id) {
@@ -36,11 +45,8 @@ public class OffenseDaoImpl implements OffenseDao {
                     int violationId = rs.getInt("violation_id");
                     String studentId = rs.getString("student_id");
 
-                    ViolationFacade violationFacade = new ViolationFacadeImpl();
-                    StudentFacade studentFacade = new StudentFacadeImpl();
-
-                    Violation violation = violationFacade.getViolationByID(violationId);
-                    Student student = studentFacade.getStudentById(studentId);
+                    Violation violation = violationDao.getViolationByID(violationId);
+                    Student student = studentDao.getStudentById(studentId);
 
                     Timestamp offense_date = rs.getTimestamp("offense_date");
                     int commServHours = rs.getInt("comm_serv_hours");
@@ -89,12 +95,10 @@ public class OffenseDaoImpl implements OffenseDao {
                 Offense offense = new Offense();
                 offense.setId(resultSet.getInt("id"));
 
-                ViolationFacade violationFacade = new ViolationFacadeImpl();
-                Violation violation = violationFacade.getViolationByID(resultSet.getInt("violation_id"));
+                Violation violation = violationDao.getViolationByID(resultSet.getInt("violation_id"));
                 offense.setViolation(violation);
 
-                StudentFacade studentFacade = new StudentFacadeImpl();
-                Student student = studentFacade.getStudentById(resultSet.getString("student_id"));
+                Student student = studentDao.getStudentById(resultSet.getString("student_id"));
                 offense.setStudent(student);
 
                 offense.setOffenseDate(resultSet.getTimestamp("offense_date"));
@@ -123,8 +127,7 @@ public class OffenseDaoImpl implements OffenseDao {
                     Offense offense = new Offense();
                     offense.setId(resultSet.getInt("id"));
 
-                    ViolationFacade violationFacade = new ViolationFacadeImpl();
-                    Violation violation = violationFacade.getViolationByID(resultSet.getInt("violation_id"));
+                    Violation violation = violationDao.getViolationByID(resultSet.getInt("violation_id"));
                     offense.setViolation(violation);
 
                     StudentFacade studentFacade = new StudentFacadeImpl();

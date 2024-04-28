@@ -10,6 +10,7 @@ import com.prefect.office.record.management.data.dao.prefect.offense.OffenseDao;
 import com.prefect.office.record.management.data.dao.prefect.offense.impl.OffenseDaoImpl;
 import com.prefect.office.record.management.data.dao.prefect.violation.ViolationDao;
 import com.prefect.office.record.management.data.dao.prefect.violation.impl.ViolationDaoImpl;
+import com.student.information.management.data.student.dao.impl.StudentDaoImpl;
 
 public class PrefectOfficeRecordMgtApplication {
 
@@ -20,11 +21,11 @@ public PrefectOfficeRecordMgtApplication(){
     CommunityServiceDao communityserviceDaoImpl = new CommunityServiceDaoImpl();
     this.communityserviceFacade = new CommunityServiceFacadeImpl(communityserviceDaoImpl);
 
-    OffenseDao offenseDaoImpl = new OffenseDaoImpl();
-    this.offenseFacade = new OffenseFacadeImpl(offenseDaoImpl);
-
     ViolationDao violationDaoImpl = new ViolationDaoImpl();
     this.violationFacade = new ViolationFacadeImpl(violationDaoImpl);
+
+    OffenseDao offenseDaoImpl = new OffenseDaoImpl(violationDaoImpl,new StudentDaoImpl());
+    this.offenseFacade = new OffenseFacadeImpl(offenseDaoImpl);
 }
 
     public CommunityServiceFacade getCommunityserviceFacade() {

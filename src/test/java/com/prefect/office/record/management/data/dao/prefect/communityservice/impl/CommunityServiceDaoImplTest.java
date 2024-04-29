@@ -1,7 +1,9 @@
 package com.prefect.office.record.management.data.dao.prefect.communityservice.impl;
 
 import com.prefect.office.record.management.appl.model.communityservice.CommunityService;
+import com.prefect.office.record.management.appl.model.offense.Offense;
 import com.prefect.office.record.management.data.dao.prefect.communityservice.CommunityServiceDao;
+import com.student.information.management.appl.model.student.Student;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -60,5 +62,18 @@ class CommunityServiceDaoImplTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Test
+    public void testGetAllCsByStudentId() {
+        Student student1 = new Student();
+        student1.setStudentId("CT21-0001");
+
+        CommunityService communityService = new CommunityService();
+        communityService.setStudent(student1);
+
+        when(communityServiceDao.getAllCsByStudentId(student1)).thenReturn(communityServices);
+        List<CommunityService> communityServiceList = communityServiceDao.getAllCsByStudentId(student1);
+        assertEquals(communityServiceList.size(), 2);
     }
 }

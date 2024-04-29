@@ -24,7 +24,7 @@ public interface CommunityServiceDao {
      * @param studentId is the id of the Student that has a Community Service History
      * @return A list of all community service records of the specific student
      */
-    List<CommunityService> getAllCsByStudentId(String studentId);
+    List<CommunityService> getAllCsByStudentId(Student studentId);
 
     /**
      * Retrieves a specific community service record by its ID from the database.

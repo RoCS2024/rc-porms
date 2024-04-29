@@ -47,6 +47,34 @@ public class ViolationDaoImpl implements ViolationDao {
     }
 
     @Override
+    public Violation getViolationByName(String violation) {
+        try (Connection connection = ConnectionHelper.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(GET_BY_NAME_VIOLATION_STATEMENT)) {
+            stmt.setString(1, "%" + violation + "%");
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    int id = rs.getInt("id");
+                    String violationName = rs.getString("violation");
+                    String type = rs.getString("type");
+                    int commServHours = rs.getInt("comm_serv_hours");
+                    Violation newViolation = new Violation(violationName, type, commServHours);
+                    newViolation.setId(id);
+
+                    return newViolation;
+                } else {
+                    LOGGER.warn("No Violation found: " + violation);
+                }
+            }
+        } catch (SQLException ex) {
+            LOGGER.warn("Error retrieving Violation " + violation + ": " + ex.getMessage());
+            ex.printStackTrace();
+        }
+        LOGGER.debug("Violation not found.");
+        return null;
+    }
+
+    @Override
     public void addViolation(Violation violation) {
         try (Connection connection = ConnectionHelper.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(ADD_VIOLATION_STATEMENT)) {
@@ -98,6 +126,35 @@ public class ViolationDaoImpl implements ViolationDao {
             LOGGER.warn("An SQL Exception occurred." + e.getMessage());
         }
         LOGGER.debug("Violation database is empty.");
+        return violations;
+    }
+
+    @Override
+    public List<Violation> getAllViolationByType(String type) {
+        List<Violation> violations = new ArrayList<>();
+        try (Connection connection = ConnectionHelper.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_VIOLATION_BY_TYPE_STATEMENT))   {
+            preparedStatement.setString(1, type);
+
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                while (rs.next()) {
+                    Violation violation = new Violation();
+                    violation.setId(rs.getInt("id"));
+                    violation.setViolation(rs.getString("violation"));
+                    violation.setType(rs.getString("type"));
+                    violation.setCommServHours(rs.getInt("comm_serv_hours"));
+                    violations.add(violation);
+                }
+                LOGGER.info("Violations retrieved successfully.");
+            } catch (SQLException ex) {
+                LOGGER.warn("Error retrieving all violation by type: " + ex.getMessage());
+                ex.printStackTrace();
+            }
+            LOGGER.debug("Violation database is empty.");
+        } catch (SQLException ex) {
+            LOGGER.warn("Error preparing statement: " + ex.getMessage());
+            ex.printStackTrace();
+        }
         return violations;
     }
 }

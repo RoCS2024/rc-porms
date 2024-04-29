@@ -60,4 +60,33 @@ class ViolationDaoImplTest {
         assertEquals(expectedViolation, violation1);
         assertEquals(expectedViolation.getId(), violation1.getId());
     }
+
+    @Test
+    public void testGetViolationByName() {
+        Violation violation1 = new Violation();
+        violation1.setViolation("fighting");
+
+        when(violationDao.getViolationByName("fighting")).thenReturn(violation1);
+
+        Violation expectedViolation = violationDao.getViolationByName("fighting");
+
+        assertEquals(expectedViolation, violation1);
+        assertEquals(expectedViolation.getViolation(), violation1.getViolation());
+    }
+
+    @Test
+    public void testGetAllViolation() {
+        when(violationDao.getAllViolation()).thenReturn(violations);
+        List<Violation> violationList = violationDao.getAllViolation();
+        assertEquals(violationList.size(), 2);
+    }
+
+    @Test
+    public void testGetAllViolationByType() {
+        String major = "Major";
+
+        when(violationDao.getAllViolationByType(major)).thenReturn(violations);
+        List<Violation> violationList = violationDao.getAllViolationByType(major);
+        assertEquals(violationList.size(), 2);
+    }
 }

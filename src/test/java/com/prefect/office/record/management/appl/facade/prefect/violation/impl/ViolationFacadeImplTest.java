@@ -93,4 +93,26 @@ class ViolationFacadeImplTest {
         assert (expectedList.equals(violationList));
         verify(violationDao).getAllViolation();
     }
+
+    @Test
+    public void testGetViolationByName() {
+        when(violationDao.getViolationByName("fighting")).thenReturn(violation);
+        Violation expectedViolation = violationFacade.getViolationByName("fighting");
+
+        assert(expectedViolation.equals(violation));
+
+        verify(violationDao).getViolationByName("fighting");
+    }
+
+    @Test
+    public void testGetAllViolationByType() {
+        String major = "Major";
+
+        when(violationDao.getAllViolationByType(major)).thenReturn(violationList);
+
+        List<Violation> expectedList = violationFacade.getAllViolationByType(major);
+
+        assert (expectedList.equals(violationList));
+        verify(violationDao).getAllViolationByType(major);
+    }
 }

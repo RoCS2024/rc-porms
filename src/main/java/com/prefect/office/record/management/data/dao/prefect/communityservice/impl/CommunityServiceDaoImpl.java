@@ -4,6 +4,9 @@ import com.prefect.office.record.management.appl.model.communityservice.Communit
 import com.prefect.office.record.management.appl.model.offense.Offense;
 import com.prefect.office.record.management.data.connectionhelper.ConnectionHelper;
 import com.prefect.office.record.management.data.dao.prefect.communityservice.CommunityServiceDao;
+import com.student.information.management.appl.facade.student.StudentFacade;
+import com.student.information.management.appl.facade.student.impl.StudentFacadeImpl;
+import com.student.information.management.appl.model.student.Student;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +38,11 @@ public class CommunityServiceDaoImpl implements CommunityServiceDao {
             while (resultSet.next()) {
                 CommunityService communityService = new CommunityService();
                 communityService.setId(resultSet.getInt("id"));
-                communityService.setStudent_id(resultSet.getString("student_id"));
+
+                StudentFacade studentFacade = new StudentFacadeImpl();
+                Student student = studentFacade.getStudentById(resultSet.getString("student_id"));
+                communityService.setStudent(student);
+
                 communityService.setDate_rendered(resultSet.getTimestamp("date_rendered"));
                 communityService.setHours_rendered(resultSet.getInt("hours_rendered"));
                 communityServices.add(communityService);
@@ -50,18 +57,22 @@ public class CommunityServiceDaoImpl implements CommunityServiceDao {
     }
 
     @Override
-    public List<CommunityService> getAllCsByStudentId(String studentId) {
+    public List<CommunityService> getAllCsByStudentId(Student studentId) {
         List<CommunityService> communityServices = new ArrayList<>();
         try (Connection con = ConnectionHelper.getConnection();
              PreparedStatement statement = con.prepareStatement(GET_ALL_CS_BY_STUDENT_ID_STATEMENT)) {
 
-            statement.setString(1, studentId);
+            statement.setString(1, studentId.getStudentId());
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     CommunityService communityService = new CommunityService();
                     communityService.setId(resultSet.getInt("id"));
-                    communityService.setStudent_id(resultSet.getString("student_id"));
+
+                    StudentFacade studentFacade = new StudentFacadeImpl();
+                    Student student = studentFacade.getStudentById(resultSet.getString("student_id"));
+                    communityService.setStudent(student);
+
                     communityService.setDate_rendered(resultSet.getTimestamp("date_rendered"));
                     communityService.setHours_rendered(resultSet.getInt("hours_rendered"));
                     communityServices.add(communityService);
@@ -94,10 +105,13 @@ public class CommunityServiceDaoImpl implements CommunityServiceDao {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     int idNum = rs.getInt("id");
-                    String student_id = rs.getString("student_id");
+
+                    StudentFacade studentFacade = new StudentFacadeImpl();
+                    Student student = studentFacade.getStudentById(rs.getString("student_id"));
+
                     Timestamp date_rendered = rs.getTimestamp("date_rendered");
                     int hours_rendered = rs.getInt("hours_rendered");
-                    return new CommunityService(idNum, student_id, date_rendered, hours_rendered);
+                    return new CommunityService(idNum, student, date_rendered, hours_rendered);
                 } else {
                     LOGGER.info("No Community Service found with ID: " + id);
                 }
@@ -122,7 +136,7 @@ public class CommunityServiceDaoImpl implements CommunityServiceDao {
     public boolean renderCs(CommunityService cs) throws SQLException {
         try (Connection con = ConnectionHelper.getConnection();
              PreparedStatement stmt = con.prepareStatement(RENDER_CS_STATEMENT)) {
-            stmt.setString(1, cs.getStudent_id());
+            stmt.setString(1, cs.getStudent().getStudentId());
             stmt.setTimestamp(2, cs.getDate_rendered());
             stmt.setInt(3, cs.getHours_rendered());
             int affectedRows = stmt.executeUpdate();

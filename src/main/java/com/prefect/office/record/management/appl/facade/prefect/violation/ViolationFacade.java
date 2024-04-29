@@ -32,9 +32,22 @@ public interface ViolationFacade {
     Violation getViolationByID (int id);
 
     /**
+     * This gets a Violation from the database with a specific name or description
+     * @param violation is the Violation name or description
+     * @return the Violation with specific ID
+     */
+    Violation getViolationByName (String violation);
+
+    /**
      * This retrieves all violation in the database
      * @return list of violation from the database
      */
     List<Violation> getAllViolation();
+
+    /**
+     * This retrieves all violation by type in the database
+     * @return list of violation by type from the database
+     */
+    List<Violation> getAllViolationByType(String type);
 
 }

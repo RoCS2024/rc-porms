@@ -32,7 +32,7 @@ public interface OffenseFacade {
      * @param studentId the id of the students.
      * @return the Offense.
      * */
-    List<Offense> getAllOffenseByStudentId(Student studentId);
+    List<Offense> getAllOffenseByStudent(Student studentId);
 
     /**
      * Updates a Student in the database.

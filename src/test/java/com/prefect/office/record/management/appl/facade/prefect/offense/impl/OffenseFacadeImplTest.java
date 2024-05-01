@@ -107,9 +107,9 @@ class OffenseFacadeImplTest {
         Student student1 = new Student();
         student1.setStudentId("CT21-0001");
 
-        List expectedList = offenseFacade.getAllOffenseByStudentId(student1);
+        List expectedList = offenseFacade.getAllOffenseByStudent(student1);
 
         assert(expectedList.equals(offenseList));
-        verify(offenseDao).getAllOffenseByStudentId(student1);
+        verify(offenseDao).getAllOffenseByStudent(student1);
     }
 }

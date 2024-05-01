@@ -4,6 +4,7 @@ import com.prefect.office.record.management.appl.model.communityservice.Communit
 import com.prefect.office.record.management.appl.model.offense.Offense;
 import com.prefect.office.record.management.data.connectionhelper.ConnectionHelper;
 import com.prefect.office.record.management.data.dao.prefect.communityservice.CommunityServiceDao;
+import com.student.information.management.StudentInfoMgtApplication;
 import com.student.information.management.appl.facade.student.StudentFacade;
 import com.student.information.management.appl.facade.student.impl.StudentFacadeImpl;
 import com.student.information.management.appl.model.student.Student;
@@ -39,7 +40,8 @@ public class CommunityServiceDaoImpl implements CommunityServiceDao {
                 CommunityService communityService = new CommunityService();
                 communityService.setId(resultSet.getInt("id"));
 
-                StudentFacade studentFacade = new StudentFacadeImpl();
+                StudentInfoMgtApplication app = new StudentInfoMgtApplication();
+                StudentFacade studentFacade = app.getStudentFacade();
                 Student student = studentFacade.getStudentById(resultSet.getString("student_id"));
                 communityService.setStudent(student);
 
@@ -57,7 +59,7 @@ public class CommunityServiceDaoImpl implements CommunityServiceDao {
     }
 
     @Override
-    public List<CommunityService> getAllCsByStudentId(Student studentId) {
+    public List<CommunityService> getAllCsByStudent(Student studentId) {
         List<CommunityService> communityServices = new ArrayList<>();
         try (Connection con = ConnectionHelper.getConnection();
              PreparedStatement statement = con.prepareStatement(GET_ALL_CS_BY_STUDENT_ID_STATEMENT)) {
@@ -69,7 +71,8 @@ public class CommunityServiceDaoImpl implements CommunityServiceDao {
                     CommunityService communityService = new CommunityService();
                     communityService.setId(resultSet.getInt("id"));
 
-                    StudentFacade studentFacade = new StudentFacadeImpl();
+                    StudentInfoMgtApplication app = new StudentInfoMgtApplication();
+                    StudentFacade studentFacade = app.getStudentFacade();
                     Student student = studentFacade.getStudentById(resultSet.getString("student_id"));
                     communityService.setStudent(student);
 
@@ -106,7 +109,8 @@ public class CommunityServiceDaoImpl implements CommunityServiceDao {
                 if (rs.next()) {
                     int idNum = rs.getInt("id");
 
-                    StudentFacade studentFacade = new StudentFacadeImpl();
+                    StudentInfoMgtApplication app = new StudentInfoMgtApplication();
+                    StudentFacade studentFacade = app.getStudentFacade();
                     Student student = studentFacade.getStudentById(rs.getString("student_id"));
 
                     Timestamp date_rendered = rs.getTimestamp("date_rendered");

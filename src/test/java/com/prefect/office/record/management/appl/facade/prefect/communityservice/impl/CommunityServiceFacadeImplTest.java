@@ -91,10 +91,10 @@ class CommunityServiceFacadeImplTest {
         Student student1 = new Student();
         student1.setStudentId("CT21-0001");
 
-        List expectedList = communityServiceFacade.getAllCsByStudentId(student1);
+        List expectedList = communityServiceFacade.getAllCsByStudent(student1);
 
         assert (expectedList.equals(communityServiceList));
 
-        verify(communityServiceDao).getAllCsByStudentId(student1);
+        verify(communityServiceDao).getAllCsByStudent(student1);
     }
 }

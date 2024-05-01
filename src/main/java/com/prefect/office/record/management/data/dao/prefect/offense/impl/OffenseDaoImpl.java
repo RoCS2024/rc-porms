@@ -7,6 +7,8 @@ import com.prefect.office.record.management.appl.model.violation.Violation;
 import com.prefect.office.record.management.data.connectionhelper.ConnectionHelper;
 import com.prefect.office.record.management.data.dao.prefect.offense.OffenseDao;
 import com.prefect.office.record.management.data.dao.prefect.violation.ViolationDao;
+import com.prefect.office.record.management.data.dao.prefect.violation.impl.ViolationDaoImpl;
+import com.student.information.management.StudentInfoMgtApplication;
 import com.student.information.management.appl.facade.student.StudentFacade;
 import com.student.information.management.appl.facade.student.impl.StudentFacadeImpl;
 import com.student.information.management.appl.model.student.Student;
@@ -26,13 +28,6 @@ import static com.prefect.office.record.management.data.utils.QueryConstants.*;
 public class OffenseDaoImpl implements OffenseDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OffenseDaoImpl.class);
-    private ViolationDao violationDao;
-    private StudentDao studentDao;
-
-    public OffenseDaoImpl(ViolationDao violationDao, StudentDao studentDao) {
-        this.violationDao = violationDao;
-        this.studentDao = studentDao;
-    }
 
     @Override
     public Offense getOffenseByID(int id) {
@@ -45,8 +40,13 @@ public class OffenseDaoImpl implements OffenseDao {
                     int violationId = rs.getInt("violation_id");
                     String studentId = rs.getString("student_id");
 
-                    Violation violation = violationDao.getViolationByID(violationId);
-                    Student student = studentDao.getStudentById(studentId);
+                    ViolationDao violationDao = new ViolationDaoImpl();
+                    ViolationFacade violationFacade = new ViolationFacadeImpl(violationDao);
+                    Violation violation = violationFacade.getViolationByID(violationId);
+
+                    StudentInfoMgtApplication app = new StudentInfoMgtApplication();
+                    StudentFacade studentFacade = app.getStudentFacade();
+                    Student student = studentFacade.getStudentById(studentId);
 
                     Timestamp offense_date = rs.getTimestamp("offense_date");
                     int commServHours = rs.getInt("comm_serv_hours");
@@ -95,10 +95,14 @@ public class OffenseDaoImpl implements OffenseDao {
                 Offense offense = new Offense();
                 offense.setId(resultSet.getInt("id"));
 
-                Violation violation = violationDao.getViolationByID(resultSet.getInt("violation_id"));
+                ViolationDao violationDao = new ViolationDaoImpl();
+                ViolationFacade violationFacade = new ViolationFacadeImpl(violationDao);
+                Violation violation = violationFacade.getViolationByID(resultSet.getInt("violation_id"));
                 offense.setViolation(violation);
 
-                Student student = studentDao.getStudentById(resultSet.getString("student_id"));
+                StudentInfoMgtApplication app = new StudentInfoMgtApplication();
+                StudentFacade studentFacade = app.getStudentFacade();
+                Student student = studentFacade.getStudentById(resultSet.getString("student_id"));
                 offense.setStudent(student);
 
                 offense.setOffenseDate(resultSet.getTimestamp("offense_date"));
@@ -115,7 +119,7 @@ public class OffenseDaoImpl implements OffenseDao {
     }
 
     @Override
-    public List<Offense> getAllOffenseByStudentId(Student studentId) {
+    public List<Offense> getAllOffenseByStudent(Student studentId) {
         List<Offense> offenses = new ArrayList<>();
         try (Connection con = ConnectionHelper.getConnection();
              PreparedStatement statement = con.prepareStatement(GET_ALL_OFFENSES_BY_STUDENT_ID_STATEMENT)) {
@@ -127,10 +131,13 @@ public class OffenseDaoImpl implements OffenseDao {
                     Offense offense = new Offense();
                     offense.setId(resultSet.getInt("id"));
 
-                    Violation violation = violationDao.getViolationByID(resultSet.getInt("violation_id"));
+                    ViolationDao violationDao = new ViolationDaoImpl();
+                    ViolationFacade violationFacade = new ViolationFacadeImpl(violationDao);
+                    Violation violation = violationFacade.getViolationByID(resultSet.getInt("violation_id"));
                     offense.setViolation(violation);
 
-                    StudentFacade studentFacade = new StudentFacadeImpl();
+                    StudentInfoMgtApplication app = new StudentInfoMgtApplication();
+                    StudentFacade studentFacade = app.getStudentFacade();
                     Student student = studentFacade.getStudentById(resultSet.getString("student_id"));
                     offense.setStudent(student);
 

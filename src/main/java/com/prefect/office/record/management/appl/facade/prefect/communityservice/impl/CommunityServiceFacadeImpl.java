@@ -26,8 +26,8 @@ public class CommunityServiceFacadeImpl implements CommunityServiceFacade {
     }
 
     @Override
-    public List<CommunityService> getAllCsByStudentId(Student studentId) {
-        return communityServiceDao.getAllCsByStudentId(studentId);
+    public List<CommunityService> getAllCsByStudent(Student studentId) {
+        return communityServiceDao.getAllCsByStudent(studentId);
     }
 
     @Override

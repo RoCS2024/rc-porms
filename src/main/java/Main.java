@@ -10,6 +10,7 @@ import com.prefect.office.record.management.appl.model.violation.Violation;
 import com.prefect.office.record.management.data.dao.prefect.communityservice.impl.CommunityServiceDaoImpl;
 import com.prefect.office.record.management.data.dao.prefect.offense.OffenseDao;
 import com.prefect.office.record.management.data.dao.prefect.offense.impl.OffenseDaoImpl;
+import com.student.information.management.StudentInfoMgtApplication;
 import com.student.information.management.appl.facade.student.StudentFacade;
 import com.student.information.management.appl.facade.student.impl.StudentFacadeImpl;
 import com.student.information.management.appl.model.student.Student;
@@ -125,10 +126,12 @@ public class Main {
             System.out.print("Enter Student ID: ");
             String studentId = scanner.next();
 
-            StudentFacade studentFacade = new StudentFacadeImpl();
+            StudentInfoMgtApplication app = new StudentInfoMgtApplication();
+            StudentFacade studentFacade = app.getStudentFacade();
             Student student = studentFacade.getStudentById(studentId);
+
             if (student != null) {
-                List<Offense> offenseRecords = offenseFacade.getAllOffenseByStudentId(student);
+                List<Offense> offenseRecords = offenseFacade.getAllOffenseByStudent(student);
                 if (offenseRecords != null && !offenseRecords.isEmpty()) {
                     System.out.println("Offense Records");
                     for (Offense offenseRecord : offenseRecords) {
@@ -198,11 +201,12 @@ public class Main {
             System.out.print("Enter Student ID: ");
             String studentId = scanner.next();
 
-            StudentFacade studentFacade = new StudentFacadeImpl();
+            StudentInfoMgtApplication app = new StudentInfoMgtApplication();
+            StudentFacade studentFacade = app.getStudentFacade();
             Student student = studentFacade.getStudentById(studentId);
             if (student != null) {
                 try {
-                    List<CommunityService> csRecords = communityServiceFacade.getAllCsByStudentId(student);
+                    List<CommunityService> csRecords = communityServiceFacade.getAllCsByStudent(student);
 
                     if (csRecords != null && !csRecords.isEmpty()) {
                         System.out.println("Community Service Records");
@@ -277,7 +281,8 @@ public class Main {
 
             Violation violation = violationFacade.getViolationByID(violationId);
 
-            StudentFacade studentFacade = new StudentFacadeImpl();
+            StudentInfoMgtApplication app = new StudentInfoMgtApplication();
+            StudentFacade studentFacade = app.getStudentFacade();
             Student student = studentFacade.getStudentById(studentId);
 
             Offense newOffense = new Offense();
@@ -316,7 +321,8 @@ public class Main {
 
             Violation newViolation = violationFacade.getViolationByID(newViolationId);
 
-            StudentFacade studentFacade = new StudentFacadeImpl();
+            StudentInfoMgtApplication app = new StudentInfoMgtApplication();
+            StudentFacade studentFacade = app.getStudentFacade();
             Student newStudent = studentFacade.getStudentById(newStudentId);
 
             Offense updatedOffense = new Offense();
@@ -503,7 +509,8 @@ public class Main {
                 if (existingOffense != null) {
                     CommunityService newCs = new CommunityService();
 
-                    StudentFacade studentFacade = new StudentFacadeImpl();
+                    StudentInfoMgtApplication app = new StudentInfoMgtApplication();
+                    StudentFacade studentFacade = app.getStudentFacade();
                     Student student = studentFacade.getStudentById(studentId);
 
                     newCs.setStudent(student);

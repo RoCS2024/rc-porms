@@ -72,8 +72,8 @@ class CommunityServiceDaoImplTest {
         CommunityService communityService = new CommunityService();
         communityService.setStudent(student1);
 
-        when(communityServiceDao.getAllCsByStudentId(student1)).thenReturn(communityServices);
-        List<CommunityService> communityServiceList = communityServiceDao.getAllCsByStudentId(student1);
+        when(communityServiceDao.getAllCsByStudent(student1)).thenReturn(communityServices);
+        List<CommunityService> communityServiceList = communityServiceDao.getAllCsByStudent(student1);
         assertEquals(communityServiceList.size(), 2);
     }
 }

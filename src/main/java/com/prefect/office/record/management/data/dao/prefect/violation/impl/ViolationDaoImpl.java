@@ -48,8 +48,9 @@ public class ViolationDaoImpl implements ViolationDao {
 
     @Override
     public Violation getViolationByName(String violation) {
-        try (Connection connection = ConnectionHelper.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(GET_BY_NAME_VIOLATION_STATEMENT)) {
+        try (Connection connection = ConnectionHelper.getConnection()){
+
+            PreparedStatement stmt = connection.prepareStatement(GET_BY_NAME_VIOLATION_STATEMENT);
             stmt.setString(1, "%" + violation + "%");
 
             try (ResultSet rs = stmt.executeQuery()) {

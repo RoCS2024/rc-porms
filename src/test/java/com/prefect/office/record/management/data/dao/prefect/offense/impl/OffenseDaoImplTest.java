@@ -79,8 +79,8 @@ class OffenseDaoImplTest {
         Offense offense1 = new Offense();
         offense1.setStudent(student1);
 
-        when(offenseDao.getAllOffenseByStudentId(student1)).thenReturn(offenses);
-        List<Offense> offenseList = offenseDao.getAllOffenseByStudentId(student1);
+        when(offenseDao.getAllOffenseByStudent(student1)).thenReturn(offenses);
+        List<Offense> offenseList = offenseDao.getAllOffenseByStudent(student1);
         assertEquals(offenseList.size(), 2);
     }
 }

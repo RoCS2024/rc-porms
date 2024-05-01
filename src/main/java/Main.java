@@ -335,34 +335,76 @@ public class Main {
 
     private static void updateOffense() {
         try {
-            System.out.print("Enter Offense ID: ");
-            int offenseId = scanner.nextInt();
-
-            System.out.print("Enter New Violation ID: ");
-            int newViolationId = scanner.nextInt();
-
-            System.out.print("Enter New Student ID: ");
-            String newStudentId = scanner.next();
-
-            Violation newViolation = violationFacade.getViolationByID(newViolationId);
-
+            Scanner scanner = new Scanner(System.in);
             StudentInfoMgtApplication app = new StudentInfoMgtApplication();
             StudentFacade studentFacade = app.getStudentFacade();
-            Student newStudent = studentFacade.getStudentById(newStudentId);
 
-            Offense updatedOffense = new Offense();
-            updatedOffense.setId(offenseId);
-            updatedOffense.setViolation(newViolation);
-            updatedOffense.setStudent(newStudent);
-            updatedOffense.setOffenseDate(new Timestamp(System.currentTimeMillis()));
+            while (true) {
+                System.out.println("Updating Offense Information:");
+                int offenseId;
+                String newViolationName;
+                String newStudentId;
 
-            boolean updated = offenseFacade.updateOffense(updatedOffense);
+                Offense newOffense;
+                do {
+                    System.out.print("Enter Offense ID: ");
+                    while (!scanner.hasNextInt()) {
+                        System.out.println("Invalid input. Please enter a valid offense ID.");
+                        scanner.next();
+                    }
+                    offenseId = scanner.nextInt();
+                    newOffense = offenseFacade.getOffenseByID(offenseId);
+                    if (newOffense == null) {
+                        System.out.println("Offense not found.");
+                    }
+                } while (newOffense == null);
 
-            if (updated) {
-                System.out.println("Offense information updated successfully!");
-            } else {
-                System.out.println("Failed to update Offense information.");
+                Violation newViolation = null;
+                boolean validInput = false;
+
+                while (!validInput) {
+                    System.out.print("Enter New Violation: ");
+                    newViolationName = scanner.next();
+                    newViolation = violationFacade.getViolationByName(newViolationName);
+
+                    if (newViolation != null) {
+                        validInput = true;
+                    } else {
+                        System.out.println("Violation not found.");
+                    }
+                }
+
+                Student newStudent;
+                do {
+                    System.out.print("Enter New Student ID: ");
+                    newStudentId = scanner.next();
+                    newStudent = studentFacade.getStudentById(newStudentId);
+                    if (newStudent == null) {
+                        System.out.println("Student not found.");
+                    }
+                } while (newStudent == null);
+
+                Offense updatedOffense = new Offense();
+                updatedOffense.setId(offenseId);
+                updatedOffense.setViolation(newViolation);
+                updatedOffense.setStudent(newStudent);
+                updatedOffense.setOffenseDate(new Timestamp(System.currentTimeMillis()));
+
+                boolean updated = offenseFacade.updateOffense(updatedOffense);
+
+                if (updated) {
+                    System.out.println("Offense information updated successfully!");
+                } else {
+                    System.out.println("Failed to update Offense information.");
+                }
+
+                System.out.print("Do you want to update another offense? (yes/no): ");
+                String choice = scanner.next();
+                if (!choice.equalsIgnoreCase("yes")) {
+                    break;
+                }
             }
+
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please enter valid IDs.");
         } catch (Exception e) {

@@ -261,46 +261,71 @@ public class Main {
 
     private static void addOffense() {
         try {
-            System.out.println("\nAdding an Offense:");
-
-            System.out.print("Enter Violation ID: ");
-            int violationId = scanner.nextInt();
-            if (violationId < 0) {
-                System.out.println("Invalid Violation ID. Please enter a non-negative integer.");
-                return;
-            }
-
-            System.out.print("Enter Student ID: ");
-            String studentId = scanner.next();
-
-            System.out.print("Enter Offense Date (YYYY-MM-DD): ");
-            String dateStr = scanner.next();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            java.util.Date parsedDate = dateFormat.parse(dateStr);
-            Timestamp offenseDate = new Timestamp(parsedDate.getTime());
-
-            Violation violation = violationFacade.getViolationByID(violationId);
-
             StudentInfoMgtApplication app = new StudentInfoMgtApplication();
             StudentFacade studentFacade = app.getStudentFacade();
-            Student student = studentFacade.getStudentById(studentId);
 
-            Offense newOffense = new Offense();
-            newOffense.setViolation(violation);
-            newOffense.setStudent(student);
-            newOffense.setOffenseDate(offenseDate);
+            while (true) {
+                System.out.println("\nAdding an Offense:");
 
-            boolean added = offenseFacade.addOffense(newOffense);
+                String violationName;
+                Violation violation;
+                String studentId;
+                Student student;
+                Timestamp offenseDate;
 
-            if (added) {
-                System.out.println("Offense added successfully!");
-            } else {
-                System.out.println("Failed to add offense.");
+                do {
+                    System.out.print("Enter Violation: ");
+                    violationName = scanner.next();
+                    violation = violationFacade.getViolationByName(violationName);
+                    if (violation == null) {
+                        System.out.println("Violation not found.");
+                    }
+                } while (violation == null);
+
+                do {
+                    System.out.print("Enter Student ID: ");
+                    studentId = scanner.next();
+                    student = studentFacade.getStudentById(studentId);
+                    if (student == null) {
+                        System.out.println("Student not found.");
+                    }
+                } while (student == null);
+
+                do {
+                    System.out.print("Enter Offense Date (YYYY-MM-DD): ");
+                    String dateStr = scanner.next();
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    java.util.Date parsedDate;
+                    try {
+                        parsedDate = dateFormat.parse(dateStr);
+                        offenseDate = new Timestamp(parsedDate.getTime());
+                    } catch (ParseException e) {
+                        System.out.println("Invalid date format. Please enter date in YYYY-MM-DD format.");
+                        offenseDate = null;
+                    }
+                } while (offenseDate == null);
+
+                Offense newOffense = new Offense();
+                newOffense.setViolation(violation);
+                newOffense.setStudent(student);
+                newOffense.setOffenseDate(offenseDate);
+
+                boolean added = offenseFacade.addOffense(newOffense);
+
+                if (added) {
+                    System.out.println("Offense added successfully!");
+                } else {
+                    System.out.println("Failed to add offense.");
+                }
+
+                System.out.print("Do you want to add another offense? (yes/no): ");
+                String choice = scanner.next();
+                if (!choice.equalsIgnoreCase("yes")) {
+                    break;
+                }
             }
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please enter valid IDs.");
-        } catch (ParseException e) {
-            System.out.println("Invalid date format. Please enter date in YYYY-MM-DD format.");
         } catch (Exception e) {
             System.err.println("An error occurred while adding an offense: " + e.getMessage());
             e.printStackTrace();

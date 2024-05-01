@@ -1,10 +1,6 @@
 package com.prefect.office.record.management.data.dao.prefect.communityservice;
 
 import com.prefect.office.record.management.appl.model.communityservice.CommunityService;
-import com.prefect.office.record.management.appl.model.offense.Offense;
-import com.student.information.management.appl.model.student.Student;
-
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -39,7 +35,6 @@ public interface CommunityServiceDao {
      *
      * @param cs The community service record to insert.
      * @return True if the insertion is successful, false otherwise.
-     * @throws SQLException If an SQL exception occurs during the insertion process.
      */
-    boolean renderCs(CommunityService cs) throws SQLException;
+    boolean renderCs(CommunityService cs);
 }

@@ -4,7 +4,7 @@
             xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
 
     <info
-            organisation="com.rogationist.college"
+            organisation="com.rocs.college"
             module="porms"
             status="integration">
     </info>

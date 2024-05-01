@@ -1,6 +1,5 @@
 package com.prefect.office.record.management.data.dao.prefect.violation.impl;
 
-import com.prefect.office.record.management.appl.model.offense.Offense;
 import com.prefect.office.record.management.appl.model.violation.Violation;
 import com.prefect.office.record.management.data.connectionhelper.ConnectionHelper;
 import com.prefect.office.record.management.data.dao.prefect.violation.ViolationDao;
@@ -20,8 +19,10 @@ public class ViolationDaoImpl implements ViolationDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ViolationDaoImpl.class);
 
+
     @Override
     public Violation getViolationByID(int id) {
+
         try (Connection connection = ConnectionHelper.getConnection();
              PreparedStatement stmt = connection.prepareStatement(GET_BY_ID_VIOLATION_STATEMENT)) {
             stmt.setInt(1, id);
@@ -47,7 +48,7 @@ public class ViolationDaoImpl implements ViolationDao {
     }
 
     @Override
-    public void addViolation(Violation violation) {
+    public void addViolation(Violation violation){
         try (Connection connection = ConnectionHelper.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(ADD_VIOLATION_STATEMENT)) {
             preparedStatement.setString(1, violation.getViolation());

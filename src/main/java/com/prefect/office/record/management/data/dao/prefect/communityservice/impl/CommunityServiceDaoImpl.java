@@ -116,10 +116,9 @@ public class CommunityServiceDaoImpl implements CommunityServiceDao {
      *
      * @param cs The community service record to insert.
      * @return True if the insertion is successful, false otherwise.
-     * @throws SQLException If an SQL exception occurs during the insertion process.
      */
     @Override
-    public boolean renderCs(CommunityService cs) throws SQLException {
+    public boolean renderCs(CommunityService cs){
         try (Connection con = ConnectionHelper.getConnection();
              PreparedStatement stmt = con.prepareStatement(RENDER_CS_STATEMENT)) {
             stmt.setString(1, cs.getStudent_id());

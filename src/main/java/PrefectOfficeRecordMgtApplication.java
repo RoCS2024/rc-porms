@@ -24,7 +24,7 @@ public PrefectOfficeRecordMgtApplication(){
     ViolationDao violationDaoImpl = new ViolationDaoImpl();
     this.violationFacade = new ViolationFacadeImpl(violationDaoImpl);
 
-    OffenseDao offenseDaoImpl = new OffenseDaoImpl(violationDaoImpl,new StudentDaoImpl());
+    OffenseDao offenseDaoImpl = new OffenseDaoImpl();
     this.offenseFacade = new OffenseFacadeImpl(offenseDaoImpl);
 }
 

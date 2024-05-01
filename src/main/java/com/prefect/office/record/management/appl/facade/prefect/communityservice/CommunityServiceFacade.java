@@ -1,6 +1,7 @@
 package com.prefect.office.record.management.appl.facade.prefect.communityservice;
 
 import com.prefect.office.record.management.appl.model.communityservice.CommunityService;
+import com.student.information.management.appl.model.student.Student;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ public interface CommunityServiceFacade {
      * @param studentId is the id of the Student that has a Community Service History
      * @return A list of all community service records of the specific student
      */
-    List<CommunityService> getAllCsByStudentId(String studentId);
+    List<CommunityService> getAllCsByStudent(Student studentId);
 
     /**
      * Renders a community service.

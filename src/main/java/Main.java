@@ -10,6 +10,7 @@ import com.prefect.office.record.management.appl.model.violation.Violation;
 import com.prefect.office.record.management.data.dao.prefect.communityservice.impl.CommunityServiceDaoImpl;
 import com.prefect.office.record.management.data.dao.prefect.offense.OffenseDao;
 import com.prefect.office.record.management.data.dao.prefect.offense.impl.OffenseDaoImpl;
+import com.student.information.management.StudentInfoMgtApplication;
 import com.student.information.management.appl.facade.student.StudentFacade;
 import com.student.information.management.appl.facade.student.impl.StudentFacadeImpl;
 import com.student.information.management.appl.model.student.Student;
@@ -39,6 +40,12 @@ public class Main {
             do {
                 displayMenu();
                 System.out.print("Choose an option: ");
+
+                while (!scanner.hasNextInt()) {
+                    System.out.println("Invalid input. Please enter a number.");
+                    scanner.next();
+                }
+
                 choice = scanner.nextInt();
 
                 switch (choice) {
@@ -67,12 +74,18 @@ public class Main {
                         searchViolationById();
                         break;
                     case 9:
-                        renderCs();
+                        searchViolationByName();
                         break;
                     case 10:
-                        viewCsHistory();
+                        filterViolationByType();
                         break;
                     case 11:
+                        renderCs();
+                        break;
+                    case 12:
+                        viewCsHistory();
+                        break;
+                    case 13:
                         searchCsHistoryByStudentId();
                         break;
                     case 0:
@@ -100,9 +113,11 @@ public class Main {
         System.out.println("6. Update Violation");
         System.out.println("7. View List of Violation");
         System.out.println("8. Search Violation By Id");
-        System.out.println("9. Render Community Service");
-        System.out.println("10. View Community Service History");
-        System.out.println("11. Search Community Service History By Student Id");
+        System.out.println("9. Search Violation By Name");
+        System.out.println("10. Filter Violation By Type");
+        System.out.println("11. Render Community Service");
+        System.out.println("12. View Community Service History");
+        System.out.println("13. Search Community Service History By Student Id");
         System.out.println("0. Exit");
     }
 
@@ -111,19 +126,23 @@ public class Main {
             System.out.print("Enter Student ID: ");
             String studentId = scanner.next();
 
-            StudentFacade studentFacade = new StudentFacadeImpl();
+            StudentInfoMgtApplication app = new StudentInfoMgtApplication();
+            StudentFacade studentFacade = app.getStudentFacade();
             Student student = studentFacade.getStudentById(studentId);
+
             if (student != null) {
-                List<Offense> offenseRecords = offenseFacade.getAllOffenseByStudentId(student);
+                List<Offense> offenseRecords = offenseFacade.getAllOffenseByStudent(student);
                 if (offenseRecords != null && !offenseRecords.isEmpty()) {
                     System.out.println("Offense Records");
                     for (Offense offenseRecord : offenseRecords) {
                         System.out.println("Offense ID: " + offenseRecord.getId());
-                        System.out.println("Violation ID: " + offenseRecord.getViolation().getViolation());
+                        System.out.println("Violation: " + offenseRecord.getViolation().getViolation());
+                        System.out.println("Student ID: " + offenseRecord.getStudent().getStudentId());
                         System.out.println("Student Last Name: " + offenseRecord.getStudent().getLastName());
                         System.out.println("Student First Name: " + offenseRecord.getStudent().getFirstName());
                         System.out.println("Student Middle Name: " + offenseRecord.getStudent().getMiddleName());
                         System.out.println("Offense Date: " + offenseRecord.getOffenseDate());
+                        System.out.println("Community Service Hours: " + offenseRecord.getCommServHours());
                         System.out.println("-----------------------------------");
                     }
                 } else {
@@ -157,22 +176,46 @@ public class Main {
         }
     }
 
+    private static void searchViolationByName() {
+        try {
+            System.out.print("Enter Violation: ");
+            String violationName = scanner.next();
+            String violationDesc = violationName.toLowerCase();
+            Violation violation = violationFacade.getViolationByName(violationDesc);
+            if (violation != null) {
+                System.out.println("-------------------------------------");
+                System.out.println("Violation ID: " + violation.getId());
+                System.out.println("Violation: " + violation.getViolation());
+                System.out.println("Violation Type: " + violation.getType());
+                System.out.println("Community Service Hours: " + violation.getCommServHours());
+            } else {
+                System.out.println("No Violation found.");
+            }
+        } catch (Exception e) {
+            System.err.println("An error occurred while viewing all offenses: " + e.getMessage());
+        }
+    }
+
     private static void searchCsHistoryByStudentId() {
         try {
             System.out.print("Enter Student ID: ");
             String studentId = scanner.next();
 
-            StudentFacade studentFacade = new StudentFacadeImpl();
+            StudentInfoMgtApplication app = new StudentInfoMgtApplication();
+            StudentFacade studentFacade = app.getStudentFacade();
             Student student = studentFacade.getStudentById(studentId);
             if (student != null) {
                 try {
-                    List<CommunityService> csRecords = communityServiceFacade.getAllCsByStudentId(studentId);
+                    List<CommunityService> csRecords = communityServiceFacade.getAllCsByStudent(student);
 
                     if (csRecords != null && !csRecords.isEmpty()) {
                         System.out.println("Community Service Records");
                         for (CommunityService csRecord : csRecords) {
                             System.out.println("Community Service ID: " + csRecord.getId());
-                            System.out.println("Student ID: " + csRecord.getStudent_id());
+                            System.out.println("Student ID: " + csRecord.getStudent().getStudentId());
+                            System.out.println("Student Last Name: " + csRecord.getStudent().getLastName());
+                            System.out.println("Student First Name: " + csRecord.getStudent().getFirstName());
+                            System.out.println("Student Middle Name: " + csRecord.getStudent().getMiddleName());
                             System.out.println("Date Rendered: " + csRecord.getDate_rendered());
                             System.out.println("Hours Rendered: " + csRecord.getHours_rendered());
                             System.out.println("-----------------------------------");
@@ -238,7 +281,8 @@ public class Main {
 
             Violation violation = violationFacade.getViolationByID(violationId);
 
-            StudentFacade studentFacade = new StudentFacadeImpl();
+            StudentInfoMgtApplication app = new StudentInfoMgtApplication();
+            StudentFacade studentFacade = app.getStudentFacade();
             Student student = studentFacade.getStudentById(studentId);
 
             Offense newOffense = new Offense();
@@ -277,7 +321,8 @@ public class Main {
 
             Violation newViolation = violationFacade.getViolationByID(newViolationId);
 
-            StudentFacade studentFacade = new StudentFacadeImpl();
+            StudentInfoMgtApplication app = new StudentInfoMgtApplication();
+            StudentFacade studentFacade = app.getStudentFacade();
             Student newStudent = studentFacade.getStudentById(newStudentId);
 
             Offense updatedOffense = new Offense();
@@ -313,6 +358,7 @@ public class Main {
             System.out.print("Enter Violation Description: ");
             scanner.nextLine();
             String description = scanner.nextLine();
+            String name = description.toLowerCase();
 
             System.out.print("Enter Violation Type: ");
             String type = scanner.nextLine();
@@ -321,7 +367,7 @@ public class Main {
             int commServHours = scanner.nextInt();
             scanner.nextLine();
 
-            violationFacade.addViolation(description, type, commServHours);
+            violationFacade.addViolation(name, type, commServHours);
             System.out.println("Violation added successfully!");
         } catch (Exception e) {
             System.err.println("An error occurred while adding a violation: " + e.getMessage());
@@ -375,6 +421,54 @@ public class Main {
         }
     }
 
+    private static void filterViolationByType() {
+        Scanner scanner = new Scanner(System.in);
+        int violationType;
+
+        do {
+            System.out.println("Choose a type");
+            System.out.println("[1] Major");
+            System.out.println("[2] Minor");
+            System.out.println("[0] Exit");
+            System.out.println("Enter choice: ");
+
+            while (!scanner.hasNextInt()) {
+                System.out.println("Invalid input. Please enter a number.");
+                scanner.next();
+            }
+            violationType = scanner.nextInt();
+
+            switch (violationType) {
+                case 1:
+                    String major = "Major";
+                    List<Violation> majorList = violationFacade.getAllViolationByType(major);
+                    printViolations(majorList);
+                    break;
+                case 2:
+                    String minor = "Minor";
+                    List<Violation> minorList = violationFacade.getAllViolationByType(minor);
+                    printViolations(minorList);
+                    break;
+                case 0:
+                    System.out.println("Exiting...");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please enter 0, 1, or 2.");
+                    break;
+            }
+        } while (violationType != 0);
+    }
+
+    private static void printViolations(List<Violation> violations) {
+        for (Violation violation : violations) {
+            System.out.println("-------------------------------------");
+            System.out.println("Violation ID: " + violation.getId());
+            System.out.println("Violation: " + violation.getViolation());
+            System.out.println("Violation Type: " + violation.getType());
+            System.out.println("Community Service Hours: " + violation.getCommServHours());
+        }
+    }
+
     private static void renderCs() {
         try {
             int offenseId;
@@ -395,7 +489,6 @@ public class Main {
                     return;
                 }
 
-                //System.out.print("Enter Student-ID: ");
                 String studentId = offenseFacade.getOffenseByID(offenseId).getStudent().getStudentId();
                 System.out.println("Student-ID: " + studentId);
 
@@ -415,7 +508,12 @@ public class Main {
                 Offense existingOffense = offenseFacade.getOffenseByID(offenseId);
                 if (existingOffense != null) {
                     CommunityService newCs = new CommunityService();
-                    newCs.setStudent_id(studentId);
+
+                    StudentInfoMgtApplication app = new StudentInfoMgtApplication();
+                    StudentFacade studentFacade = app.getStudentFacade();
+                    Student student = studentFacade.getStudentById(studentId);
+
+                    newCs.setStudent(student);
                     newCs.setHours_rendered(hoursRendered);
                     newCs.setDate_rendered(new Timestamp(System.currentTimeMillis()));
 
@@ -447,7 +545,10 @@ public class Main {
                 System.out.println("Community Service Records");
                 for (CommunityService csRecord : csRecords) {
                     System.out.println("Community Service ID: " + csRecord.getId());
-                    System.out.println("Student ID: " + csRecord.getStudent_id());
+                    System.out.println("Student ID: " + csRecord.getStudent().getStudentId());
+                    System.out.println("Student Last Name: " + csRecord.getStudent().getLastName());
+                    System.out.println("Student First Name: " + csRecord.getStudent().getFirstName());
+                    System.out.println("Student Middle Name: " + csRecord.getStudent().getMiddleName());
                     System.out.println("Date Rendered: " + csRecord.getDate_rendered());
                     System.out.println("Hours Rendered: " + csRecord.getHours_rendered());
                     System.out.println("-----------------------------------");

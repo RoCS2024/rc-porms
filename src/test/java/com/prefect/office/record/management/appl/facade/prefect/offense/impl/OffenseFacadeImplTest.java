@@ -2,6 +2,7 @@ package com.prefect.office.record.management.appl.facade.prefect.offense.impl;
 
 import com.prefect.office.record.management.appl.model.offense.Offense;
 import com.prefect.office.record.management.data.dao.prefect.offense.OffenseDao;
+import com.student.information.management.appl.model.student.Student;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -99,5 +100,16 @@ class OffenseFacadeImplTest {
         } catch (Exception e) {
             LOGGER.error("Exception caught: " + e.getMessage());
         }
+    }
+
+    @Test
+    public void testGetAllOffenseByStudentId() {
+        Student student1 = new Student();
+        student1.setStudentId("CT21-0001");
+
+        List expectedList = offenseFacade.getAllOffenseByStudent(student1);
+
+        assert(expectedList.equals(offenseList));
+        verify(offenseDao).getAllOffenseByStudent(student1);
     }
 }

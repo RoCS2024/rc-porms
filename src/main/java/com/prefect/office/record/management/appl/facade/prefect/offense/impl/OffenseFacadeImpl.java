@@ -38,9 +38,9 @@ public class OffenseFacadeImpl implements OffenseFacade {
     }
 
     @Override
-    public List<Offense> getAllOffenseByStudentId(Student studentId) {
+    public List<Offense> getAllOffenseByStudent(Student studentId) {
         try {
-            return offenseDao.getAllOffenseByStudentId(studentId);
+            return offenseDao.getAllOffenseByStudent(studentId);
         } catch (Exception e) {
             throw new RuntimeException("Failed to retrieve all offenses: " + e.getMessage(), e);
         }

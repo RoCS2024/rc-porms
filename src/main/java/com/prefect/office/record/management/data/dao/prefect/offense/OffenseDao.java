@@ -19,7 +19,7 @@ public interface OffenseDao {
      * @param studentId is the id of the Student that has an Offense Record
      * @return list of all the offenses
      */
-    List<Offense> getAllOffenseByStudentId(Student studentId);
+    List<Offense> getAllOffenseByStudent(Student studentId);
 
     /**
      * This gets an Offense from the database with a specific ID

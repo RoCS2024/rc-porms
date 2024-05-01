@@ -4,6 +4,7 @@ import com.prefect.office.record.management.appl.facade.prefect.communityservice
 import com.prefect.office.record.management.appl.model.communityservice.CommunityService;
 import com.prefect.office.record.management.data.dao.prefect.communityservice.CommunityServiceDao;
 import com.prefect.office.record.management.data.dao.prefect.communityservice.impl.CommunityServiceDaoImpl;
+import com.student.information.management.appl.model.student.Student;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -83,5 +84,17 @@ class CommunityServiceFacadeImplTest {
         } catch (Exception e) {
             LOGGER.error("Exception caught: " + e.getMessage());
         }
+    }
+
+    @Test
+    public void testGetAllCsByStudentId() {
+        Student student1 = new Student();
+        student1.setStudentId("CT21-0001");
+
+        List expectedList = communityServiceFacade.getAllCsByStudent(student1);
+
+        assert (expectedList.equals(communityServiceList));
+
+        verify(communityServiceDao).getAllCsByStudent(student1);
     }
 }

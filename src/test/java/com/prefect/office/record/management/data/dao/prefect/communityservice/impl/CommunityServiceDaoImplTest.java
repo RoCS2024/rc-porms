@@ -65,15 +65,14 @@ class CommunityServiceDaoImplTest {
     }
 
     @Test
-    public void testGetAllCsByStudentId() {
-        Student student1 = new Student();
-        student1.setStudentId("CT21-0001");
+    public void testGetAllCsByStudent() {
+        Student student = new Student();
 
         CommunityService communityService = new CommunityService();
-        communityService.setStudent(student1);
+        communityService.setStudent(student);
 
-        when(communityServiceDao.getAllCsByStudent(student1)).thenReturn(communityServices);
-        List<CommunityService> communityServiceList = communityServiceDao.getAllCsByStudent(student1);
+        when(communityServiceDao.getAllCsByStudent(student)).thenReturn(communityServices);
+        List<CommunityService> communityServiceList = communityServiceDao.getAllCsByStudent(student);
         assertEquals(communityServiceList.size(), 2);
     }
 }

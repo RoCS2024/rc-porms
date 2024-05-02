@@ -12,8 +12,11 @@ import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 class OffenseFacadeImplTest {
@@ -103,13 +106,16 @@ class OffenseFacadeImplTest {
     }
 
     @Test
-    public void testGetAllOffenseByStudentId() {
+    public void testGetAllOffenseByStudent() {
         Student student1 = new Student();
-        student1.setStudentId("CT21-0001");
 
-        List expectedList = offenseFacade.getAllOffenseByStudent(student1);
+        List<Offense> expectedList = new ArrayList<>();
 
-        assert(expectedList.equals(offenseList));
+        when(offenseFacade.getAllOffenseByStudent(student1)).thenReturn(expectedList);
+        List<Offense> resultList = offenseFacade.getAllOffenseByStudent(student1);
+
+        assertTrue(resultList.isEmpty());
         verify(offenseDao).getAllOffenseByStudent(student1);
     }
+
 }

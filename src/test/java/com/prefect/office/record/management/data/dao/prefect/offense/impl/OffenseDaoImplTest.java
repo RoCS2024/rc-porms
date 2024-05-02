@@ -72,15 +72,14 @@ class OffenseDaoImplTest {
     }
 
     @Test
-    public void testGetAllOffenseByStudentId() {
-        Student student1 = new Student();
-        student1.setStudentId("CT21-0001");
+    public void testGetAllOffenseByStudent() {
+        Student student = new Student();
 
         Offense offense1 = new Offense();
-        offense1.setStudent(student1);
+        offense1.setStudent(student);
 
-        when(offenseDao.getAllOffenseByStudent(student1)).thenReturn(offenses);
-        List<Offense> offenseList = offenseDao.getAllOffenseByStudent(student1);
+        when(offenseDao.getAllOffenseByStudent(student)).thenReturn(offenses);
+        List<Offense> offenseList = offenseDao.getAllOffenseByStudent(student);
         assertEquals(offenseList.size(), 2);
     }
 }

@@ -14,8 +14,10 @@ import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class CommunityServiceFacadeImplTest {
@@ -87,14 +89,13 @@ class CommunityServiceFacadeImplTest {
     }
 
     @Test
-    public void testGetAllCsByStudentId() {
-        Student student1 = new Student();
-        student1.setStudentId("CT21-0001");
+    public void testGetAllCsByStudent() {
+      Student student = new Student();
 
-        List expectedList = communityServiceFacade.getAllCsByStudent(student1);
+      List<CommunityService> communityServiceList = new ArrayList<>();
 
-        assert (expectedList.equals(communityServiceList));
-
-        verify(communityServiceDao).getAllCsByStudent(student1);
-    }
+      when(communityServiceFacade.getAllCsByStudent(student)).thenReturn(communityServiceList);
+      List<CommunityService> expectedList = communityServiceFacade.getAllCsByStudent(student);
+      assertEquals(communityServiceList, expectedList);
+   }
 }

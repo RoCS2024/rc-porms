@@ -30,7 +30,7 @@ public class Main {
     private static OffenseFacade offenseFacade;
 
         public static void main(String[] args) {
-            com.prefect.office.record.management.PrefectOfficeRecordMgtApplication app = new com.prefect.office.record.management.PrefectOfficeRecordMgtApplication();
+            PrefectOfficeRecordMgtApplication app = new com.prefect.office.record.management.PrefectOfficeRecordMgtApplication();
             communityServiceFacade = app.getCommunityserviceFacade();
             offenseFacade = app.getOffenseFacade();
             violationFacade = app.getViolationFacade();

@@ -2,6 +2,7 @@ package com.prefect.office.record.management.data.dao.prefect.offense.impl;
 
 import com.prefect.office.record.management.appl.model.offense.Offense;
 import com.prefect.office.record.management.data.dao.prefect.offense.OffenseDao;
+import com.student.information.management.appl.model.student.Student;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -68,5 +69,18 @@ class OffenseDaoImplTest {
 
         Offense expectedOffense = offenseDao.getOffenseByID(1);
         assertEquals(expectedOffense.getId(), offense.getId());
+    }
+
+    @Test
+    public void testGetAllOffenseByStudentId() {
+        Student student1 = new Student();
+        student1.setStudentId("CT21-0001");
+
+        Offense offense1 = new Offense();
+        offense1.setStudent(student1);
+
+        when(offenseDao.getAllOffenseByStudent(student1)).thenReturn(offenses);
+        List<Offense> offenseList = offenseDao.getAllOffenseByStudent(student1);
+        assertEquals(offenseList.size(), 2);
     }
 }

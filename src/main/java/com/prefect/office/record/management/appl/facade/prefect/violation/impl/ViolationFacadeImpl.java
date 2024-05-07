@@ -51,7 +51,21 @@ public class ViolationFacadeImpl implements ViolationFacade {
     }
 
     @Override
+    public Violation getViolationByName(String violation) {
+        return violationDAO.getViolationByName(violation);
+    }
+
+    @Override
     public List<Violation> getAllViolation() {
         return violationDAO.getAllViolation();
+    }
+
+    @Override
+    public List<Violation> getAllViolationByType(String type) {
+        try {
+            return violationDAO.getAllViolationByType(type);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to retrieve all violation by tpe: " + e.getMessage(), e);
+        }
     }
 }

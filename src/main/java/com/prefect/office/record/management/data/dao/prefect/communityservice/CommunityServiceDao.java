@@ -1,6 +1,8 @@
 package com.prefect.office.record.management.data.dao.prefect.communityservice;
 
 import com.prefect.office.record.management.appl.model.communityservice.CommunityService;
+import com.student.information.management.appl.model.student.Student;
+
 import java.util.List;
 
 /**
@@ -20,7 +22,7 @@ public interface CommunityServiceDao {
      * @param studentId is the id of the Student that has a Community Service History
      * @return A list of all community service records of the specific student
      */
-    List<CommunityService> getAllCsByStudentId(String studentId);
+    List<CommunityService> getAllCsByStudent(Student studentId);
 
     /**
      * Retrieves a specific community service record by its ID from the database.

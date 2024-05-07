@@ -64,9 +64,20 @@ public final class QueryConstants {
     public static final String GET_ALL_VIOLATION_STATEMENT = "SELECT * FROM violation";
 
     /**
+     * SQL query to retrieves all violation by type from the database.
+     */
+    public static final String GET_ALL_VIOLATION_BY_TYPE_STATEMENT = "SELECT * FROM violation WHERE type = ?";
+
+    /**
      * SQL query to retrieves a Violation by their Violation Number from the database.
      */
     public static final String GET_BY_ID_VIOLATION_STATEMENT = "SELECT * FROM violation WHERE id = ?";
+
+    /**
+     * SQL query to retrieves a Violation by their Violation name from the database.
+     */
+    public static final String GET_BY_NAME_VIOLATION_STATEMENT = "SELECT * FROM violation WHERE violation LIKE ?";
+
 
     /**
      * SQL query to updates an existing violation in the database.

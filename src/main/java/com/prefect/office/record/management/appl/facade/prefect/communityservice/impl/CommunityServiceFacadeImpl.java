@@ -3,6 +3,7 @@ package com.prefect.office.record.management.appl.facade.prefect.communityservic
 import com.prefect.office.record.management.appl.facade.prefect.communityservice.CommunityServiceFacade;
 import com.prefect.office.record.management.appl.model.communityservice.CommunityService;
 import com.prefect.office.record.management.data.dao.prefect.communityservice.CommunityServiceDao;
+import com.student.information.management.appl.model.student.Student;
 
 import java.util.List;
 
@@ -25,9 +26,10 @@ public class CommunityServiceFacadeImpl implements CommunityServiceFacade {
     }
 
     @Override
-    public List<CommunityService> getAllCsByStudentId(String studentId) {
-        return communityServiceDao.getAllCsByStudentId(studentId);
+    public List<CommunityService> getAllCsByStudent(Student studentId) {
+        return communityServiceDao.getAllCsByStudent(studentId);
     }
+
 
     @Override
     public boolean renderCs(CommunityService cs) throws RuntimeException{

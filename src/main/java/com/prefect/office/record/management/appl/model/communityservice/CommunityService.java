@@ -1,5 +1,7 @@
 package com.prefect.office.record.management.appl.model.communityservice;
 
+import com.student.information.management.appl.model.student.Student;
+
 import java.sql.Timestamp;
 
 /**
@@ -9,7 +11,7 @@ public class CommunityService {
 
     private int id;
 
-    private String student_id;
+    private Student student;
 
     private Timestamp date_rendered;
 
@@ -26,13 +28,13 @@ public class CommunityService {
      * Constructs a new CommunityService object.
      *
      * @param id            The unique identifier of the community service record.
-     * @param student_id    The ID of the student who rendered the service.
+     * @param student    The student who rendered the service.
      * @param date_rendered The timestamp indicating the date and time of service.
      * @param hours_rendered The number of hours of community service rendered.
      */
-    public CommunityService(int id, String student_id, Timestamp date_rendered, int hours_rendered) {
+    public CommunityService(int id, Student student, Timestamp date_rendered, int hours_rendered) {
         this.id = id;
-        this.student_id = student_id;
+        this.student = student;
         this.date_rendered = date_rendered;
         this.hours_rendered = hours_rendered;
     }
@@ -54,19 +56,19 @@ public class CommunityService {
     }
 
     /**
-     * Retrieves the ID of the student who rendered the community service.
-     * @return The ID of the student.
+     * Retrieves the student who rendered the community service.
+     * @return The student.
      */
-    public String getStudent_id() {
-        return student_id;
+    public Student getStudent() {
+        return student;
     }
 
     /**
-     * Sets the ID of the student who rendered the community service.
-     * @param student_id The ID of the student to set.
+     * Sets the student who rendered the community service.
+     * @param student The student to set.
      */
-    public void setStudent_id(String student_id) {
-        this.student_id = student_id;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
     /**

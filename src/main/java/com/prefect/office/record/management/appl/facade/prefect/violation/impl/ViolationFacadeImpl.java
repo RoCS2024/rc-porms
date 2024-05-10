@@ -21,7 +21,7 @@ public class ViolationFacadeImpl implements ViolationFacade {
     public ViolationFacadeImpl(ViolationDao violationDao) { this.violationDAO = violationDao;}
 
     @Override
-    public void addViolation(String violation, String type, int commServHours) {
+    public void addViolation(String violation, String type, int commServHours) throws RuntimeException{
         try {
             Violation newViolation = new Violation(violation, type, commServHours);
             violationDAO.addViolation(newViolation);
@@ -31,7 +31,7 @@ public class ViolationFacadeImpl implements ViolationFacade {
     }
 
     @Override
-    public boolean updateViolation(Violation violation) {
+    public boolean updateViolation(Violation violation) throws RuntimeException{
         boolean result = false;
         try {
             Violation targetViolation = getViolationByID(violation.getId());

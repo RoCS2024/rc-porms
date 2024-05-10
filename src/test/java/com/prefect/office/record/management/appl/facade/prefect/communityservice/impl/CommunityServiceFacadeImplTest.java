@@ -1,9 +1,7 @@
 package com.prefect.office.record.management.appl.facade.prefect.communityservice.impl;
 
-import com.prefect.office.record.management.appl.facade.prefect.communityservice.CommunityServiceFacade;
 import com.prefect.office.record.management.appl.model.communityservice.CommunityService;
 import com.prefect.office.record.management.data.dao.prefect.communityservice.CommunityServiceDao;
-import com.prefect.office.record.management.data.dao.prefect.communityservice.impl.CommunityServiceDaoImpl;
 import com.student.information.management.appl.model.student.Student;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +20,7 @@ class CommunityServiceFacadeImplTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(CommunityServiceFacadeImplTest.class);
 
     @InjectMocks
-    private CommunityServiceFacade communityServiceFacade = new CommunityServiceFacadeImpl(new CommunityServiceDaoImpl());
+    private CommunityServiceFacadeImpl communityServiceFacade;
 
     @Mock
     private CommunityServiceDao communityServiceDao;
@@ -89,7 +87,7 @@ class CommunityServiceFacadeImplTest {
     @Test
     public void testGetAllCsByStudentId() {
         Student student1 = new Student();
-        student1.setStudentId("CT21-0001");
+        student1.setStudentId("CT21-0058");
 
         List expectedList = communityServiceFacade.getAllCsByStudent(student1);
 

@@ -2,6 +2,7 @@ package com.prefect.office.record.management.appl.facade.prefect.offense.impl;
 
 import com.prefect.office.record.management.appl.facade.prefect.offense.OffenseFacade;
 import com.prefect.office.record.management.appl.model.offense.Offense;
+import com.prefect.office.record.management.appl.model.violation.Violation;
 import com.prefect.office.record.management.data.dao.prefect.offense.OffenseDao;
 import com.prefect.office.record.management.data.dao.prefect.offense.impl.OffenseDaoImpl;
 import com.student.information.management.appl.model.student.Student;
@@ -46,8 +47,9 @@ public class OffenseFacadeImpl implements OffenseFacade {
         }
     }
 
+
     @Override
-    public boolean updateOffense(Offense offense) {
+    public boolean updateOffense(Offense offense) throws RuntimeException{
         boolean result = false;
         try {
             Offense targetOffense = getOffenseByID(offense.getId());
@@ -68,12 +70,11 @@ public class OffenseFacadeImpl implements OffenseFacade {
 
 
     @Override
-    public boolean addOffense(Offense offense) {
+    public boolean addOffense(Offense offense) throws RuntimeException {
         try {
-            return offenseDao.addOffense(offense);
+           return offenseDao.addOffense(offense);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException("Failed to add offense: " + e.getMessage(), e);
         }
-        return false;
     }
 }

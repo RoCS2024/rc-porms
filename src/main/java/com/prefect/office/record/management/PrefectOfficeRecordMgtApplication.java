@@ -1,3 +1,5 @@
+package com.prefect.office.record.management;
+
 import com.prefect.office.record.management.appl.facade.prefect.communityservice.CommunityServiceFacade;
 import com.prefect.office.record.management.appl.facade.prefect.communityservice.impl.CommunityServiceFacadeImpl;
 import com.prefect.office.record.management.appl.facade.prefect.offense.OffenseFacade;

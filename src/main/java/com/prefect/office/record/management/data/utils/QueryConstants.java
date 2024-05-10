@@ -4,7 +4,7 @@ package com.prefect.office.record.management.data.utils;
  * Inside the QueryConstants class contains constants representing SQL queries for managing prefect office system.
  */
 
-public class QueryConstants {
+public final class QueryConstants {
 
     /**
      * SQL query to retrieves all employees from the database.

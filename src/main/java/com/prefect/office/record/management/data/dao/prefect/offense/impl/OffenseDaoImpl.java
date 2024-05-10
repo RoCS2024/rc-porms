@@ -1,5 +1,6 @@
 package com.prefect.office.record.management.data.dao.prefect.offense.impl;
 
+
 import com.prefect.office.record.management.appl.facade.prefect.violation.ViolationFacade;
 import com.prefect.office.record.management.appl.facade.prefect.violation.impl.ViolationFacadeImpl;
 import com.prefect.office.record.management.appl.model.offense.Offense;
@@ -156,8 +157,8 @@ public class OffenseDaoImpl implements OffenseDao {
             ex.printStackTrace();
         }
         return offenses;
-
     }
+
 
 
     @Override

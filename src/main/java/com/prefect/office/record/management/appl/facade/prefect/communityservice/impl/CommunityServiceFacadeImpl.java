@@ -30,8 +30,9 @@ public class CommunityServiceFacadeImpl implements CommunityServiceFacade {
         return communityServiceDao.getAllCsByStudent(studentId);
     }
 
+
     @Override
-    public boolean renderCs(CommunityService cs) {
+    public boolean renderCs(CommunityService cs) throws RuntimeException{
         try {
             return communityServiceDao.renderCs(cs);
         } catch (Exception e) {

@@ -1,8 +1,8 @@
 package com.prefect.office.record.management.appl.facade.prefect.violation.impl;
 
-import com.prefect.office.record.management.appl.model.offense.Offense;
 import com.prefect.office.record.management.appl.model.violation.Violation;
 import com.prefect.office.record.management.data.dao.prefect.violation.ViolationDao;
+import com.student.information.management.appl.model.student.Student;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class ViolationFacadeImplTest {
@@ -31,33 +32,61 @@ class ViolationFacadeImplTest {
     @Mock
     private Violation violation;
 
+    @Mock
+    private Violation addViolation;
+
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+        violationFacade = new ViolationFacadeImpl(violationDao);
+        violation.setId(1);
+        addViolation.setId(2);
+        when(violationDao.getAllViolation()).thenReturn(violationList);
     }
 
     @AfterEach
     public void validate() {
         validateMockitoUsage();
     }
-
     @Test
-    public void testAddViolation() {
-        try {
-            String violationName = "CUTTING";
-            String violationType = "SUPER INTENSE!";
-            int commServHours = 10;
+    public void testGetAllOffenses() {
+        List expectedList = violationFacade.getAllViolation();
 
-            violationFacade.addViolation(violationName, violationType, commServHours);
-
-            verify(violationDao).addViolation(any(Violation.class));
-        } catch (Exception e) {
-            LOGGER.error("Exception caught: " + e.getMessage());
-        }
+        assert(expectedList.equals(violationList));
+        verify(violationDao).getAllViolation();
     }
 
     @Test
-    public void testUpdateViolation() {
+    public void testGetOffenseById() {
+        when(violationDao.getViolationByID(1)).thenReturn(violation);
+        Violation expectedViolation = violationFacade.getViolationByID(1);
+
+        assert(expectedViolation.equals(violation));
+
+        verify(violationDao).getViolationByID(1);
+    }
+
+    @Test
+    public void testAddOffense() {
+        try {
+            when(violationDao.getViolationByID(addViolation.getId())).thenReturn(null);
+            when(violationDao.addViolation(addViolation)).thenReturn(true);
+
+            boolean result = violationFacade.addViolation(addViolation);
+
+            assert(result == true);
+
+            assert(violationFacade.getViolationByID(2) == null);
+
+            verify(violationDao).addViolation(addViolation);
+        } catch (Exception e) {
+            LOGGER.error("Exception caught: " + e.getMessage());
+        }
+
+    }
+
+    @Test
+    public void testUpdateOffense() {
         try {
             when(violationDao.getViolationByID(violation.getId())).thenReturn(violation);
             when(violationDao.updateViolation(violation)).thenReturn(true);
@@ -75,44 +104,14 @@ class ViolationFacadeImplTest {
     }
 
     @Test
-    public void testGetViolationById() {
-        when(violationDao.getViolationByID(1)).thenReturn(violation);
-        Violation expectedViolation = violationFacade.getViolationByID(1);
+    public void testGetAllOffenseByStudentId() {
+        Student student1 = new Student();
+        student1.setStudentId("CT21-0001");
+        when(violationDao.getAllViolationByStudent(student1)).thenReturn(violationList);
 
-        assert(expectedViolation.equals(violation));
+        List<Violation> expectedList = violationFacade.getAllViolationByStudent(student1);
 
-        verify(violationDao).getViolationByID(1);
-    }
-
-    @Test
-    public void testGetAllViolation() {
-        when(violationDao.getAllViolation()).thenReturn(violationList);
-
-        List<Violation> expectedList = violationFacade.getAllViolation();
-
-        assert (expectedList.equals(violationList));
-        verify(violationDao).getAllViolation();
-    }
-
-    @Test
-    public void testGetViolationByName() {
-        when(violationDao.getViolationByName("fighting")).thenReturn(violation);
-        Violation expectedViolation = violationFacade.getViolationByName("fighting");
-
-        assert(expectedViolation.equals(violation));
-
-        verify(violationDao).getViolationByName("fighting");
-    }
-
-    @Test
-    public void testGetAllViolationByType() {
-        String major = "Major";
-
-        when(violationDao.getAllViolationByType(major)).thenReturn(violationList);
-
-        List<Violation> expectedList = violationFacade.getAllViolationByType(major);
-
-        assert (expectedList.equals(violationList));
-        verify(violationDao).getAllViolationByType(major);
+        assertEquals(expectedList, violationList);
+        verify(violationDao).getAllViolationByStudent(student1);
     }
 }

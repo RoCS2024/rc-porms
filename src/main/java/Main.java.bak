@@ -1,15 +1,15 @@
 import com.prefect.office.record.management.appl.facade.prefect.communityservice.CommunityServiceFacade;
 import com.prefect.office.record.management.appl.facade.prefect.communityservice.impl.CommunityServiceFacadeImpl;
-import com.prefect.office.record.management.appl.facade.prefect.offense.OffenseFacade;
-import com.prefect.office.record.management.appl.facade.prefect.offense.impl.OffenseFacadeImpl;
+import com.prefect.office.record.management.appl.facade.prefect.violation.ViolationFacade;
+import com.prefect.office.record.management.appl.facade.prefect.violation.impl.ViolationFacadeImpl;
 import com.prefect.office.record.management.appl.facade.prefect.violation.ViolationFacade;
 import com.prefect.office.record.management.appl.facade.prefect.violation.impl.ViolationFacadeImpl;
 import com.prefect.office.record.management.appl.model.communityservice.CommunityService;
-import com.prefect.office.record.management.appl.model.offense.Offense;
-import com.prefect.office.record.management.appl.model.violation.Violation;
+import com.prefect.office.record.management.appl.model.violation.Offense;
+import com.prefect.office.record.management.appl.model.violation.Offense;
 import com.prefect.office.record.management.data.dao.prefect.communityservice.impl.CommunityServiceDaoImpl;
-import com.prefect.office.record.management.data.dao.prefect.offense.OffenseDao;
-import com.prefect.office.record.management.data.dao.prefect.offense.impl.OffenseDaoImpl;
+import com.prefect.office.record.management.data.dao.prefect.violation.OffenseDao;
+import com.prefect.office.record.management.data.dao.prefect.violation.impl.OffenseDaoImpl;
 import com.student.information.management.StudentInfoMgtApplication;
 import com.student.information.management.appl.facade.student.StudentFacade;
 import com.student.information.management.appl.facade.student.impl.StudentFacadeImpl;
@@ -26,14 +26,14 @@ public class Main {
     private static Scanner scanner = new Scanner(System.in);
     private static final PrefectOfficeRecordMgtApplication app = new PrefectOfficeRecordMgtApplication();
     private static CommunityServiceFacade communityServiceFacade;
-    private static ViolationFacade violationFacade;
+    private static ViolationFacade offenseFacade;
     private static OffenseFacade offenseFacade;
 
         public static void main(String[] args) {
             PrefectOfficeRecordMgtApplication app = new PrefectOfficeRecordMgtApplication();
-            communityServiceFacade = app.getCommunityserviceFacade();
+            communityServiceFacade = app.getCommunityServiceFacade();
             offenseFacade = app.getOffenseFacade();
-            violationFacade = app.getViolationFacade();
+            offenseFacade = app.getViolationFacade();
 
         try {
             int choice;
@@ -146,13 +146,13 @@ public class Main {
                         System.out.println("-----------------------------------");
                     }
                 } else {
-                    System.out.println("No offense records found.");
+                    System.out.println("No violation records found.");
                 }
             } else {
                 System.out.println("No Student ID found.");
             }
         } catch (Exception e) {
-            System.err.println("An error occurred while viewing all offenses: " + e.getMessage());
+            System.err.println("An error occurred while viewing all offens: " + e.getMessage());
         }
     }
 
@@ -161,7 +161,7 @@ public class Main {
             System.out.print("Enter Violation ID: ");
             int violationId = scanner.nextInt();
 
-            Violation violation = violationFacade.getViolationByID(violationId);
+            Violation violation = offenseFacade.getViolationByID(violationId);
             if (violation != null) {
                     System.out.println("-------------------------------------");
                     System.out.println("Violation ID: " + violation.getId());
@@ -172,7 +172,7 @@ public class Main {
                 System.out.println("No Violation ID found.");
             }
         } catch (Exception e) {
-            System.err.println("An error occurred while viewing all offenses: " + e.getMessage());
+            System.err.println("An error occurred while viewing all offens: " + e.getMessage());
         }
     }
 
@@ -181,7 +181,7 @@ public class Main {
             System.out.print("Enter Violation: ");
             String violationName = scanner.next();
             String violationDesc = violationName.toLowerCase();
-            Violation violation = violationFacade.getViolationByName(violationDesc);
+            Violation violation = offenseFacade.getViolationByName(violationDesc);
             if (violation != null) {
                 System.out.println("-------------------------------------");
                 System.out.println("Violation ID: " + violation.getId());
@@ -192,7 +192,7 @@ public class Main {
                 System.out.println("No Violation found.");
             }
         } catch (Exception e) {
-            System.err.println("An error occurred while viewing all offenses: " + e.getMessage());
+            System.err.println("An error occurred while viewing all offens: " + e.getMessage());
         }
     }
 
@@ -230,7 +230,7 @@ public class Main {
                 System.out.println("No Student ID found.");
             }
         } catch (Exception e) {
-            System.err.println("An error occurred while viewing all offenses: " + e.getMessage());
+            System.err.println("An error occurred while viewing all offens: " + e.getMessage());
         }
     }
 
@@ -250,10 +250,10 @@ public class Main {
                     System.out.println("-----------------------------------");
                 }
             } else {
-                System.out.println("No offense records found.");
+                System.out.println("No violation records found.");
             }
         } catch (Exception e) {
-            System.err.println("An error occurred while viewing all offenses: " + e.getMessage());
+            System.err.println("An error occurred while viewing all offens: " + e.getMessage());
         }
     }
 
@@ -276,7 +276,7 @@ public class Main {
                 do {
                     System.out.print("Enter Violation: ");
                     violationName = scanner.next();
-                    violation = violationFacade.getViolationByName(violationName);
+                    violation = offenseFacade.getViolationByName(violationName);
                     if (violation == null) {
                         System.out.println("Violation not found.");
                     }
@@ -315,10 +315,10 @@ public class Main {
                 if (added) {
                     System.out.println("Offense added successfully!");
                 } else {
-                    System.out.println("Failed to add offense.");
+                    System.out.println("Failed to add violation.");
                 }
 
-                System.out.print("Do you want to add another offense? (yes/no): ");
+                System.out.print("Do you want to add another violation? (yes/no): ");
                 String choice = scanner.next();
                 if (!choice.equalsIgnoreCase("yes")) {
                     break;
@@ -327,7 +327,7 @@ public class Main {
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please enter valid IDs.");
         } catch (Exception e) {
-            System.err.println("An error occurred while adding an offense: " + e.getMessage());
+            System.err.println("An error occurred while adding an violation: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -349,7 +349,7 @@ public class Main {
                 do {
                     System.out.print("Enter Offense ID: ");
                     while (!scanner.hasNextInt()) {
-                        System.out.println("Invalid input. Please enter a valid offense ID.");
+                        System.out.println("Invalid input. Please enter a valid violation ID.");
                         scanner.next();
                     }
                     offenseId = scanner.nextInt();
@@ -359,15 +359,15 @@ public class Main {
                     }
                 } while (newOffense == null);
 
-                Violation newViolation = null;
+                Violation newOffense = null;
                 boolean validInput = false;
 
                 while (!validInput) {
                     System.out.print("Enter New Violation: ");
                     newViolationName = scanner.next();
-                    newViolation = violationFacade.getViolationByName(newViolationName);
+                    newOffense = offenseFacade.getViolationByName(newViolationName);
 
-                    if (newViolation != null) {
+                    if (newOffense != null) {
                         validInput = true;
                     } else {
                         System.out.println("Violation not found.");
@@ -386,7 +386,7 @@ public class Main {
 
                 Offense updatedOffense = new Offense();
                 updatedOffense.setId(offenseId);
-                updatedOffense.setViolation(newViolation);
+                updatedOffense.setViolation(newOffense);
                 updatedOffense.setStudent(newStudent);
                 updatedOffense.setOffenseDate(new Timestamp(System.currentTimeMillis()));
 
@@ -398,7 +398,7 @@ public class Main {
                     System.out.println("Failed to update Offense information.");
                 }
 
-                System.out.print("Do you want to update another offense? (yes/no): ");
+                System.out.print("Do you want to update another violation? (yes/no): ");
                 String choice = scanner.next();
                 if (!choice.equalsIgnoreCase("yes")) {
                     break;
@@ -434,7 +434,7 @@ public class Main {
             int commServHours = scanner.nextInt();
             scanner.nextLine();
 
-            violationFacade.addViolation(name, type, commServHours);
+            offenseFacade.addViolation(name, type, commServHours);
             System.out.println("Violation added successfully!");
         } catch (Exception e) {
             System.err.println("An error occurred while adding a violation: " + e.getMessage());
@@ -448,7 +448,7 @@ public class Main {
 
             System.out.print("Enter New Violation Name: ");
             scanner.nextLine();
-            String newViolation = scanner.nextLine();
+            String newOffense = scanner.nextLine();
 
             System.out.print("Enter New Violation Type: ");
             String newViolationType = scanner.nextLine();
@@ -458,11 +458,11 @@ public class Main {
 
             Violation updatedViolation = new Violation();
             updatedViolation.setId(violationId);
-            updatedViolation.setViolation(newViolation);
+            updatedViolation.setViolation(newOffense);
             updatedViolation.setType(newViolationType);
             updatedViolation.setCommServHours(newCsHours);
 
-            boolean updated = violationFacade.updateViolation(updatedViolation);
+            boolean updated = offenseFacade.updateViolation(updatedViolation);
 
             if (updated) {
                 System.out.println("Violation information updated successfully!");
@@ -478,7 +478,7 @@ public class Main {
 
     private static void viewAllViolation() {
         System.out.println("Showing all Violations ...");
-        List<Violation> violationList =violationFacade.getAllViolation();
+        List<Violation> violationList =offenseFacade.getAllViolation();
         for (Violation violation : violationList) {
             System.out.println("-------------------------------------");
             System.out.println("Violation ID: " + violation.getId());
@@ -508,12 +508,12 @@ public class Main {
             switch (violationType) {
                 case 1:
                     String major = "Major";
-                    List<Violation> majorList = violationFacade.getAllViolationByType(major);
+                    List<Violation> majorList = offenseFacade.getAllViolationByType(major);
                     printViolations(majorList);
                     break;
                 case 2:
                     String minor = "Minor";
-                    List<Violation> minorList = violationFacade.getAllViolationByType(minor);
+                    List<Violation> minorList = offenseFacade.getAllViolationByType(minor);
                     printViolations(minorList);
                     break;
                 case 0:
@@ -526,8 +526,8 @@ public class Main {
         } while (violationType != 0);
     }
 
-    private static void printViolations(List<Violation> violations) {
-        for (Violation violation : violations) {
+    private static void printViolations(List<Violation> offens) {
+        for (Violation violation : offens) {
             System.out.println("-------------------------------------");
             System.out.println("Violation ID: " + violation.getId());
             System.out.println("Violation: " + violation.getViolation());

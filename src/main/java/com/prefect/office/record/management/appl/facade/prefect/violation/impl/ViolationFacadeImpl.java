@@ -1,34 +1,50 @@
 package com.prefect.office.record.management.appl.facade.prefect.violation.impl;
 
 import com.prefect.office.record.management.appl.facade.prefect.violation.ViolationFacade;
-import com.prefect.office.record.management.appl.model.offense.Offense;
 import com.prefect.office.record.management.appl.model.violation.Violation;
 import com.prefect.office.record.management.data.dao.prefect.violation.ViolationDao;
-import com.prefect.office.record.management.data.dao.prefect.violation.impl.ViolationDaoImpl;
+import com.student.information.management.appl.model.student.Student;
 
 import java.util.List;
 
 /**
- * This is an implementation class of the ViolationFacade
+ * An implementation class of the Offence Facade.
  */
+
 public class ViolationFacadeImpl implements ViolationFacade {
-    private ViolationDao violationDAO;
 
-    /**
-     * This is a constructor for new ViolationFacadeImpl object
-     * This initializes the ViolationDao
-     */
-    public ViolationFacadeImpl(ViolationDao violationDao) { this.violationDAO = violationDao;}
+    private ViolationDao violationDao;
 
-    @Override
-    public void addViolation(String violation, String type, int commServHours) throws RuntimeException{
+    public ViolationFacadeImpl(ViolationDao violationDao) {
+        this.violationDao = violationDao;
+    }
+
+    public ViolationFacadeImpl() {
+
+    }
+
+    public List<Violation> getAllViolation() {
         try {
-            Violation newViolation = new Violation(violation, type, commServHours);
-            violationDAO.addViolation(newViolation);
+            return violationDao.getAllViolation();
         } catch (Exception e) {
-            throw new RuntimeException("Failed to add violation: " + e.getMessage(), e);
+            throw new RuntimeException("Failed to retrieve all Violation: " + e.getMessage(), e);
         }
     }
+
+    @Override
+    public Violation getViolationByID(int id) {
+        return violationDao.getViolationByID(id);
+    }
+
+    @Override
+    public List<Violation> getAllViolationByStudent(Student studentId) {
+        try {
+            return violationDao.getAllViolationByStudent(studentId);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to retrieve all Violation: " + e.getMessage(), e);
+        }
+    }
+
 
     @Override
     public boolean updateViolation(Violation violation) throws RuntimeException{
@@ -36,36 +52,27 @@ public class ViolationFacadeImpl implements ViolationFacade {
         try {
             Violation targetViolation = getViolationByID(violation.getId());
             if (targetViolation == null) {
-                throw new Exception("Violation to update not found. ");
+                throw new Exception("Violation to update not found.");
             }
-            result = violationDAO.updateViolation(violation);
+            result = violationDao.updateViolation(violation);
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            String errorMessage = e.getMessage();
+            if (errorMessage != null) {
+                throw new RuntimeException(errorMessage);
+            } else {
+                throw new RuntimeException("An error occurred while updating the Violation information.");
+            }
         }
         return result;
     }
 
-    @Override
-    public Violation getViolationByID(int id) {
-        return violationDAO.getViolationByID(id);
-    }
 
     @Override
-    public Violation getViolationByName(String violation) {
-        return violationDAO.getViolationByName(violation);
-    }
-
-    @Override
-    public List<Violation> getAllViolation() {
-        return violationDAO.getAllViolation();
-    }
-
-    @Override
-    public List<Violation> getAllViolationByType(String type) {
+    public boolean addViolation(Violation violation) throws RuntimeException {
         try {
-            return violationDAO.getAllViolationByType(type);
+           return violationDao.addViolation(violation);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to retrieve all violation by tpe: " + e.getMessage(), e);
+            throw new RuntimeException("Failed to add Violation: " + e.getMessage(), e);
         }
     }
 }

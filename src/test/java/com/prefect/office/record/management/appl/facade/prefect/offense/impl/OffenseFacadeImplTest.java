@@ -2,7 +2,6 @@ package com.prefect.office.record.management.appl.facade.prefect.offense.impl;
 
 import com.prefect.office.record.management.appl.model.offense.Offense;
 import com.prefect.office.record.management.data.dao.prefect.offense.OffenseDao;
-import com.student.information.management.appl.model.student.Student;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,57 +30,31 @@ class OffenseFacadeImplTest {
     @Mock
     private Offense offense;
 
-    @Mock
-    private Offense addOffense;
-
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        offenseFacade = new OffenseFacadeImpl(offenseDao);
-        offense.setId(1);
-        addOffense.setId(2);
-        when(offenseDao.getAllOffenses()).thenReturn(offenseList);
     }
 
     @AfterEach
     public void validate() {
         validateMockitoUsage();
     }
-    @Test
-    public void testGetAllOffenses() {
-        List expectedList = offenseFacade.getAllOffenses();
-
-        assert(expectedList.equals(offenseList));
-        verify(offenseDao).getAllOffenses();
-    }
-
-    @Test
-    public void testGetOffenseById() {
-        when(offenseDao.getOffenseByID(1)).thenReturn(offense);
-        Offense expectedOffense = offenseFacade.getOffenseByID(1);
-
-        assert(expectedOffense.equals(offense));
-
-        verify(offenseDao).getOffenseByID(1);
-    }
 
     @Test
     public void testAddOffense() {
         try {
-            when(offenseDao.getOffenseByID(addOffense.getId())).thenReturn(null);
-            when(offenseDao.addOffense(addOffense)).thenReturn(true);
+            int id = 1;
+            String type = "Major";
+            String description = "Vandalism";
 
-            boolean result = offenseFacade.addOffense(addOffense);
+            Offense offense1 = new Offense(id, type, description);
 
-            assert(result == true);
+            offenseFacade.addOffense(offense1);
 
-            assert(offenseFacade.getOffenseByID(2) == null);
-
-            verify(offenseDao).addOffense(addOffense);
+            verify(offenseDao).addOffense(any(Offense.class));
         } catch (Exception e) {
             LOGGER.error("Exception caught: " + e.getMessage());
         }
-
     }
 
     @Test
@@ -103,13 +76,44 @@ class OffenseFacadeImplTest {
     }
 
     @Test
-    public void testGetAllOffenseByStudentId() {
-        Student student1 = new Student();
-        student1.setStudentId("CT21-0001");
+    public void testGetOffenseById() {
+        when(offenseDao.getOffenseByID(1)).thenReturn(offense);
+        Offense expectedOffense = offenseFacade.getOffenseByID(1);
 
-        List expectedList = offenseFacade.getAllOffenseByStudent(student1);
+        assert(expectedOffense.equals(offense));
 
-        assert(expectedList.equals(offenseList));
-        verify(offenseDao).getAllOffenseByStudent(student1);
+        verify(offenseDao).getOffenseByID(1);
+    }
+
+    @Test
+    public void testGetAllOffense() {
+        when(offenseDao.getAllOffense()).thenReturn(offenseList);
+
+        List<Offense> expectedList = offenseFacade.getAllOffense();
+
+        assert (expectedList.equals(offenseList));
+        verify(offenseDao).getAllOffense();
+    }
+
+    @Test
+    public void testGetOffenseByName() {
+        when(offenseDao.getOffenseByName("fighting")).thenReturn(offense);
+        Offense expectedOffense = offenseFacade.getOffenseByName("fighting");
+
+        assert(expectedOffense.equals(offense));
+
+        verify(offenseDao).getOffenseByName("fighting");
+    }
+
+    @Test
+    public void testGetAllOffenseByType() {
+        String major = "Major";
+
+        when(offenseDao.getAllOffenseByType(major)).thenReturn(offenseList);
+
+        List<Offense> expectedList = offenseFacade.getAllOffenseByType(major);
+
+        assert (expectedList.equals(offenseList));
+        verify(offenseDao).getAllOffenseByType(major);
     }
 }

@@ -1,7 +1,6 @@
 package com.prefect.office.record.management.data.dao.prefect.communityservice.impl;
 
 import com.prefect.office.record.management.appl.model.communityservice.CommunityService;
-import com.prefect.office.record.management.appl.model.offense.Offense;
 import com.prefect.office.record.management.data.dao.prefect.communityservice.CommunityServiceDao;
 import com.student.information.management.appl.model.student.Student;
 import org.junit.jupiter.api.BeforeEach;

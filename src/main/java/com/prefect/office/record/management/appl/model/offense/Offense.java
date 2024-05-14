@@ -1,36 +1,12 @@
 package com.prefect.office.record.management.appl.model.offense;
 
-import com.prefect.office.record.management.appl.model.violation.Violation;
-import com.student.information.management.appl.model.student.Student;
-
-import java.sql.Timestamp;
-
 /**
- * Represents a record of a student offense.
+ * Represents a record of an offense.
  */
 public class Offense {
-
     private int id;
-    private Violation violation;
-    private Student student;
-    private Timestamp offenseDate;
-    private int commServHours;
-
-    /**
-     * Constructs a new Offense object.
-     *
-     * @param id          The unique identifier of the offense record.
-     * @param violationId The ID of the violation associated with the offense.
-     * @param studentId   The ID of the student who committed the offense.
-     * @param offenseDate The timestamp indicating the date and time of the offense.
-     */  
-    public Offense(int id, Violation violation, Student student, Timestamp offenseDate, int commServHours) {
-        this.id = id;
-        this.violation = violation;
-        this.student = student;
-        this.offenseDate = offenseDate;
-        this.commServHours = commServHours;
-    }
+    private String type;
+    private String description;
 
     /**
      * Constructs a new Offense object with default values.
@@ -38,6 +14,18 @@ public class Offense {
     public Offense() {
     }
 
+    /**
+     * Constructs a new Offense object.
+     *
+     * @param type          The type of offense.
+     * @param description     The description of the offense.
+     */
+
+    public Offense(int id, String type, String description) {
+        this.id = id;
+        this.type = type;
+        this.description = description;
+    }
 
     /**
      * Retrieves the unique identifier of the offense record.
@@ -56,67 +44,34 @@ public class Offense {
     }
 
     /**
-     * Retrieves the violation object of the Violation associated with the offense.
-     * @return The violation object of the Violation.
+     * Retrieves the type for offense.
+     * @return type.
      */
-    public Violation getViolation() {
-        return violation;
+    public String getType() {
+        return type;
     }
 
     /**
-     * Sets the violation indicating the violation of the offense.
-     * @param violation The violation to set.
+     * Sets the type of offense.
+     * @param type The type of offense to set.
      */
-    public void setViolation(Violation violation) {
-        this.violation = violation;
-    }
-    
-    /**
-     * Retrieves the student object of the Student associated with the offense.
-     * @return The student object of the Student.
-     */
-    public Student getStudent() {
-        return student;
+    public void setType(String type) {
+        this.type = type;
     }
 
     /**
-     * Sets the student indicating the student of the offense.
-     * @param student The student to set.
+     * Retrieves the offense violated.
+     * @return offense.
      */
-    public void setStudent(Student student) {
-        this.student = student;
+    public String getDescription() {
+        return description;
     }
 
     /**
-     * Retrieves the timestamp indicating the date and time of the offense.
-     * @return The timestamp indicating the date and time of the offense.
+     * Sets the description of the Offense violated.
+     * @param description The offense to set.
      */
-    public Timestamp getOffenseDate() {
-        return offenseDate;
-    }
-
-    /**
-     * Sets the timestamp indicating the date and time of the offense.
-     * @param offenseDate The timestamp to set.
-     */
-    public void setOffenseDate(Timestamp offenseDate) {
-        this.offenseDate = offenseDate;
-    }
-
-    /**
-     * Retrieves the commServHours of the offense.
-     * @return The commServHours of the offense.
-     */
-    public int getCommServHours() {
-        return commServHours;
-    }
-
-
-    /**
-     * Sets the commServHours of the offense.
-     * @param commServHours The commServHours to set.
-     */
-    public void setCommServHours(int commServHours) {
-        this.commServHours = commServHours;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

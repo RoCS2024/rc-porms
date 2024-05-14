@@ -1,44 +1,49 @@
 package com.prefect.office.record.management.data.dao.prefect.offense;
 
 import com.prefect.office.record.management.appl.model.offense.Offense;
-import com.student.information.management.appl.model.student.Student;
 
 import java.util.List;
 /**
  * This is the interface for the OffenseDao
  */
 public interface OffenseDao {
-    /**
-     * This retrieves all Offenses from the database
-     * @return list of all the offenses
-     */
-    List<Offense> getAllOffenses();
-
-    /**
-     * This retrieves all Offenses from the database with a specific student ID
-     * @param studentId is the id of the Student that has an Offense Record
-     * @return list of all the offenses
-     */
-    List<Offense> getAllOffenseByStudent(Student studentId);
 
     /**
      * This gets an Offense from the database with a specific ID
      * @param id is the id of the Offense
      * @return the Offense with specific ID
      */
-    Offense getOffenseByID (int id);
+    Offense getOffenseByID(int id);
 
     /**
-     * This updates an Offense in the database
-     * @param offense is the Offense to update
-     * @return true if update of Offense is successful
+     * This gets an Offense from the database with a specific Name
+     * @param description is the Offense description or name
+     * @return the Offense with specific description or name
      */
-    boolean updateOffense (Offense offense);
+    Offense getOffenseByName(String description);
 
     /**
-     * This adds an Offense in the database
+     * This adds Offense to the database
      * @param offense is the Offense to add
-     * @return true if adding of Offense is successful
      */
-    boolean addOffense(Offense offense);
+    void addOffense(Offense offense);
+
+    /**
+     * This updates Offense to the database
+     * @param offense is the Offense to update
+     */
+    boolean updateOffense(Offense offense);
+
+    /**
+     * This retrieves all Offense from the database
+     * @return list of Offense
+     */
+    List<Offense> getAllOffense();
+
+    /**
+     * This retrieves all Offense by type from the database
+     * @return list of Offense by Type
+     */
+    List<Offense> getAllOffenseByType(String type);
 }
+

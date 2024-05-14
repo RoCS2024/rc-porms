@@ -1,19 +1,8 @@
 package com.prefect.office.record.management.data.dao.prefect.offense.impl;
 
-
-import com.prefect.office.record.management.appl.facade.prefect.violation.ViolationFacade;
-import com.prefect.office.record.management.appl.facade.prefect.violation.impl.ViolationFacadeImpl;
 import com.prefect.office.record.management.appl.model.offense.Offense;
-import com.prefect.office.record.management.appl.model.violation.Violation;
 import com.prefect.office.record.management.data.connectionhelper.ConnectionHelper;
 import com.prefect.office.record.management.data.dao.prefect.offense.OffenseDao;
-import com.prefect.office.record.management.data.dao.prefect.violation.ViolationDao;
-import com.prefect.office.record.management.data.dao.prefect.violation.impl.ViolationDaoImpl;
-import com.student.information.management.StudentInfoMgtApplication;
-import com.student.information.management.appl.facade.student.StudentFacade;
-import com.student.information.management.appl.facade.student.impl.StudentFacadeImpl;
-import com.student.information.management.appl.model.student.Student;
-import com.student.information.management.data.student.dao.StudentDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,32 +21,23 @@ public class OffenseDaoImpl implements OffenseDao {
 
     @Override
     public Offense getOffenseByID(int id) {
-        try (Connection con = ConnectionHelper.getConnection();
-             PreparedStatement stmt = con.prepareStatement(GET_OFFENSE_BY_ID_STATEMENT)) {
+
+        try (Connection connection = ConnectionHelper.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(GET_OFFENSE_BY_ID_STATEMENT)) {
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    int idNum = rs.getInt("id");
-                    int violationId = rs.getInt("violation_id");
-                    String studentId = rs.getString("student_id");
+                    String type = rs.getString("type");
+                    String description = rs.getString("description");
+                    Offense offense = new Offense(id, type, description);
 
-                    ViolationDao violationDao = new ViolationDaoImpl();
-                    ViolationFacade violationFacade = new ViolationFacadeImpl(violationDao);
-                    Violation violation = violationFacade.getViolationByID(violationId);
-
-                    StudentInfoMgtApplication app = new StudentInfoMgtApplication();
-                    StudentFacade studentFacade = app.getStudentFacade();
-                    Student student = studentFacade.getStudentById(studentId);
-
-                    Timestamp offense_date = rs.getTimestamp("offense_date");
-                    int commServHours = rs.getInt("comm_serv_hours");
-                    return new Offense(idNum, violation, student, offense_date, commServHours);
+                    return offense;
                 } else {
-                    LOGGER.warn("No offense found with ID: " + id);
+                    LOGGER.warn("No Offense found with ID: " + id);
                 }
             }
         } catch (SQLException ex) {
-            LOGGER.warn("Error retrieving offense with ID " + id + ": " + ex.getMessage());
+            LOGGER.warn("Error retrieving Offense with ID " + id + ": " + ex.getMessage());
             ex.printStackTrace();
         }
         LOGGER.debug("Offense not found.");
@@ -65,17 +45,55 @@ public class OffenseDaoImpl implements OffenseDao {
     }
 
     @Override
+    public Offense getOffenseByName(String offense) {
+        try (Connection connection = ConnectionHelper.getConnection()){
+
+            PreparedStatement stmt = connection.prepareStatement(GET_OFFENSE_BY_NAME_STATEMENT);
+            stmt.setString(1, "%" + offense + "%");
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    int id = rs.getInt("id");
+                    String type = rs.getString("type");
+                    String description = rs.getString("description");
+                    Offense newOffense = new Offense(id, type, description);
+
+                    return newOffense;
+                } else {
+                    LOGGER.warn("No Offense found: " + offense);
+                }
+            }
+        } catch (SQLException ex) {
+            LOGGER.warn("Error retrieving Offense " + offense + ": " + ex.getMessage());
+            ex.printStackTrace();
+        }
+        LOGGER.debug("Offense not found.");
+        return null;
+    }
+
+    @Override
+    public void addOffense(Offense offense) {
+
+        try (Connection connection = ConnectionHelper.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(ADD_OFFENSE_STATEMENT)) {
+            preparedStatement.setString(1, offense.getType());
+            preparedStatement.setString(2, offense.getDescription());
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            LOGGER.warn("Error adding offense: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+        LOGGER.debug("Adding offense failed.");
+    }
+
+    @Override
     public boolean updateOffense(Offense offense) {
-        try (Connection con = ConnectionHelper.getConnection();
-             PreparedStatement stmt = con.prepareStatement(UPDATE_OFFENSE_STATEMENT)) {
-
-            Violation violation = offense.getViolation();
-            Student student = offense.getStudent();
-
-            stmt.setInt(1, violation.getId());
-            stmt.setString(2, student.getStudentId());
-            stmt.setTimestamp(3, offense.getOffenseDate());
-            stmt.setInt(4, offense.getId());
+        try (Connection connection = ConnectionHelper.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(UPDATE_OFFENSE_STATEMENT)) {
+            stmt.setString(1, offense.getType());
+            stmt.setString(2, offense.getDescription());
+            stmt.setInt(3, offense.getId());
             int affectedRows = stmt.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException ex) {
@@ -86,69 +104,45 @@ public class OffenseDaoImpl implements OffenseDao {
     }
 
     @Override
-    public List<Offense> getAllOffenses() {
+    public List<Offense> getAllOffense() {
         List<Offense> offenses = new ArrayList<>();
-        try (Connection con = ConnectionHelper.getConnection();
-             PreparedStatement statement = con.prepareStatement(GET_ALL_OFFENSES_STATEMENT);
-             ResultSet resultSet = statement.executeQuery()) {
+        try (Connection connection = ConnectionHelper.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_OFFENSE_STATEMENT))   {
+            ResultSet rs = preparedStatement.executeQuery();
 
-            while (resultSet.next()) {
+            while (rs.next()) {
                 Offense offense = new Offense();
-                offense.setId(resultSet.getInt("id"));
-
-                ViolationDao violationDao = new ViolationDaoImpl();
-                ViolationFacade violationFacade = new ViolationFacadeImpl(violationDao);
-                Violation violation = violationFacade.getViolationByID(resultSet.getInt("violation_id"));
-                offense.setViolation(violation);
-
-                StudentInfoMgtApplication app = new StudentInfoMgtApplication();
-                StudentFacade studentFacade = app.getStudentFacade();
-                Student student = studentFacade.getStudentById(resultSet.getString("student_id"));
-                offense.setStudent(student);
-
-                offense.setOffenseDate(resultSet.getTimestamp("offense_date"));
-                offense.setCommServHours(resultSet.getInt("comm_serv_hours"));
+                offense.setId(rs.getInt("id"));
+                offense.setType(rs.getString("type"));
+                offense.setDescription(rs.getString("description"));
                 offenses.add(offense);
             }
             LOGGER.info("Offenses retrieved successfully.");
-        } catch (SQLException ex) {
-            LOGGER.warn("Error retrieving all offenses: " + ex.getMessage());
-            ex.printStackTrace();
+        } catch (Exception e) {
+            LOGGER.warn("An SQL Exception occurred." + e.getMessage());
         }
         LOGGER.debug("Offense database is empty.");
         return offenses;
     }
 
     @Override
-    public List<Offense> getAllOffenseByStudent(Student studentId) {
+    public List<Offense> getAllOffenseByType(String type) {
         List<Offense> offenses = new ArrayList<>();
-        try (Connection con = ConnectionHelper.getConnection();
-             PreparedStatement statement = con.prepareStatement(GET_ALL_OFFENSES_BY_STUDENT_ID_STATEMENT)) {
+        try (Connection connection = ConnectionHelper.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_OFFENSE_BY_TYPE_STATEMENT))   {
+            preparedStatement.setString(1, type);
 
-            statement.setString(1, studentId.getStudentId());
-
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                while (rs.next()) {
                     Offense offense = new Offense();
-                    offense.setId(resultSet.getInt("id"));
-
-                    ViolationDao violationDao = new ViolationDaoImpl();
-                    ViolationFacade violationFacade = new ViolationFacadeImpl(violationDao);
-                    Violation violation = violationFacade.getViolationByID(resultSet.getInt("violation_id"));
-                    offense.setViolation(violation);
-
-                    StudentInfoMgtApplication app = new StudentInfoMgtApplication();
-                    StudentFacade studentFacade = app.getStudentFacade();
-                    Student student = studentFacade.getStudentById(resultSet.getString("student_id"));
-                    offense.setStudent(student);
-
-                    offense.setOffenseDate(resultSet.getTimestamp("offense_date"));
-                    offense.setCommServHours(resultSet.getInt("comm_serv_hours"));
+                    offense.setId(rs.getInt("id"));
+                    offense.setType(rs.getString("type"));
+                    offense.setDescription(rs.getString("description"));
                     offenses.add(offense);
                 }
                 LOGGER.info("Offenses retrieved successfully.");
             } catch (SQLException ex) {
-                LOGGER.warn("Error retrieving all offenses: " + ex.getMessage());
+                LOGGER.warn("Error retrieving all offense by type: " + ex.getMessage());
                 ex.printStackTrace();
             }
             LOGGER.debug("Offense database is empty.");
@@ -157,32 +151,5 @@ public class OffenseDaoImpl implements OffenseDao {
             ex.printStackTrace();
         }
         return offenses;
-    }
-
-
-
-    @Override
-    public boolean addOffense(Offense offense) {
-        if (offense == null || offense.getViolation() == null || offense.getStudent() == null) {
-            LOGGER.warn("Invalid offense object: " + offense);
-            return false;
-        }
-
-        try (Connection con = ConnectionHelper.getConnection();
-             PreparedStatement stmt = con.prepareStatement(ADD_OFFENSE_STATEMENT)) {
-            Violation violation = offense.getViolation();
-            int id = violation.getId();
-
-            stmt.setInt(1, id);
-            stmt.setString(2, offense.getStudent().getStudentId());
-            stmt.setTimestamp(3, offense.getOffenseDate());
-            int affectedRows = stmt.executeUpdate();
-            //return affectedRows > 0;
-            return true;
-        } catch (SQLException ex) {
-            LOGGER.warn("Error adding offense: " + ex.getMessage());
-            ex.printStackTrace();
-            return false;
-        }
     }
 }

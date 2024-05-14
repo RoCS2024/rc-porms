@@ -1,53 +1,52 @@
 package com.prefect.office.record.management.appl.facade.prefect.violation;
 
-
-import com.prefect.office.record.management.appl.model.offense.Offense;
 import com.prefect.office.record.management.appl.model.violation.Violation;
+import com.student.information.management.appl.model.student.Student;
 
 import java.util.List;
+
 /**
- * This is the interface to the ViolationFacade
+ * An interface to the Violation Facade.
  */
+
 public interface ViolationFacade {
 
     /**
-     * This adds a violation in the database.
-     * @param violation is the violation to add in the database
-     * @param type is the type of violation to be recorded in the database
-     * @param commServHours is the number of community service to be recorded in the database
-     */
-    void addViolation(String violation, String type, int commServHours);
-
-    /**
-     * This updates Violation to the database
-     * @param violation is the violation to update
-     */
-    boolean updateViolation(Violation violation);
-
-    /**
-     * This gets a Violation from the database with a specific ID
-     * @param id is the id of the Violation
-     * @return the Violation with specific ID
-     */
-    Violation getViolationByID (int id);
-
-    /**
-     * This gets a Violation from the database with a specific name or description
-     * @param violation is the Violation name or description
-     * @return the Violation with specific ID
-     */
-    Violation getViolationByName (String violation);
-
-    /**
-     * This retrieves all violation in the database
-     * @return list of violation from the database
-     */
+     * Retrieves all Violation from the database.
+     *
+     * @return list of all Violation.
+     * */
     List<Violation> getAllViolation();
 
     /**
-     * This retrieves all violation by type in the database
-     * @return list of violation by type from the database
-     */
-    List<Violation> getAllViolationByType(String type);
+     * Retrieves a Violation from the database with specified id.
+     *
+     * @param id the id of the Violation.
+     * @return the Violation.
+     * */
+    Violation getViolationByID(int id);
 
+    /**
+     * Retrieves all Violation from the database with specified student id.
+     *
+     * @param studentId the id of the students.
+     * @return the Violation.
+     * */
+    List<Violation> getAllViolationByStudent(Student studentId);
+
+    /**
+     * Updates a Student in the database.
+     *
+     * @param violation  Violation to update.
+     * @return true if update is successful.
+     * */
+    boolean updateViolation(Violation violation);
+
+    /**
+     * Adds a Student to the database.
+     *
+     * @param violation Violation to add.
+     * @return true if adding is successful.
+     * */
+    boolean addViolation(Violation violation);
 }

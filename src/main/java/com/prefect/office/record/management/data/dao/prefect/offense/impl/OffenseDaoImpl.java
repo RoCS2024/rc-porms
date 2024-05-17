@@ -72,19 +72,20 @@ public class OffenseDaoImpl implements OffenseDao {
     }
 
     @Override
-    public void addOffense(Offense offense) {
-
+    public boolean addOffense(Offense offense) {
         try (Connection connection = ConnectionHelper.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(ADD_OFFENSE_STATEMENT)) {
             preparedStatement.setString(1, offense.getType());
             preparedStatement.setString(2, offense.getDescription());
 
-            preparedStatement.executeUpdate();
+            int affectedRows = preparedStatement.executeUpdate();
+            return affectedRows > 0;
+
         } catch (SQLException ex) {
             LOGGER.warn("Error adding offense: " + ex.getMessage());
             ex.printStackTrace();
+            return false;
         }
-        LOGGER.debug("Adding offense failed.");
     }
 
     @Override

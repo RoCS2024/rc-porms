@@ -19,10 +19,9 @@ public class OffenseFacadeImpl implements OffenseFacade {
     public OffenseFacadeImpl(OffenseDao offenseDao) { this.offenseDAO = offenseDao;}
 
     @Override
-    public void addOffense(Offense offense) throws RuntimeException{
+    public boolean addOffense(Offense offense) throws RuntimeException{
         try {
-            Offense newOffense = new Offense();
-            offenseDAO.addOffense(newOffense);
+            return offenseDAO.addOffense(offense);
         } catch (Exception e) {
             throw new RuntimeException("Failed to add Offense: " + e.getMessage(), e);
         }

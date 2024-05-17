@@ -26,7 +26,7 @@ public interface OffenseDao {
      * This adds Offense to the database
      * @param offense is the Offense to add
      */
-    void addOffense(Offense offense);
+    boolean addOffense(Offense offense);
 
     /**
      * This updates Offense to the database

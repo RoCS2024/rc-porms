@@ -462,6 +462,9 @@ public class Main {
             String type = scanner.nextLine();
 
             Offense offense = new Offense();
+            System.out.print(description);
+            System.out.print(type);
+
             offense.setDescription(description);
             offense.setType(type);
 

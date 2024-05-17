@@ -13,7 +13,7 @@ public interface OffenseFacade {
      * This adds an offense in the database.
      * @param offense is the offense to add in the database
      */
-    void addOffense(Offense offense);
+    boolean addOffense(Offense offense);
 
     /**
      * This updates offense to the database
@@ -22,7 +22,7 @@ public interface OffenseFacade {
     boolean updateOffense(Offense offense);
 
     /**
-     * This gets a Offense from the database with a specific ID
+     * This gets an Offense from the database with a specific ID
      * @param id is the id of the Offense
      * @return the Offense with specific ID
      */

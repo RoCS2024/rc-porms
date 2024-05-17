@@ -40,7 +40,8 @@ public class ViolationDaoImpl implements ViolationDao {
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    String studentId = rs.getString("student_id");
+                    int studentId = rs.getInt("student_id");
+
                     StudentInfoMgtApplication app = new StudentInfoMgtApplication();
                     StudentFacade studentFacade = app.getStudentFacade();
                     Student student = studentFacade.getStudentById(studentId);
@@ -50,17 +51,17 @@ public class ViolationDaoImpl implements ViolationDao {
                     OffenseFacade offenseFacade = new OffenseFacadeImpl(offenseDao);
                     Offense offense = offenseFacade.getOffenseByID(offenseId);
 
-                    int warning_number = rs.getInt("warning_number");
-                    int cs_hours = rs.getInt("cs_hours");
-                    String disciplinary_action = rs.getString("disciplinary_action");
-                    Timestamp date_of_notice = rs.getTimestamp("date_of_notice");
+                    int warningNumber = rs.getInt("warning_number");
+                    int csHours = rs.getInt("cs_hours");
+                    String disciplinaryAction = rs.getString("disciplinary_action");
+                    Timestamp dateOfNotice = rs.getTimestamp("date_of_notice");
 
-                    String approvedById = rs.getString("approved_by_id");
+                    int approvedById = rs.getInt("approved_by_id");
                     EmployeeInfoMgtApplication appl = new EmployeeInfoMgtApplication();
                     EmployeeFacade employeeFacade = appl.getEmployeeFacade();
-                    Employee approvedBy = employeeFacade.getEmployeeById(approvedById);
+                    Employee approvedBy = employeeFacade.getById(approvedById);
 
-                    Violation violation = new Violation(id, student, offense, warning_number, cs_hours, disciplinary_action, date_of_notice, approvedBy);
+                    Violation violation = new Violation(id, student, offense, warningNumber, csHours, disciplinaryAction, dateOfNotice, approvedBy);
                     return violation;
                 } else {
                     LOGGER.warn("No violation found with ID: " + id);
@@ -83,13 +84,13 @@ public class ViolationDaoImpl implements ViolationDao {
             Student student = violation.getStudent();
             Employee employee = violation.getApprovedBy();
 
-            stmt.setString(1, student.getStudentId());
+            stmt.setInt(1, student.getId());
             stmt.setInt(2, offense.getId());
             stmt.setInt(3, violation.getWarningNum());
             stmt.setInt(4, violation.getCommServHours());
             stmt.setString(5, violation.getDisciplinaryAction());
             stmt.setTimestamp(6, violation.getDateOfNotice());
-            stmt.setString(7, employee.getEmployeeNo());
+            stmt.setInt(7, employee.getId());
             stmt.setInt(8, violation.getId());
             int affectedRows = stmt.executeUpdate();
             return affectedRows > 0;
@@ -113,7 +114,7 @@ public class ViolationDaoImpl implements ViolationDao {
 
                 StudentInfoMgtApplication app = new StudentInfoMgtApplication();
                 StudentFacade studentFacade = app.getStudentFacade();
-                Student student = studentFacade.getStudentById(resultSet.getString("student_id"));
+                Student student = studentFacade.getStudentById(resultSet.getInt("student_id"));
                 violation.setStudent(student);
 
                 OffenseDao offenseDao = new OffenseDaoImpl();
@@ -128,7 +129,7 @@ public class ViolationDaoImpl implements ViolationDao {
 
                 EmployeeInfoMgtApplication appl = new EmployeeInfoMgtApplication();
                 EmployeeFacade employeeFacade = appl.getEmployeeFacade();
-                Employee employee = employeeFacade.getEmployeeById(resultSet.getString("approved_by_id"));
+                Employee employee = employeeFacade.getById(resultSet.getInt("approved_by_id"));
                 violation.setApprovedBy(employee);
 
                 violations.add(violation);
@@ -143,23 +144,22 @@ public class ViolationDaoImpl implements ViolationDao {
     }
 
     @Override
-    public List<Violation> getAllViolationByStudent(Student studentId) {
+    public List<Violation> getAllViolationByStudent(Student student) {
         List<Violation> violations = new ArrayList<>();
         try (Connection con = ConnectionHelper.getConnection();
              PreparedStatement statement = con.prepareStatement(GET_ALL_VIOLATION_BY_STUDENT_ID_STATEMENT)) {
 
-            statement.setString(1, studentId.getStudentId());
+            statement.setInt(1, student.getId());
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     Violation violation = new Violation();
                     violation.setId(resultSet.getInt("id"));
 
-                    StudentInfoMgtApplication app = new StudentInfoMgtApplication();
-                    StudentFacade studentFacade = app.getStudentFacade();
-                    Student student = studentFacade.getStudentById(resultSet.getString("student_id"));
+                    // Set student
                     violation.setStudent(student);
 
+                    // Retrieve offense
                     OffenseDao offenseDao = new OffenseDaoImpl();
                     OffenseFacade offenseFacade = new OffenseFacadeImpl(offenseDao);
                     Offense offense = offenseFacade.getOffenseByID(resultSet.getInt("offense_id"));
@@ -170,25 +170,26 @@ public class ViolationDaoImpl implements ViolationDao {
                     violation.setDisciplinaryAction(resultSet.getString("disciplinary_action"));
                     violation.setDateOfNotice(resultSet.getTimestamp("date_of_notice"));
 
+                    // Retrieve approved by employee
                     EmployeeInfoMgtApplication appl = new EmployeeInfoMgtApplication();
                     EmployeeFacade employeeFacade = appl.getEmployeeFacade();
-                    Employee employee = employeeFacade.getEmployeeById(resultSet.getString("approved_by_id"));
+                    Employee employee = employeeFacade.getById(resultSet.getInt("approved_by_id"));
                     violation.setApprovedBy(employee);
 
                     violations.add(violation);
                 }
-                LOGGER.info("Violation retrieved successfully.");
+                LOGGER.info("Violations retrieved successfully.");
             } catch (SQLException ex) {
-                LOGGER.warn("Error retrieving all violation: " + ex.getMessage());
+                LOGGER.warn("Error retrieving all violations: " + ex.getMessage());
                 ex.printStackTrace();
             }
-            LOGGER.debug("Violation database is empty.");
         } catch (SQLException ex) {
             LOGGER.warn("Error preparing statement: " + ex.getMessage());
             ex.printStackTrace();
         }
         return violations;
     }
+
 
 
 
@@ -206,13 +207,13 @@ public class ViolationDaoImpl implements ViolationDao {
             Student student = violation.getStudent();
             Employee employee = violation.getApprovedBy();
 
-            stmt.setString(1, student.getStudentId());
+            stmt.setInt(1, student.getId());
             stmt.setInt(2, offense.getId());
             stmt.setInt(3, violation.getWarningNum());
             stmt.setInt(4, violation.getCommServHours());
             stmt.setString(5, violation.getDisciplinaryAction());
             stmt.setTimestamp(6, violation.getDateOfNotice());
-            stmt.setString(7, employee.getEmployeeNo());
+            stmt.setInt(7, employee.getId());
 
             int affectedRows = stmt.executeUpdate();
             //return affectedRows > 0;

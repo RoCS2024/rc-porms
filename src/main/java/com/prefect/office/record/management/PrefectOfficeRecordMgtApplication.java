@@ -12,30 +12,32 @@ import com.prefect.office.record.management.data.dao.prefect.offense.OffenseDao;
 import com.prefect.office.record.management.data.dao.prefect.offense.impl.OffenseDaoImpl;
 import com.prefect.office.record.management.data.dao.prefect.violation.ViolationDao;
 import com.prefect.office.record.management.data.dao.prefect.violation.impl.ViolationDaoImpl;
-import com.student.information.management.data.student.dao.impl.StudentDaoImpl;
 
 public class PrefectOfficeRecordMgtApplication {
 
-private CommunityServiceFacade communityserviceFacade;
-    private OffenseFacade offenseFacade;
+    private CommunityServiceFacade communityserviceFacade;
     private ViolationFacade violationFacade;
-public PrefectOfficeRecordMgtApplication(){
-    CommunityServiceDao communityserviceDaoImpl = new CommunityServiceDaoImpl();
-    this.communityserviceFacade = new CommunityServiceFacadeImpl(communityserviceDaoImpl);
+    private OffenseFacade offenseFacade;
 
-    ViolationDao violationDaoImpl = new ViolationDaoImpl();
-    this.violationFacade = new ViolationFacadeImpl(violationDaoImpl);
+    public PrefectOfficeRecordMgtApplication(){
+        CommunityServiceDao communityServiceDaoImpl = new CommunityServiceDaoImpl();
+        this.communityserviceFacade = new CommunityServiceFacadeImpl(communityServiceDaoImpl);
 
-    OffenseDao offenseDaoImpl = new OffenseDaoImpl();
-    this.offenseFacade = new OffenseFacadeImpl(offenseDaoImpl);
-}
+        OffenseDao offenseDaoImpl = new OffenseDaoImpl();
+        this.offenseFacade = new OffenseFacadeImpl(offenseDaoImpl);
+
+        ViolationDao violationDaoImpl = new ViolationDaoImpl();
+        this.violationFacade = new ViolationFacadeImpl(violationDaoImpl);
+    }
 
     public CommunityServiceFacade getCommunityserviceFacade() {
         return communityserviceFacade;
     }
+
     public OffenseFacade getOffenseFacade() {
         return offenseFacade;
     }
+
     public ViolationFacade getViolationFacade() {
         return violationFacade;
     }

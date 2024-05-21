@@ -1,23 +1,21 @@
+import com.employee.info.mgmt.EmployeeInfoMgtApplication;
+import com.employee.info.mgmt.appl.facade.employee.EmployeeFacade;
+import com.employee.info.mgmt.appl.model.Employee;
+import com.prefect.office.record.management.PrefectOfficeRecordMgtApplication;
 import com.prefect.office.record.management.appl.facade.prefect.communityservice.CommunityServiceFacade;
-import com.prefect.office.record.management.appl.facade.prefect.communityservice.impl.CommunityServiceFacadeImpl;
 import com.prefect.office.record.management.appl.facade.prefect.offense.OffenseFacade;
-import com.prefect.office.record.management.appl.facade.prefect.offense.impl.OffenseFacadeImpl;
 import com.prefect.office.record.management.appl.facade.prefect.violation.ViolationFacade;
-import com.prefect.office.record.management.appl.facade.prefect.violation.impl.ViolationFacadeImpl;
 import com.prefect.office.record.management.appl.model.communityservice.CommunityService;
 import com.prefect.office.record.management.appl.model.offense.Offense;
 import com.prefect.office.record.management.appl.model.violation.Violation;
-import com.prefect.office.record.management.data.dao.prefect.communityservice.impl.CommunityServiceDaoImpl;
-import com.prefect.office.record.management.data.dao.prefect.offense.OffenseDao;
-import com.prefect.office.record.management.data.dao.prefect.offense.impl.OffenseDaoImpl;
 import com.student.information.management.StudentInfoMgtApplication;
 import com.student.information.management.appl.facade.student.StudentFacade;
-import com.student.information.management.appl.facade.student.impl.StudentFacadeImpl;
 import com.student.information.management.appl.model.student.Student;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -29,11 +27,11 @@ public class Main {
     private static ViolationFacade violationFacade;
     private static OffenseFacade offenseFacade;
 
-        public static void main(String[] args) {
-            PrefectOfficeRecordMgtApplication app = new PrefectOfficeRecordMgtApplication();
-            communityServiceFacade = app.getCommunityserviceFacade();
-            offenseFacade = app.getOffenseFacade();
-            violationFacade = app.getViolationFacade();
+    public static void main(String[] args) {
+        PrefectOfficeRecordMgtApplication app = new PrefectOfficeRecordMgtApplication();
+        communityServiceFacade = app.getCommunityserviceFacade();
+        offenseFacade = app.getOffenseFacade();
+        violationFacade = app.getViolationFacade();
 
         try {
             int choice;
@@ -50,42 +48,39 @@ public class Main {
 
                 switch (choice) {
                     case 1:
-                        viewAllOffense();
-                        break;
-                    case 2:
-                        addOffense();
-                        break;
-                    case 3:
-                        updateOffense();
-                        break;
-                    case 4:
-                        searchAllOffenseByStudentId();
-                        break;
-                    case 5:
-                        addViolation();
-                        break;
-                    case 6:
-                        updateViolation();
-                        break;
-                    case 7:
                         viewAllViolation();
                         break;
+                    case 2:
+                        addViolation();
+                        break;
+                    case 3:
+                        updateViolation();
+                        break;
+                    case 4:
+                        searchAllViolationByStudentId();
+                        break;
+                    case 5:
+                        addOffense();
+                        break;
+                    case 6:
+                        updateOffense();
+                        break;
+                    case 7:
+                        viewAllOffense();
+                        break;
                     case 8:
-                        searchViolationById();
+                        searchOffenseByName();
                         break;
                     case 9:
-                        searchViolationByName();
+                        filterOffenseByType();
                         break;
                     case 10:
-                        filterViolationByType();
-                        break;
-                    case 11:
                         renderCs();
                         break;
-                    case 12:
+                    case 11:
                         viewCsHistory();
                         break;
-                    case 13:
+                    case 12:
                         searchCsHistoryByStudentId();
                         break;
                     case 0:
@@ -105,220 +100,204 @@ public class Main {
 
     private static void displayMenu() {
         System.out.println("Prefect System");
-        System.out.println("1. View List of Offense");
-        System.out.println("2. Add Offense");
-        System.out.println("3. Update Offense");
-        System.out.println("4. Search Offense By Student Id");
-        System.out.println("5. Add Violation");
-        System.out.println("6. Update Violation");
-        System.out.println("7. View List of Violation");
-        System.out.println("8. Search Violation By Id");
-        System.out.println("9. Search Violation By Name");
-        System.out.println("10. Filter Violation By Type");
-        System.out.println("11. Render Community Service");
-        System.out.println("12. View Community Service History");
-        System.out.println("13. Search Community Service History By Student Id");
+        System.out.println("1. View List of Violation");
+        System.out.println("2. Add Violation");
+        System.out.println("3. Update Violation");
+        System.out.println("4. Search Violation By Student Id");
+        System.out.println("5. Add Offense");
+        System.out.println("6. Update Offense");
+        System.out.println("7. View List of Offense");
+        System.out.println("8. Search Offense By Name");
+        System.out.println("9. Filter Offense By Type");
+        System.out.println("10. Render Community Service");
+        System.out.println("11. View Community Service History");
+        System.out.println("12. Search Community Service History By Student Id");
         System.out.println("0. Exit");
     }
 
-    private static void searchAllOffenseByStudentId() {
+    private static void searchAllViolationByStudentId() {
         try {
             System.out.print("Enter Student ID: ");
             String studentId = scanner.next();
 
             StudentInfoMgtApplication app = new StudentInfoMgtApplication();
             StudentFacade studentFacade = app.getStudentFacade();
-            Student student = studentFacade.getStudentById(studentId);
+            Student student = studentFacade.getStudentByNumber(studentId);
 
             if (student != null) {
-                List<Offense> offenseRecords = offenseFacade.getAllOffenseByStudent(student);
-                if (offenseRecords != null && !offenseRecords.isEmpty()) {
-                    System.out.println("Offense Records");
-                    for (Offense offenseRecord : offenseRecords) {
-                        System.out.println("Offense ID: " + offenseRecord.getId());
-                        System.out.println("Violation: " + offenseRecord.getViolation().getViolation());
-                        System.out.println("Student ID: " + offenseRecord.getStudent().getStudentId());
-                        System.out.println("Student Last Name: " + offenseRecord.getStudent().getLastName());
-                        System.out.println("Student First Name: " + offenseRecord.getStudent().getFirstName());
-                        System.out.println("Student Middle Name: " + offenseRecord.getStudent().getMiddleName());
-                        System.out.println("Offense Date: " + offenseRecord.getOffenseDate());
-                        System.out.println("Community Service Hours: " + offenseRecord.getCommServHours());
+                List<Violation> violationRecords = violationFacade.getAllViolationByStudent(student);
+                if (violationRecords != null && !violationRecords.isEmpty()) {
+                    System.out.println("Violation Records");
+                    for (Violation violationRecord : violationRecords) {
+                        System.out.println("Student ID: " + violationRecord.getStudent().getStudentId());
+                        System.out.println("Student Last Name: " + violationRecord.getStudent().getLastName());
+                        System.out.println("Student First Name: " + violationRecord.getStudent().getFirstName());
+                        System.out.println("Offense: " + violationRecord.getOffense().getDescription());
+                        System.out.println("Warning Number: " + violationRecord.getWarningNum());
+                        System.out.println("CS Hours: " + violationRecord.getCommServHours());
+                        System.out.println("Disciplinary Action: " + violationRecord.getDisciplinaryAction());
+                        System.out.println("Date of Notice: " + violationRecord.getDateOfNotice());
+                        System.out.println("Personnel Last Name: " + violationRecord.getApprovedBy().getLastName());
+                        System.out.println("Personnel First Name: " + violationRecord.getApprovedBy().getFirstName());
+                        System.out.println("Community Service Hours: " + violationRecord.getCommServHours());
                         System.out.println("-----------------------------------");
                     }
                 } else {
-                    System.out.println("No offense records found.");
+                    System.out.println("No Violation records found.");
                 }
             } else {
                 System.out.println("No Student ID found.");
             }
         } catch (Exception e) {
-            System.err.println("An error occurred while viewing all offenses: " + e.getMessage());
+            System.err.println("An error occurred while viewing all violation: " + e.getMessage());
         }
     }
 
-    private static void searchViolationById() {
+    private static void searchOffenseByName() {
         try {
-            System.out.print("Enter Violation ID: ");
-            int violationId = scanner.nextInt();
-
-            Violation violation = violationFacade.getViolationByID(violationId);
-            if (violation != null) {
-                    System.out.println("-------------------------------------");
-                    System.out.println("Violation ID: " + violation.getId());
-                    System.out.println("Violation: " + violation.getViolation());
-                    System.out.println("Violation Type: " + violation.getType());
-                    System.out.println("Community Service Hours: " + violation.getCommServHours());
-            } else {
-                System.out.println("No Violation ID found.");
-            }
-        } catch (Exception e) {
-            System.err.println("An error occurred while viewing all offenses: " + e.getMessage());
-        }
-    }
-
-    private static void searchViolationByName() {
-        try {
-            System.out.print("Enter Violation: ");
-            String violationName = scanner.next();
-            String violationDesc = violationName.toLowerCase();
-            Violation violation = violationFacade.getViolationByName(violationDesc);
-            if (violation != null) {
+            System.out.print("Enter Offense: ");
+            String offenseName = scanner.next();
+            String offenseDesc = offenseName.toLowerCase();
+            Offense offense = offenseFacade.getOffenseByName(offenseDesc);
+            if (offense != null) {
                 System.out.println("-------------------------------------");
-                System.out.println("Violation ID: " + violation.getId());
-                System.out.println("Violation: " + violation.getViolation());
-                System.out.println("Violation Type: " + violation.getType());
-                System.out.println("Community Service Hours: " + violation.getCommServHours());
+                System.out.println("Offense ID: " + offense.getId());
+                System.out.println("Offense: " + offense.getDescription());
+                System.out.println("Offense Type: " + offense.getType());
             } else {
-                System.out.println("No Violation found.");
+                System.out.println("No Offense found.");
             }
         } catch (Exception e) {
-            System.err.println("An error occurred while viewing all offenses: " + e.getMessage());
+            System.err.println("An error occurred while viewing all Offense: " + e.getMessage());
         }
     }
 
-    private static void searchCsHistoryByStudentId() {
+
+    private static void viewAllViolation() {
         try {
-            System.out.print("Enter Student ID: ");
-            String studentId = scanner.next();
+            List<Violation> violationRecords = violationFacade.getAllViolation();
 
-            StudentInfoMgtApplication app = new StudentInfoMgtApplication();
-            StudentFacade studentFacade = app.getStudentFacade();
-            Student student = studentFacade.getStudentById(studentId);
-            if (student != null) {
-                try {
-                    List<CommunityService> csRecords = communityServiceFacade.getAllCsByStudent(student);
-
-                    if (csRecords != null && !csRecords.isEmpty()) {
-                        System.out.println("Community Service Records");
-                        for (CommunityService csRecord : csRecords) {
-                            System.out.println("Community Service ID: " + csRecord.getId());
-                            System.out.println("Student ID: " + csRecord.getStudent().getStudentId());
-                            System.out.println("Student Last Name: " + csRecord.getStudent().getLastName());
-                            System.out.println("Student First Name: " + csRecord.getStudent().getFirstName());
-                            System.out.println("Student Middle Name: " + csRecord.getStudent().getMiddleName());
-                            System.out.println("Date Rendered: " + csRecord.getDate_rendered());
-                            System.out.println("Hours Rendered: " + csRecord.getHours_rendered());
-                            System.out.println("-----------------------------------");
-                        }
-                    } else {
-                        System.out.println("No Community Service found.");
-                    }
-                } catch (Exception e) {
-                    System.err.println("An error occurred while viewing community service history: " + e.getMessage());
-                }
-            } else {
-                System.out.println("No Student ID found.");
-            }
-        } catch (Exception e) {
-            System.err.println("An error occurred while viewing all offenses: " + e.getMessage());
-        }
-    }
-
-    private static void viewAllOffense() {
-        try {
-            List<Offense> offenseRecords = offenseFacade.getAllOffenses();
-
-            if (offenseRecords != null && !offenseRecords.isEmpty()) {
-                System.out.println("Offense Records");
-                for (Offense offenseRecord : offenseRecords) {
-                    System.out.println("Offense ID: " + offenseRecord.getId());
-                    System.out.println("Violation ID: " + offenseRecord.getViolation().getViolation());
-                    System.out.println("Student Last Name: " + offenseRecord.getStudent().getLastName());
-                    System.out.println("Student First Name: " + offenseRecord.getStudent().getFirstName());
-                    System.out.println("Student Middle Name: " + offenseRecord.getStudent().getMiddleName());
-                    System.out.println("Offense Date: " + offenseRecord.getOffenseDate());
+            if (violationRecords != null && !violationRecords.isEmpty()) {
+                System.out.println("Violation Records");
+                for (Violation violationRecord : violationRecords) {
+                    System.out.println("Student ID: " + violationRecord.getStudent().getStudentId());
+                    System.out.println("Student Last Name: " + violationRecord.getStudent().getLastName());
+                    System.out.println("Student First Name: " + violationRecord.getStudent().getFirstName());
+                    System.out.println("Offense: " + violationRecord.getOffense().getDescription());
+                    System.out.println("Warning Number: " + violationRecord.getWarningNum());
+                    System.out.println("CS Hours: " + violationRecord.getCommServHours());
+                    System.out.println("Disciplinary Action: " + violationRecord.getDisciplinaryAction());
+                    System.out.println("Date of Notice: " + violationRecord.getDateOfNotice());
+                    System.out.println("Personnel Last Name: " + violationRecord.getApprovedBy().getLastName());
+                    System.out.println("Personnel First Name: " + violationRecord.getApprovedBy().getFirstName());
+                    System.out.println("Community Service Hours: " + violationRecord.getCommServHours());
                     System.out.println("-----------------------------------");
                 }
             } else {
-                System.out.println("No offense records found.");
+                System.out.println("No violation records found.");
             }
         } catch (Exception e) {
-            System.err.println("An error occurred while viewing all offenses: " + e.getMessage());
+            System.err.println("An error occurred while viewing all offens: " + e.getMessage());
         }
     }
 
 
 
-    private static void addOffense() {
+    private static void addViolation() {
         try {
             StudentInfoMgtApplication app = new StudentInfoMgtApplication();
             StudentFacade studentFacade = app.getStudentFacade();
 
-            while (true) {
-                System.out.println("\nAdding an Offense:");
+            EmployeeInfoMgtApplication appl = new EmployeeInfoMgtApplication();
+            EmployeeFacade employeeFacade = appl.getEmployeeFacade();
 
-                String violationName;
-                Violation violation;
+            while (true) {
+                System.out.println("\nAdding a Violation:");
                 String studentId;
                 Student student;
-                Timestamp offenseDate;
-
-                do {
-                    System.out.print("Enter Violation: ");
-                    violationName = scanner.next();
-                    violation = violationFacade.getViolationByName(violationName);
-                    if (violation == null) {
-                        System.out.println("Violation not found.");
-                    }
-                } while (violation == null);
+                Offense offense;
+                String offenseName;
+                int warningNum;
+                int csHours;
+                String disciplinaryAction;
+                Timestamp dateOfNotice;
+                String employeeId;
+                Employee approvedBy;
 
                 do {
                     System.out.print("Enter Student ID: ");
                     studentId = scanner.next();
-                    student = studentFacade.getStudentById(studentId);
+                    student = studentFacade.getStudentByNumber(studentId);
                     if (student == null) {
                         System.out.println("Student not found.");
                     }
                 } while (student == null);
 
                 do {
-                    System.out.print("Enter Offense Date (YYYY-MM-DD): ");
+                    System.out.print("Enter Offense: ");
+                    offenseName = scanner.next();
+                    offense = offenseFacade.getOffenseByName(offenseName);
+                    if (offense == null) {
+                        System.out.println("offense not found.");
+                    }
+                } while (offense == null);
+
+                do {
+                    System.out.print("Enter Warning Number: ");
+                    warningNum = scanner.nextInt();
+                } while (warningNum <= 0);
+
+                do {
+                    System.out.print("Enter CS Hours: ");
+                    csHours = scanner.nextInt();
+                } while (csHours <= 0);
+
+                do {
+                    System.out.print("Enter Disciplinary Action: ");
+                    disciplinaryAction = scanner.next();
+                } while (disciplinaryAction == null);
+
+                do {
+                    System.out.print("Enter Date of Notice (YYYY-MM-DD): ");
                     String dateStr = scanner.next();
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                    java.util.Date parsedDate;
+                    Date parsedDate;
                     try {
                         parsedDate = dateFormat.parse(dateStr);
-                        offenseDate = new Timestamp(parsedDate.getTime());
+                        dateOfNotice = new Timestamp(parsedDate.getTime());
                     } catch (ParseException e) {
                         System.out.println("Invalid date format. Please enter date in YYYY-MM-DD format.");
-                        offenseDate = null;
+                        dateOfNotice = null;
                     }
-                } while (offenseDate == null);
+                } while (dateOfNotice == null);
 
-                Offense newOffense = new Offense();
-                newOffense.setViolation(violation);
-                newOffense.setStudent(student);
-                newOffense.setOffenseDate(offenseDate);
+                do {
+                    System.out.print("Enter Employee ID: ");
+                    employeeId = scanner.next();
+                    approvedBy = employeeFacade.getEmployeeById(employeeId);
+                    if (approvedBy == null) {
+                        System.out.println("Employee not found.");
+                    }
+                } while (approvedBy == null);
 
-                boolean added = offenseFacade.addOffense(newOffense);
+                Violation newViolation = new Violation();
+                newViolation.setStudent(student);
+                newViolation.setOffense(offense);
+                newViolation.setWarningNum(warningNum);
+                newViolation.setCommServHours(csHours);
+                newViolation.setDisciplinaryAction(disciplinaryAction);
+                newViolation.setDateOfNotice(dateOfNotice);
+                newViolation.setApprovedBy(approvedBy);
+
+                boolean added = violationFacade.addViolation(newViolation);
 
                 if (added) {
-                    System.out.println("Offense added successfully!");
+                    System.out.println("Violation added successfully!");
                 } else {
-                    System.out.println("Failed to add offense.");
+                    System.out.println("Failed to add Violation.");
                 }
 
-                System.out.print("Do you want to add another offense? (yes/no): ");
+                System.out.print("Do you want to add another Violation? (yes/no): ");
                 String choice = scanner.next();
                 if (!choice.equalsIgnoreCase("yes")) {
                     break;
@@ -327,78 +306,130 @@ public class Main {
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please enter valid IDs.");
         } catch (Exception e) {
-            System.err.println("An error occurred while adding an offense: " + e.getMessage());
+            System.err.println("An error occurred while adding an Violation: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
 
-    private static void updateOffense() {
+    private static void updateViolation() {
         try {
             Scanner scanner = new Scanner(System.in);
             StudentInfoMgtApplication app = new StudentInfoMgtApplication();
             StudentFacade studentFacade = app.getStudentFacade();
 
-            while (true) {
-                System.out.println("Updating Offense Information:");
-                int offenseId;
-                String newViolationName;
-                String newStudentId;
+            EmployeeInfoMgtApplication appl = new EmployeeInfoMgtApplication();
+            EmployeeFacade employeeFacade = appl.getEmployeeFacade();
 
-                Offense newOffense;
+            while (true) {
+                System.out.println("Updating Violation Information:");
+                int violationId;
+                String studentId;
+                String offenseName;
+                int warningNum;
+                int csHours;
+                String disciplinaryAction;
+                Timestamp dateOfNotice;
+                String employeeId;
+                Employee approvedBy;
+
+                Violation newViolation;
                 do {
-                    System.out.print("Enter Offense ID: ");
+                    System.out.print("Enter Violation ID: ");
                     while (!scanner.hasNextInt()) {
-                        System.out.println("Invalid input. Please enter a valid offense ID.");
+                        System.out.println("Invalid input. Please enter a valid violation ID.");
                         scanner.next();
                     }
-                    offenseId = scanner.nextInt();
-                    newOffense = offenseFacade.getOffenseByID(offenseId);
-                    if (newOffense == null) {
+                    violationId = scanner.nextInt();
+                    newViolation = violationFacade.getViolationByID(violationId);
+                    if (newViolation == null) {
                         System.out.println("Offense not found.");
                     }
-                } while (newOffense == null);
+                } while (newViolation == null);
 
-                Violation newViolation = null;
+                Offense newOffense = null;
                 boolean validInput = false;
 
                 while (!validInput) {
-                    System.out.print("Enter New Violation: ");
-                    newViolationName = scanner.next();
-                    newViolation = violationFacade.getViolationByName(newViolationName);
+                    System.out.print("Enter New Offense: ");
+                    offenseName = scanner.next();
+                    newOffense = offenseFacade.getOffenseByName(offenseName);
 
-                    if (newViolation != null) {
+                    if (newOffense != null) {
                         validInput = true;
                     } else {
-                        System.out.println("Violation not found.");
+                        System.out.println("Offense not found.");
                     }
                 }
 
                 Student newStudent;
                 do {
                     System.out.print("Enter New Student ID: ");
-                    newStudentId = scanner.next();
-                    newStudent = studentFacade.getStudentById(newStudentId);
+                    studentId = scanner.next();
+                    newStudent = studentFacade.getStudentByNumber(studentId);
                     if (newStudent == null) {
                         System.out.println("Student not found.");
                     }
                 } while (newStudent == null);
 
-                Offense updatedOffense = new Offense();
-                updatedOffense.setId(offenseId);
-                updatedOffense.setViolation(newViolation);
-                updatedOffense.setStudent(newStudent);
-                updatedOffense.setOffenseDate(new Timestamp(System.currentTimeMillis()));
+                do {
+                    System.out.print("Enter Warning Number: ");
+                    warningNum = scanner.nextInt();
+                } while (warningNum <= 0);
 
-                boolean updated = offenseFacade.updateOffense(updatedOffense);
+                do {
+                    System.out.print("Enter CS Hours: ");
+                    csHours = scanner.nextInt();
+                } while (csHours <= 0);
+
+                do {
+                    System.out.print("Enter Disciplinary Action: ");
+                    disciplinaryAction = scanner.next();
+                } while (disciplinaryAction == null);
+
+                do {
+                    System.out.print("Enter Date of Notice (YYYY-MM-DD): ");
+                    String dateStr = scanner.next();
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    Date parsedDate;
+                    try {
+                        parsedDate = dateFormat.parse(dateStr);
+                        dateOfNotice = new Timestamp(parsedDate.getTime());
+                    } catch (ParseException e) {
+                        System.out.println("Invalid date format. Please enter date in YYYY-MM-DD format.");
+                        dateOfNotice = null;
+                    }
+                } while (dateOfNotice == null);
+
+                do {
+                    System.out.print("Enter Employee ID: ");
+                    employeeId = scanner.next();
+                    approvedBy = employeeFacade.getEmployeeById(employeeId);
+                    if (approvedBy == null) {
+                        System.out.println("Employee not found.");
+                    }
+                } while (approvedBy == null);
+
+
+                Violation updatedViolation = new Violation();
+                updatedViolation.setId(violationId);
+                updatedViolation.setStudent(newStudent);
+                updatedViolation.setOffense(newOffense);
+                updatedViolation.setWarningNum(warningNum);
+                updatedViolation.setCommServHours(csHours);
+                updatedViolation.setDisciplinaryAction(disciplinaryAction);
+                updatedViolation.setDateOfNotice(dateOfNotice);
+                updatedViolation.setApprovedBy(approvedBy);
+
+                boolean updated = violationFacade.updateViolation(updatedViolation);
 
                 if (updated) {
-                    System.out.println("Offense information updated successfully!");
+                    System.out.println("Violation information updated successfully!");
                 } else {
-                    System.out.println("Failed to update Offense information.");
+                    System.out.println("Failed to update Violation information.");
                 }
 
-                System.out.print("Do you want to update another offense? (yes/no): ");
+                System.out.print("Do you want to update another Violation? (yes/no): ");
                 String choice = scanner.next();
                 if (!choice.equalsIgnoreCase("yes")) {
                     break;
@@ -412,85 +443,83 @@ public class Main {
             if (errorMessage != null) {
                 throw new RuntimeException(errorMessage);
             } else {
-                throw new RuntimeException("An error occurred while updating Offense information.");
+                throw new RuntimeException("An error occurred while updating Violation information.");
             }
         }
 
     }
 
-    private static void addViolation() {
+    private static void addOffense() {
         try {
-            System.out.println("\nAdding a Violation:");
+            System.out.println("\nAdding an Offense:");
 
-            System.out.print("Enter Violation Description: ");
+            System.out.print("Enter Offense Description: ");
             scanner.nextLine();
-            String description = scanner.nextLine();
-            String name = description.toLowerCase();
+            String name = scanner.nextLine();
+            String description = name.toLowerCase();
 
-            System.out.print("Enter Violation Type: ");
+            System.out.print("Enter Offense Type: ");
             String type = scanner.nextLine();
 
-            System.out.print("Enter Community Service Hours: ");
-            int commServHours = scanner.nextInt();
-            scanner.nextLine();
+            Offense offense = new Offense();
+            System.out.print(description);
+            System.out.print(type);
 
-            violationFacade.addViolation(name, type, commServHours);
-            System.out.println("Violation added successfully!");
+            offense.setDescription(description);
+            offense.setType(type);
+
+            offenseFacade.addOffense(offense);
+            System.out.println("Offense added successfully!");
         } catch (Exception e) {
-            System.err.println("An error occurred while adding a violation: " + e.getMessage());
+            System.err.println("An error occurred while adding a Offense: " + e.getMessage());
         }
     }
 
-    private static void updateViolation() {
+    private static void updateOffense() {
         try {
-            System.out.print("Enter Violation ID: ");
-            int violationId = scanner.nextInt();
+            System.out.print("Enter Offense ID: ");
+            int offenseId = scanner.nextInt();
 
-            System.out.print("Enter New Violation Name: ");
+            System.out.print("Enter New Offense Name: ");
             scanner.nextLine();
-            String newViolation = scanner.nextLine();
+            String newOffense = scanner.nextLine();
 
-            System.out.print("Enter New Violation Type: ");
-            String newViolationType = scanner.nextLine();
+            System.out.print("Enter New Offense Type: ");
+            String newOffenseType = scanner.nextLine();
 
-            System.out.print("Enter New Community Service Hours: ");
-            int newCsHours = scanner.nextInt();
+            Offense updatedOffense = new Offense();
+            updatedOffense.setId(offenseId);
+            updatedOffense.setDescription(newOffense);
+            updatedOffense.setType(newOffenseType);
 
-            Violation updatedViolation = new Violation();
-            updatedViolation.setId(violationId);
-            updatedViolation.setViolation(newViolation);
-            updatedViolation.setType(newViolationType);
-            updatedViolation.setCommServHours(newCsHours);
-
-            boolean updated = violationFacade.updateViolation(updatedViolation);
+            boolean updated = offenseFacade.updateOffense(updatedOffense);
 
             if (updated) {
-                System.out.println("Violation information updated successfully!");
+                System.out.println("Offense information updated successfully!");
             } else {
-                System.out.println("Failed to update Violation information.");
+                System.out.println("Failed to update Offense information.");
             }
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please enter valid IDs.");
         } catch (Exception e) {
-            System.err.println("An error occurred while updating Violation information: " + e.getMessage());
+            System.err.println("An error occurred while updating Offense information: " + e.getMessage());
         }
     }
 
-    private static void viewAllViolation() {
-        System.out.println("Showing all Violations ...");
-        List<Violation> violationList =violationFacade.getAllViolation();
-        for (Violation violation : violationList) {
+    private static void viewAllOffense() {
+        System.out.println("Showing all Offenses ...");
+        List<Offense> offenseList =offenseFacade.getAllOffense();
+        for (Offense offense : offenseList) {
             System.out.println("-------------------------------------");
-            System.out.println("Violation ID: " + violation.getId());
-            System.out.println("Violation: " + violation.getViolation());
-            System.out.println("Violation Type: " + violation.getType());
-            System.out.println("Community Service Hours: " + violation.getCommServHours());
+            System.out.println("Offense: " + offense.getDescription());
+            System.out.println("Offense Type: " + offense.getType());
+
         }
     }
 
-    private static void filterViolationByType() {
+    private static void filterOffenseByType() {
         Scanner scanner = new Scanner(System.in);
-        int violationType;
+        int offenseType;
 
         do {
             System.out.println("Choose a type");
@@ -503,18 +532,18 @@ public class Main {
                 System.out.println("Invalid input. Please enter a number.");
                 scanner.next();
             }
-            violationType = scanner.nextInt();
+            offenseType = scanner.nextInt();
 
-            switch (violationType) {
+            switch (offenseType) {
                 case 1:
                     String major = "Major";
-                    List<Violation> majorList = violationFacade.getAllViolationByType(major);
-                    printViolations(majorList);
+                    List<Offense> majorList = offenseFacade.getAllOffenseByType(major);
+                    printOffense(majorList);
                     break;
                 case 2:
                     String minor = "Minor";
-                    List<Violation> minorList = violationFacade.getAllViolationByType(minor);
-                    printViolations(minorList);
+                    List<Offense> minorList = offenseFacade.getAllOffenseByType(minor);
+                    printOffense(minorList);
                     break;
                 case 0:
                     System.out.println("Exiting...");
@@ -523,40 +552,38 @@ public class Main {
                     System.out.println("Invalid choice. Please enter 0, 1, or 2.");
                     break;
             }
-        } while (violationType != 0);
+        } while (offenseType != 0);
     }
 
-    private static void printViolations(List<Violation> violations) {
-        for (Violation violation : violations) {
+    private static void printOffense(List<Offense> offenses) {
+        for (Offense offense : offenses) {
             System.out.println("-------------------------------------");
-            System.out.println("Violation ID: " + violation.getId());
-            System.out.println("Violation: " + violation.getViolation());
-            System.out.println("Violation Type: " + violation.getType());
-            System.out.println("Community Service Hours: " + violation.getCommServHours());
+            System.out.println("Violation: " + offense.getDescription());
+            System.out.println("Violation Type: " + offense.getType());
         }
     }
 
     private static void renderCs() {
         try {
-            int offenseId;
+            int violationId;
             do {
-                System.out.print("Enter Offense-ID (0 to exit): ");
+                System.out.print("Enter Violation-ID (0 to exit): ");
                 if (!scanner.hasNextInt()) {
                     System.out.println("Invalid input. Please enter an integer.");
                     scanner.next();
                     continue;
                 }
-                offenseId = scanner.nextInt();
-                if (offenseId < 0) {
-                    System.out.println("Invalid Offense ID. Please enter a non-negative integer.");
+                violationId = scanner.nextInt();
+                if (violationId < 0) {
+                    System.out.println("Invalid Violation ID. Please enter a non-negative integer.");
                     continue;
                 }
-                if (offenseId == 0) {
+                if (violationId == 0) {
                     System.out.println("Exiting...");
                     return;
                 }
 
-                String studentId = offenseFacade.getOffenseByID(offenseId).getStudent().getStudentId();
+                String studentId = violationFacade.getViolationByID(violationId).getStudent().getStudentId();
                 System.out.println("Student-ID: " + studentId);
 
                 System.out.print("Enter Hours Rendered: ");
@@ -572,13 +599,13 @@ public class Main {
                     continue;
                 }
 
-                Offense existingOffense = offenseFacade.getOffenseByID(offenseId);
-                if (existingOffense != null) {
+                Violation existingViolation = violationFacade.getViolationByID(violationId);
+                if (existingViolation != null) {
                     CommunityService newCs = new CommunityService();
 
                     StudentInfoMgtApplication app = new StudentInfoMgtApplication();
                     StudentFacade studentFacade = app.getStudentFacade();
-                    Student student = studentFacade.getStudentById(studentId);
+                    Student student = studentFacade.getStudentByNumber(studentId);
 
                     newCs.setStudent(student);
                     newCs.setHours_rendered(hoursRendered);
@@ -592,7 +619,7 @@ public class Main {
                         System.out.println("Failed to Render Community Service.");
                     }
                 } else {
-                    System.out.println("Offense with ID " + offenseId + " does not exist.");
+                    System.out.println("Offense with ID " + violationId + " does not exist.");
                 }
                 return;
             } while (true);
@@ -627,4 +654,43 @@ public class Main {
             System.err.println("An error occurred while viewing community service history: " + e.getMessage());
         }
     }
+
+    private static void searchCsHistoryByStudentId() {
+        try {
+            System.out.print("Enter Student ID: ");
+            String studentId = scanner.next();
+
+            StudentInfoMgtApplication app = new StudentInfoMgtApplication();
+            StudentFacade studentFacade = app.getStudentFacade();
+            Student student = studentFacade.getStudentByNumber(studentId);
+            if (student != null) {
+                try {
+                    List<CommunityService> csRecords = communityServiceFacade.getAllCsByStudent(student);
+
+                    if (csRecords != null && !csRecords.isEmpty()) {
+                        System.out.println("Community Service Records");
+                        for (CommunityService csRecord : csRecords) {
+                            System.out.println("Community Service ID: " + csRecord.getId());
+                            System.out.println("Student ID: " + csRecord.getStudent().getStudentId());
+                            System.out.println("Student Last Name: " + csRecord.getStudent().getLastName());
+                            System.out.println("Student First Name: " + csRecord.getStudent().getFirstName());
+                            System.out.println("Student Middle Name: " + csRecord.getStudent().getMiddleName());
+                            System.out.println("Date Rendered: " + csRecord.getDate_rendered());
+                            System.out.println("Hours Rendered: " + csRecord.getHours_rendered());
+                            System.out.println("-----------------------------------");
+                        }
+                    } else {
+                        System.out.println("No Community Service found.");
+                    }
+                } catch (Exception e) {
+                    System.err.println("An error occurred while viewing community service history: " + e.getMessage());
+                }
+            } else {
+                System.out.println("No Student ID found.");
+            }
+        } catch (Exception e) {
+            System.err.println("An error occurred while viewing all Cs History: " + e.getMessage());
+        }
+    }
+
 }

@@ -5,82 +5,81 @@ package com.prefect.office.record.management.data.utils;
  */
 
 public final class QueryConstants {
-
     /**
-     * SQL query to retrieves all employees from the database.
+     * SQL query to retrieve all CS (community service) records from the database.
      */
-    public static final String GET_ALL_CS_STATEMENT = "SELECT * FROM comm_serv_rendered";
+    public static final String GET_ALL_CS_STATEMENT = "SELECT * FROM cs_rendered";
 
     /**
-     * SQL query to retrieves all offenses by student id from the database.
+     * SQL query to retrieve all CS records by student ID from the database.
      */
-    public static final String GET_ALL_CS_BY_STUDENT_ID_STATEMENT = "SELECT * FROM comm_serv_rendered WHERE STUDENT_ID = ?";
+    public static final String GET_ALL_CS_BY_STUDENT_ID_STATEMENT = "SELECT * FROM cs_rendered WHERE student_id = ?";
 
     /**
-     * SQL query to retrieves an CS by their Student Number from the database.
+     * SQL query to retrieve a CS record by its ID from the database.
      */
-    public static final String GET_CS_BY_ID_STATEMENT = "SELECT * FROM comm_serv_rendered WHERE id = ?";
+    public static final String GET_CS_BY_ID_STATEMENT = "SELECT * FROM cs_rendered WHERE id = ?";
 
     /**
-     * SQL query to render the CS to the database.
+     * SQL query to add a new CS record to the database.
      */
-    public static final String RENDER_CS_STATEMENT = "INSERT INTO comm_serv_rendered (student_id, date_rendered, hours_rendered) VALUES (?, ?, ?)";
+    public static final String RENDER_CS_STATEMENT = "INSERT INTO cs_rendered (student_id, date_rendered, hours_completed) VALUES (?, ?, ?)";
 
 
     /**
-     * SQL query to retrieves all offenses from the database.
-     */
-    public static final String GET_ALL_OFFENSES_STATEMENT = "SELECT * FROM offense";
-
-    /**
-     * SQL query to retrieves all offenses by student id from the database.
-     */
-    public static final String GET_ALL_OFFENSES_BY_STUDENT_ID_STATEMENT = "SELECT * FROM OFFENSE WHERE STUDENT_ID = ?";
-
-    /**
-     * SQL query to retrieves an Offense by their Student Number from the database.
-     */
-    public static final String GET_OFFENSE_BY_ID_STATEMENT = "SELECT * FROM offense WHERE id = ?";
-
-    /**
-     * SQL query to updates an existing offense in the database.
-     */
-    public static final String UPDATE_OFFENSE_STATEMENT = "UPDATE offense SET violation_id = ?, student_id = ?, offense_date = ? WHERE id = ?";
-
-    /**
-     * SQL query that adds a new offense to the database.
-     */
-    public static final String ADD_OFFENSE_STATEMENT = "INSERT INTO offense (violation_id, student_id, offense_date) VALUES (?, ?, ?)";
-
-
-    /**
-     * SQL query that adds a new violation to the database.
-     */
-    public static final String ADD_VIOLATION_STATEMENT = "INSERT INTO violation (violation, type, comm_serv_hours) VALUES (?, ?, ?)";
-
-    /**
-     * SQL query to retrieves all violation from the database.
+     * SQL query to retrieve all violations from the database.
      */
     public static final String GET_ALL_VIOLATION_STATEMENT = "SELECT * FROM violation";
 
     /**
-     * SQL query to retrieves all violation by type from the database.
+     * SQL query to retrieve all violations by student ID from the database.
      */
-    public static final String GET_ALL_VIOLATION_BY_TYPE_STATEMENT = "SELECT * FROM violation WHERE type = ?";
+    public static final String GET_ALL_VIOLATION_BY_STUDENT_ID_STATEMENT = "SELECT * FROM violation WHERE student_id = ?";
 
     /**
-     * SQL query to retrieves a Violation by their Violation Number from the database.
+     * SQL query to retrieve a violation by its ID from the database.
      */
-    public static final String GET_BY_ID_VIOLATION_STATEMENT = "SELECT * FROM violation WHERE id = ?";
+    public static final String GET_VIOLATION_BY_ID_STATEMENT = "SELECT * FROM violation WHERE id = ?";
 
     /**
-     * SQL query to retrieves a Violation by their Violation name from the database.
+     * SQL query to update an existing violation in the database.
      */
-    public static final String GET_BY_NAME_VIOLATION_STATEMENT = "SELECT * FROM violation WHERE violation LIKE ?";
+    public static final String UPDATE_VIOLATION_STATEMENT = "UPDATE violation SET student_id = ?, offense_id = ?, warning_number = ?, cs_hours = ?, disciplinary_action = ?, date_of_notice = ?, approved_by_id = ? WHERE id = ?";
+
+    /**
+     * SQL query that adds a new violation to the database.
+     */
+    public static final String ADD_VIOLATION_STATEMENT = "INSERT INTO violation (student_id, offense_id, warning_number, cs_hours, disciplinary_action, date_of_notice, approved_by_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
 
 
     /**
-     * SQL query to updates an existing violation in the database.
+     * SQL query that adds a new offense to the database.
      */
-    public static final String UPDATE_VIOLATION_STATEMENT ="UPDATE violation SET violation = ?, type = ?, comm_serv_hours = ? WHERE id = ?";
+    public static final String ADD_OFFENSE_STATEMENT = "INSERT INTO offense (type, description) VALUES (?, ?)";
+
+    /**
+     * SQL query to retrieve all offenses from the database.
+     */
+    public static final String GET_ALL_OFFENSE_STATEMENT = "SELECT * FROM offense";
+
+    /**
+     * SQL query to retrieve all offenses by type from the database.
+     */
+    public static final String GET_ALL_OFFENSE_BY_TYPE_STATEMENT = "SELECT * FROM offense WHERE type = ?";
+
+    /**
+     * SQL query to retrieve an offense by its offense id from the database.
+     */
+    public static final String GET_OFFENSE_BY_ID_STATEMENT = "SELECT * FROM offense WHERE id = ?";
+
+    /**
+     * SQL query to retrieve an offense by its description from the database.
+     */
+    public static final String GET_OFFENSE_BY_NAME_STATEMENT = "SELECT * FROM offense WHERE description LIKE ?";
+
+    /**
+     * SQL query to update an existing offense in the database.
+     */
+    public static final String UPDATE_OFFENSE_STATEMENT = "UPDATE offense SET type = ?, description = ? WHERE id = ?";
 }

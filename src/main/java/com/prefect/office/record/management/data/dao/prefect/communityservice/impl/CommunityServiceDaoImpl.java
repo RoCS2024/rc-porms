@@ -1,12 +1,10 @@
 package com.prefect.office.record.management.data.dao.prefect.communityservice.impl;
 
 import com.prefect.office.record.management.appl.model.communityservice.CommunityService;
-import com.prefect.office.record.management.appl.model.offense.Offense;
 import com.prefect.office.record.management.data.connectionhelper.ConnectionHelper;
 import com.prefect.office.record.management.data.dao.prefect.communityservice.CommunityServiceDao;
 import com.student.information.management.StudentInfoMgtApplication;
 import com.student.information.management.appl.facade.student.StudentFacade;
-import com.student.information.management.appl.facade.student.impl.StudentFacadeImpl;
 import com.student.information.management.appl.model.student.Student;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,57 +40,63 @@ public class CommunityServiceDaoImpl implements CommunityServiceDao {
 
                 StudentInfoMgtApplication app = new StudentInfoMgtApplication();
                 StudentFacade studentFacade = app.getStudentFacade();
-                Student student = studentFacade.getStudentById(resultSet.getString("student_id"));
+                Student student = studentFacade.getStudentById(resultSet.getInt("student_id"));
                 communityService.setStudent(student);
 
                 communityService.setDate_rendered(resultSet.getTimestamp("date_rendered"));
-                communityService.setHours_rendered(resultSet.getInt("hours_rendered"));
+                communityService.setHours_rendered(resultSet.getInt("hours_completed"));
                 communityServices.add(communityService);
             }
-            LOGGER.info("Community Service retrieved successfully.");
+            if (communityServices.isEmpty()) {
+                LOGGER.debug("Community Service database is empty.");
+            } else {
+                LOGGER.info("Community Service retrieved successfully.");
+            }
         } catch (SQLException ex) {
             LOGGER.warn("Error retrieving all community services: " + ex.getMessage());
             ex.printStackTrace();
         }
-        LOGGER.debug("Community Service database is empty.");
         return communityServices;
     }
 
+
     @Override
-    public List<CommunityService> getAllCsByStudent(Student studentId) {
+    public List<CommunityService> getAllCsByStudent(Student student) {
         List<CommunityService> communityServices = new ArrayList<>();
         try (Connection con = ConnectionHelper.getConnection();
              PreparedStatement statement = con.prepareStatement(GET_ALL_CS_BY_STUDENT_ID_STATEMENT)) {
 
-            statement.setString(1, studentId.getStudentId());
+            statement.setInt(1, student.getId());
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     CommunityService communityService = new CommunityService();
                     communityService.setId(resultSet.getInt("id"));
 
-                    StudentInfoMgtApplication app = new StudentInfoMgtApplication();
-                    StudentFacade studentFacade = app.getStudentFacade();
-                    Student student = studentFacade.getStudentById(resultSet.getString("student_id"));
+                    // Set student
                     communityService.setStudent(student);
 
                     communityService.setDate_rendered(resultSet.getTimestamp("date_rendered"));
-                    communityService.setHours_rendered(resultSet.getInt("hours_rendered"));
+                    communityService.setHours_rendered(resultSet.getInt("hours_completed"));
                     communityServices.add(communityService);
                 }
-                LOGGER.info("Community Service retrieved successfully.");
+                if (communityServices.isEmpty()) {
+                    LOGGER.debug("Community Service database is empty.");
+                } else {
+                    LOGGER.info("Community Service retrieved successfully.");
+                }
             } catch (SQLException ex) {
-                LOGGER.warn("Error retrieving all community services: " + ex.getMessage());
+                LOGGER.warn("Error retrieving community services: " + ex.getMessage());
                 ex.printStackTrace();
             }
-            LOGGER.debug("Community Service database is empty.");
         } catch (SQLException ex) {
             LOGGER.warn("Error preparing statement: " + ex.getMessage());
             ex.printStackTrace();
         }
         return communityServices;
-
     }
+
+
 
     /**
      * Retrieves a specific community service record by its ID from the database.
@@ -111,22 +115,23 @@ public class CommunityServiceDaoImpl implements CommunityServiceDao {
 
                     StudentInfoMgtApplication app = new StudentInfoMgtApplication();
                     StudentFacade studentFacade = app.getStudentFacade();
-                    Student student = studentFacade.getStudentById(rs.getString("student_id"));
+                    Student student = studentFacade.getStudentById(rs.getInt("student_id"));
 
                     Timestamp date_rendered = rs.getTimestamp("date_rendered");
-                    int hours_rendered = rs.getInt("hours_rendered");
-                    return new CommunityService(idNum, student, date_rendered, hours_rendered);
+                    int hours_completed = rs.getInt("hours_completed");
+                    return new CommunityService(idNum, student, date_rendered, hours_completed);
                 } else {
                     LOGGER.info("No Community Service found with ID: " + id);
+                    LOGGER.debug("Community Service not found.");
                 }
             }
         } catch (SQLException ex) {
             LOGGER.warn("Error retrieving Community Service with ID " + id + ": " + ex.getMessage());
             ex.printStackTrace();
         }
-        LOGGER.debug("Community Service not found.");
         return null;
     }
+
 
 
     /**
@@ -136,10 +141,10 @@ public class CommunityServiceDaoImpl implements CommunityServiceDao {
      * @return True if the insertion is successful, false otherwise.
      */
     @Override
-    public boolean renderCs(CommunityService cs){
+    public boolean renderCs(CommunityService cs) {
         try (Connection con = ConnectionHelper.getConnection();
              PreparedStatement stmt = con.prepareStatement(RENDER_CS_STATEMENT)) {
-            stmt.setString(1, cs.getStudent().getStudentId());
+            stmt.setInt(1, cs.getStudent().getId());
             stmt.setTimestamp(2, cs.getDate_rendered());
             stmt.setInt(3, cs.getHours_rendered());
             int affectedRows = stmt.executeUpdate();
@@ -150,4 +155,5 @@ public class CommunityServiceDaoImpl implements CommunityServiceDao {
             return false;
         }
     }
+
 }

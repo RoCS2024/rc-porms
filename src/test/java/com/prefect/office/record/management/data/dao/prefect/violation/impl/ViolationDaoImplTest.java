@@ -2,6 +2,7 @@ package com.prefect.office.record.management.data.dao.prefect.violation.impl;
 
 import com.prefect.office.record.management.appl.model.violation.Violation;
 import com.prefect.office.record.management.data.dao.prefect.violation.ViolationDao;
+import com.student.information.management.appl.model.student.Student;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -27,25 +27,11 @@ class ViolationDaoImplTest {
 
         violationDao = mock(ViolationDao.class);
     }
-
     @Test
-    public void testAddViolation(){
-        Violation testViolation = new Violation("TestingLang", "TestCon", 5);
-
-        violationDao.addViolation(testViolation);
-        assertTrue(true, "Expected: True, Actual: True");
-    }
-
-    @Test
-    public void testUpdateViolation() {
-        Violation violation = new Violation();
-        violation.setId(1);
-
-        when(violationDao.updateViolation(violation)).thenReturn(true);
-        when(violationDao.getViolationByID(1)).thenReturn(violation);
-
-        Violation expectedViolation = violationDao.getViolationByID(1);
-        assertEquals(expectedViolation.getId(), violation.getId());
+    public void testGetAllViolation() {
+        when(violationDao.getAllViolation()).thenReturn(violations);
+        List<Violation> violationList = violationDao.getAllViolation();
+        assertEquals(violationList.size(), 2);
     }
 
     @Test
@@ -62,31 +48,39 @@ class ViolationDaoImplTest {
     }
 
     @Test
-    public void testGetViolationByName() {
+    public void testAddViolation() {
+        Violation violation = new Violation();
+        violation.setId(1);
+
+        when(violationDao.addViolation(violation)).thenReturn(true);
+        when(violationDao.getViolationByID(1)).thenReturn(violation);
+
+        Violation expectedViolation = violationDao.getViolationByID(1);
+        assertEquals(expectedViolation.getId(), violation.getId());
+    }
+    @Test
+    public void testUpdateViolation() {
+        Violation violation = new Violation();
+        violation.setId(1);
+
+        when(violationDao.addViolation(violation)).thenReturn(true);
+        when(violationDao.updateViolation(violation)).thenReturn(true);
+        when(violationDao.getViolationByID(1)).thenReturn(violation);
+
+        Violation expectedViolation = violationDao.getViolationByID(1);
+        assertEquals(expectedViolation.getId(), violation.getId());
+    }
+
+    @Test
+    public void testGetAllViolationByStudentId() {
+        Student student1 = new Student();
+        student1.setStudentId("CT21-0001");
+
         Violation violation1 = new Violation();
-        violation1.setViolation("fighting");
+        violation1.setStudent(student1);
 
-        when(violationDao.getViolationByName("fighting")).thenReturn(violation1);
-
-        Violation expectedViolation = violationDao.getViolationByName("fighting");
-
-        assertEquals(expectedViolation, violation1);
-        assertEquals(expectedViolation.getViolation(), violation1.getViolation());
-    }
-
-    @Test
-    public void testGetAllViolation() {
-        when(violationDao.getAllViolation()).thenReturn(violations);
-        List<Violation> violationList = violationDao.getAllViolation();
-        assertEquals(violationList.size(), 2);
-    }
-
-    @Test
-    public void testGetAllViolationByType() {
-        String major = "Major";
-
-        when(violationDao.getAllViolationByType(major)).thenReturn(violations);
-        List<Violation> violationList = violationDao.getAllViolationByType(major);
+        when(violationDao.getAllViolationByStudent(student1)).thenReturn(violations);
+        List<Violation> violationList = violationDao.getAllViolationByStudent(student1);
         assertEquals(violationList.size(), 2);
     }
 }

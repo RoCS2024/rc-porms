@@ -2,51 +2,30 @@ package com.prefect.office.record.management.appl.facade.prefect.offense.impl;
 
 import com.prefect.office.record.management.appl.facade.prefect.offense.OffenseFacade;
 import com.prefect.office.record.management.appl.model.offense.Offense;
-import com.prefect.office.record.management.appl.model.violation.Violation;
 import com.prefect.office.record.management.data.dao.prefect.offense.OffenseDao;
-import com.prefect.office.record.management.data.dao.prefect.offense.impl.OffenseDaoImpl;
-import com.student.information.management.appl.model.student.Student;
 
 import java.util.List;
 
 /**
- * An implementation class of the Offence Facade.
+ * This is an implementation class of the OffenseFacade
  */
-
 public class OffenseFacadeImpl implements OffenseFacade {
+    private OffenseDao offenseDAO;
 
-    private OffenseDao offenseDao;
-
-    public OffenseFacadeImpl(OffenseDao offenseDao) {
-        this.offenseDao = offenseDao;
-    }
-
-    public OffenseFacadeImpl() {
-
-    }
-
-    public List<Offense> getAllOffenses() {
-        try {
-            return offenseDao.getAllOffenses();
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to retrieve all offenses: " + e.getMessage(), e);
-        }
-    }
+    /**
+     * This is a constructor for new OffenseFacadeImpl object
+     * This initializes the OffenseDao
+     */
+    public OffenseFacadeImpl(OffenseDao offenseDao) { this.offenseDAO = offenseDao;}
 
     @Override
-    public Offense getOffenseByID(int id) {
-        return offenseDao.getOffenseByID(id);
-    }
-
-    @Override
-    public List<Offense> getAllOffenseByStudent(Student studentId) {
+    public boolean addOffense(Offense offense) throws RuntimeException{
         try {
-            return offenseDao.getAllOffenseByStudent(studentId);
+            return offenseDAO.addOffense(offense);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to retrieve all offenses: " + e.getMessage(), e);
+            throw new RuntimeException("Failed to add Offense: " + e.getMessage(), e);
         }
     }
-
 
     @Override
     public boolean updateOffense(Offense offense) throws RuntimeException{
@@ -54,27 +33,36 @@ public class OffenseFacadeImpl implements OffenseFacade {
         try {
             Offense targetOffense = getOffenseByID(offense.getId());
             if (targetOffense == null) {
-                throw new Exception("Offense to update not found.");
+                throw new Exception("Offense to update not found. ");
             }
-            result = offenseDao.updateOffense(offense);
+            result = offenseDAO.updateOffense(offense);
         } catch (Exception e) {
-            String errorMessage = e.getMessage();
-            if (errorMessage != null) {
-                throw new RuntimeException(errorMessage);
-            } else {
-                throw new RuntimeException("An error occurred while updating the offense information.");
-            }
+            throw new RuntimeException(e.getMessage());
         }
         return result;
     }
 
+    @Override
+    public Offense getOffenseByID(int id) {
+        return offenseDAO.getOffenseByID(id);
+    }
 
     @Override
-    public boolean addOffense(Offense offense) throws RuntimeException {
+    public Offense getOffenseByName(String description) {
+        return offenseDAO.getOffenseByName(description);
+    }
+
+    @Override
+    public List<Offense> getAllOffense() {
+        return offenseDAO.getAllOffense();
+    }
+
+    @Override
+    public List<Offense> getAllOffenseByType(String type) {
         try {
-           return offenseDao.addOffense(offense);
+            return offenseDAO.getAllOffenseByType(type);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to add offense: " + e.getMessage(), e);
+            throw new RuntimeException("Failed to retrieve all Offense by tpe: " + e.getMessage(), e);
         }
     }
 }

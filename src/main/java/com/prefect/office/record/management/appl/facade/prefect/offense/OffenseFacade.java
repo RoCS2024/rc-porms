@@ -1,52 +1,50 @@
 package com.prefect.office.record.management.appl.facade.prefect.offense;
 
+
 import com.prefect.office.record.management.appl.model.offense.Offense;
-import com.student.information.management.appl.model.student.Student;
 
 import java.util.List;
-
 /**
- * An interface to the Offense Facade.
+ * This is the interface to the OffenseFacade
  */
-
 public interface OffenseFacade {
 
     /**
-     * Retrieves all Offense from the database.
-     *
-     * @return list of all Offense.
-     * */
-    List<Offense> getAllOffenses();
-
-    /**
-     * Retrieves an Offense from the database with specified id.
-     *
-     * @param id the id of the offense.
-     * @return the Offense.
-     * */
-    Offense getOffenseByID (int id);
-
-    /**
-     * Retrieves all offense from the database with specified student id.
-     *
-     * @param studentId the id of the students.
-     * @return the Offense.
-     * */
-    List<Offense> getAllOffenseByStudent(Student studentId);
-
-    /**
-     * Updates a Student in the database.
-     *
-     * @param offense  offense to update.
-     * @return true if update is successful.
-     * */
-    boolean updateOffense (Offense offense);
-
-    /**
-     * Adds a Student to the database.
-     *
-     * @param offense offense to add.
-     * @return true if adding is successful.
-     * */
+     * This adds an offense in the database.
+     * @param offense is the offense to add in the database
+     */
     boolean addOffense(Offense offense);
+
+    /**
+     * This updates offense to the database
+     * @param offense is the offense to update
+     */
+    boolean updateOffense(Offense offense);
+
+    /**
+     * This gets an Offense from the database with a specific ID
+     * @param id is the id of the Offense
+     * @return the Offense with specific ID
+     */
+    Offense getOffenseByID(int id);
+
+    /**
+     * This gets an offense from the database with a specific name or description
+     * @param description is the offense name or description
+     * @return the Offense with specific name or description
+     */
+    Offense getOffenseByName(String description);
+
+    /**
+     * This retrieves all offense in the database
+     * @return list of offense from the database
+     */
+    List<Offense> getAllOffense();
+
+    /**
+     * This retrieves all offense by type in the database
+     * @return list of offense by type from the database
+     */
+    List<Offense> getAllOffenseByType(String type);
+
 }
